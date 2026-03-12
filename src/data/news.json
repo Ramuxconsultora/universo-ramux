@@ -1,0 +1,46 @@
+[
+    {
+        "id": "deepseek-v3-release",
+        "title": "DeepSeek-V3 supera a modelos propietarios y potencia a Llama 4 en Open Source",
+        "summary": "El nuevo modelo chino de código abierto demuestra capacidades de razonamiento superiores. La comunidad integra sus hallazgos para optimizar Llama y Mistral en finanzas.",
+        "category": "DeepSeek, Llama & Open Source",
+        "source_name": "DeepSeek Blog",
+        "source_url": "https://www.deepseek.com/blog",
+        "date": "2026-01-31T10:00:00Z",
+        "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070",
+        "content": "DeepSeek ha liberado su modelo V3, logrando puntajes récord en benchmarks financieros. Analistas destacan su eficiencia en costos y su capacidad para correr en hardware local. En paralelo, desarrolladores de Meta han anunciado la compatibilidad de estas técnicas con el ecosistema Llama, democratizando el acceso a herramientas de trading algorítmico de alta frecuencia."
+    },
+    {
+        "id": "openai-canvas-traders",
+        "title": "OpenAI lanza 'Canvas for Traders': Análisis de gráficos en tiempo real",
+        "summary": "La nueva interfaz permite a los inversores interactuar visualmente con gráficos de velas y obtener proyecciones basadas en IA generativa.",
+        "category": "IA Pro",
+        "source_name": "OpenAI News",
+        "source_url": "https://openai.com/blog",
+        "date": "2026-01-31T11:30:00Z",
+        "image": "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070",
+        "content": "OpenAI continúa su expansión en el sector fintech con 'Canvas for Traders'. Esta herramienta se integra con plataformas de corretaje para superponer análisis predictivos directamente sobre los gráficos de precios. Expertos sugieren que esto reducirá la barrera de entrada para el análisis técnico avanzado, aunque advierten sobre la 'alucinación' de patrones inexistentes."
+    },
+    {
+        "id": "cnv-fci-algo",
+        "title": "CNV aprueba primeros Fondos Comunes de Inversión algorítmicos",
+        "summary": "Hito en la regulación local: Se autorizan FCIs que utilizan estrategias 100% automatizadas bajo supervisión humana.",
+        "category": "Mercado Argentino",
+        "source_name": "CNV Argentina",
+        "source_url": "https://www.cnv.gov.ar",
+        "date": "2026-01-31T09:15:00Z",
+        "image": "https://www.cnv.gov.ar/images/logo.png",
+        "content": "La Comisión Nacional de Valores (CNV) ha dado luz verde a la creación de una nueva categoría de Fondos Comunes de Inversión que operan mediante algoritmos de Inteligencia Artificial. La normativa exige auditorías de código y 'kill-switches' obligatorios para prevenir flash crashes. Es un paso gigante para la modernización del Mercado de Capitales Argentino."
+    },
+    {
+        "id": "nasdaq-deepseek-effect",
+        "title": "El Nasdaq salta 3%: El 'Efecto DeepSeek' reduce costos operativos en Fintech",
+        "summary": "Las acciones tecnológicas repuntan ante la expectativa de menores costos de inferencia gracias a los nuevos modelos eficientes.",
+        "category": "Wall Street",
+        "source_name": "Bloomberg",
+        "source_url": "https://www.bloomberg.com/markets",
+        "date": "2026-01-31T14:00:00Z",
+        "image": "https://images.unsplash.com/photo-1642104704074-907c0698cbd9?q=80&w=2070",
+        "content": "Wall Street celebra la 'commoditización' de la inteligencia. El índice Nasdaq compuso un rally del 3% impulsado por empresas fintech que reportaron ahorros masivos al migrar a modelos de lenguaje más eficientes como DeepSeek. Analistas de Goldman Sachs proyectan que esto mejorará los márgenes operativos del sector software en un 15% para el próximo trimestre."
+    }
+]

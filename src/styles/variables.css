@@ -1,0 +1,30 @@
+:root {
+    /* --- Palette: Futuristic Dark Mode --- */
+    --bg-dark: #020617;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+
+    /* Accents */
+    --accent-cyan: #06b6d4;
+    /* Cyan-500 */
+    --accent-violet: #7c3aed;
+    /* Violet-600 */
+    --accent-indigo: #4f46e5;
+    /* Indigo-600 */
+
+    /* Glass Effect Tokens */
+    --glass-bg: rgba(2, 6, 23, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+
+    /* --- Motion: Agile & Fluid --- */
+    --ease-agile: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 300ms;
+    --duration-medium: 500ms;
+
+    /* --- Spacing & Layout --- */
+    --nav-height: 5rem;
+    /* 80px (h-20) */
+    --sidebar-width: 18rem;
+    /* 72 (w-72) */
+}

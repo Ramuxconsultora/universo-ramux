@@ -1,0 +1,236 @@
+{
+    "id": "modulo_2",
+    "title": "Módulo 2: Prevención de Lavado de Activos y Financiamiento del Terrorismo",
+    "description": "Marco normativo experto, actualizado a Resolución UIF 78/2023 y estándares internacionales.",
+    "levels": [
+        {
+            "id": 1,
+            "title": "Conceptos Fundamentales (GAFI y Ley 25.246)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "El Lavado de Activos (LA) es un delito complejo que busca dar apariencia de legalidad a activos provenientes de ilícitos penales. Según el <strong>Art. 303 del Código Penal</strong>, introducido por la Ley 26.683, es un delito autónomo contra el Orden Económico y Financiero."
+                },
+                {
+                    "type": "highlight_box",
+                    "title": "Estándar Internacional: Las 40 Recomendaciones del GAFI",
+                    "text": "El Grupo de Acción Financiera Internacional (GAFI) establece los estándares globales. Sus 40 Recomendaciones exigen a los países tipificar el delito, establecer unidades de inteligencia financiera (UIF) y aplicar medidas preventivas en el sector financiero y no financiero."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "La <strong>Ley 25.246</strong> creó la UIF en Argentina y estableció el marco administrativo de prevención, definiendo a los Sujetos Obligados y sus deberes."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Etapas del Lavado de Activos",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "Gafi identifica tres etapas teóricas en el proceso de lavado, aunque pueden superponerse:"
+                },
+                {
+                    "type": "list",
+                    "title": "Ciclo del Lavado",
+                    "items": [
+                        "<strong>1. Colocación (Placement):</strong> El ingreso físico de fondos ilícitos (ej. efectivo) al sistema financiero. Es la etapa más vulnerable a la detección.",
+                        "<strong>2. Estratificación (Layering):</strong> Realización de múltiples transacciones complejas para separar los fondos de su origen ilegal y dificultar el rastreo (audit trail).",
+                        "<strong>3. Integración (Integration):</strong> Los fondos, ya 'lavados', reingresan a la economía formal aparentando ser legítimos (ej. compra de inmuebles, inversiones)."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "Delitos Precedentes y Autonomía",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "El lavado de activos requiere un 'delito precedente' que genere los fondos ilícitos. Sin embargo, procesalmente es un delito autónomo."
+                },
+                {
+                    "type": "legal_box",
+                    "title": "Delitos Precedentes (GAFI)",
+                    "citation": "Ley 25.246 / Código Penal",
+                    "text": "Incluyen narcotráfico, corrupción, trata de personas, contrabando, delitos tributarios, delitos de mercado (insider trading, manipulación), entre otros. No es necesario una condena previa por el delito precedente para juzgar el lavado."
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "title": "Normativa Actualizada: Resolución UIF 78/2023",
+            "content": [
+                {
+                    "type": "warning_box",
+                    "title": "Cambio Normativo Importante",
+                    "text": "La Resolución UIF N° 78/2023 <strong>ABROGA</strong> las Resoluciones UIF N° 21/2018 y N° 22/2011. Todo marco preventivo en el Mercado de Capitales debe regirse ahora por la Res. 78/2023."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Esta norma actualiza las obligaciones para adecuar a Argentina a los estándares del GAFI, poniendo foco central en la <strong>Efectividad</strong> del sistema preventivo."
+                },
+                {
+                    "type": "legal_box",
+                    "title": "Normas CNV (T.O. 2013) - Título XI",
+                    "citation": "Normas CNV",
+                    "text": "La CNV regula la actuación de los agentes en materia de prevención, actuando en coordinación con la normativa de la UIF. Los Agentes deben cumplir con ambas regulaciones."
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "title": "Sistema de Prevención y Enfoque Basado en Riesgo (EBR)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "La Res. 78/2023 (Arts. 3 y 4) obliga a implementar un Sistema de Prevención basado en riesgos."
+                },
+                {
+                    "type": "list",
+                    "title": "Componentes del EBR",
+                    "items": [
+                        "<strong>Autoevaluación de Riesgos:</strong> Informe técnico anual donde el sujeto obligado identifica sus riesgos inherentes y residuales (Art. 5).",
+                        "<strong>Factores de Riesgo:</strong> Se deben ponderar riesgos de: Clientes, Productos/Servicios, Canales de Distribución y Zonas Geográficas.",
+                        "<strong>Tolerancia al Riesgo:</strong> Nivel de riesgo que la entidad está dispuesta a asumir, aprobado por el Directorio."
+                    ]
+                },
+                {
+                    "type": "highlight_box",
+                    "title": "Oficial de Cumplimiento",
+                    "text": "Debe designarse un Oficial de Cumplimiento titular (y suplente) ante la UIF, quien será responsable de velar por el sistema de prevención. Debe integrar el órgano de administración (Directorio)."
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "title": "Financiamiento del Terrorismo (FT) - Ley 26.734",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "La Ley 26.734 incorporó el Art. 306 al Código Penal, tipificando el Financiamiento del Terrorismo."
+                },
+                {
+                    "type": "legal_box",
+                    "title": "Diferencia Clave con LA",
+                    "citation": "Diferencia Conceptual",
+                    "text": "En el Lavado de Activos, el origen de los fondos es ILÍCITO y se busca ocultarlo. En el Financiamiento del Terrorismo, el origen puede ser LÍCITO (donaciones, sueldos) o ILÍCITO, pero el objetivo es financiar un acto o grupo terrorista."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Las técnicas de movimiento de fondos pueden ser similares (uso de ONGs, transferencias electrónicas, criptoactivos), pero la lógica inversa de 'rastro' es fundamental para la prevención."
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "title": "Congelamiento de Activos (Decreto 918/2012)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "El Decreto 918/2012 establece el procedimiento para el congelamiento administrativo de activos vinculados al terrorismo, cumpliendo Resoluciones del Consejo de Seguridad de la ONU (Res. 1267 y sucs)."
+                },
+                {
+                    "type": "highlight_box",
+                    "title": "Registro Público (RePET)",
+                    "text": "Crea el Registro Público de Personas y Entidades vinculadas a actos de Terrorismo y su Financiamiento (RePET). La UIF tiene potestad para ordenar el congelamiento INMEDIATO de bienes de personas listadas, sin orden judicial previa (medida cautelar administrativa)."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Los Sujetos Obligados deben cotejar sus clientes contra el RePET y las listas de la ONU de forma constante."
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "title": "Sujetos Obligados (Ley 25.246 Art. 20)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "El Art. 20 de la Ley 25.246 enumera quiénes tiene deberes de informar."
+                },
+                {
+                    "type": "list",
+                    "title": "Sujetos en Mercado de Capitales",
+                    "items": [
+                        "Agentes de Negociación (AN) y Agentes de Liquidación y Compensación (ALyC).",
+                        "Agentes de Colocación y Distribución de FCI (ACDI).",
+                        "Fiduciarios Financieros.",
+                        "Plataformas de Financiamiento Colectivo (PFC).",
+                        "Agentes Asesores Globales de Inversión (AAGI)."
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Todos ellos deben cumplir con la Debida Diligencia (KYC), monitoreo de operaciones y reporte de operaciones sospechosas."
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "title": "Debida Diligencia y Roles de Supervisión (Res 72/2023)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "La Resolución UIF 72/2023 reglamenta el 'Deber de Colaboración' de los Organismos de Contralor Específico (OCE), como la CNV."
+                },
+                {
+                    "type": "legal_box",
+                    "title": "Rol de la CNV",
+                    "citation": "Res UIF 72/2023",
+                    "text": "La CNV colabora con la UIF en la supervisión in-situ y extra-situ de los sujetos obligados bajo su órbita. Puede realizar inspecciones y requerir información sobre cumplimiento PLA/FT."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "El deber de colaboración implica que la CNV puede sancionar incumplimientos a normas técnicas que también afecten la prevención de lavado."
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "title": "Obligaciones de Reporte (ROS)",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "La obligación final y más crítica es el Reporte de Operación Sospechosa (ROS)."
+                },
+                {
+                    "type": "list",
+                    "title": "Plazos y Confidencialidad",
+                    "items": [
+                        "<strong>Lavado de Activos:</strong> Plazo de 15 días corridos desde que se califica la operación como sospechosa.",
+                        "<strong>Financiación del Terrorismo:</strong> Plazo de 48 horas.",
+                        "<strong>Confidencialidad (Tithing-off):</strong> Está prohibido revelar al cliente o terceros que se ha emitido un ROS. El reporte es secreto."
+                    ]
+                },
+                {
+                    "type": "warning_box",
+                    "title": "Sanciones",
+                    "text": "El incumplimiento de la obligación de reportar conlleva multas severas (1 a 10 veces el valor de la operación) y sanciones administrativas para el oficial de cumplimiento y la entidad."
+                }
+            ]
+        }
+    ],
+    "bibliography": [
+        {
+            "title": "Ley 25.246 - Encubrimiento y Lavado de Activos",
+            "url": "http://servicios.infoleg.gob.ar/infolegInternet/anexos/60000-64999/62977/texact.htm"
+        },
+        {
+            "title": "Resolución UIF N° 78/2023 (Mercado de Capitales)",
+            "url": "http://servicios.infoleg.gob.ar/infolegInternet/anexos/380000-384999/383407/norma.htm"
+        },
+        {
+            "title": "Resolución UIF N° 72/2023 (Colaboración CNV)",
+            "url": "http://servicios.infoleg.gob.ar/infolegInternet/anexos/380000-384999/383138/norma.htm"
+        },
+        {
+            "title": "Decreto 918/2012 (Congelamiento y RePET)",
+            "url": "http://servicios.infoleg.gob.ar/infolegInternet/anexos/195000-199999/198599/norma.htm"
+        },
+        {
+            "title": "Ley 26.734 - Financiación del Terrorismo",
+            "url": "http://servicios.infoleg.gob.ar/infolegInternet/anexos/190000-194999/192137/norma.htm"
+        }
+    ]
+}

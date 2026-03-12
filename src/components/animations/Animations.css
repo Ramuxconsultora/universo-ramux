@@ -1,0 +1,18 @@
+:root {
+    /* Palette Futuristic */
+    --bg-dark: #020617;
+    --accent-cyan: #06b6d4;
+    --accent-violet: #7c3aed;
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(2, 6, 23, 0.7);
+
+    /* Motion */
+    --ease-agile: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 0.3s;
+}
+
+/* Global Keyframes if needed later */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

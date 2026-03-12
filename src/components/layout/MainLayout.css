@@ -1,0 +1,53 @@
+@import '../../styles/variables.css';
+
+.main-layout-container {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+}
+
+.fixed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 40%, var(--bg-dark) 100%);
+}
+
+.main-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-top: var(--nav-height);
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Sidebar Specific Logic requested by User */
+.sidebar-sticky {
+    position: sticky;
+    top: 0;
+    /* As requested, though needs offset for header typically */
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 50;
+    /* Ensure it stays on top */
+}
+
+/* Responsive adjustment */
+@media (min-width: 1280px) {
+    .main-content-grid.has-sidebar {
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+    }
+
+    .sidebar-sticky {
+        display: block;
+    }
+}
