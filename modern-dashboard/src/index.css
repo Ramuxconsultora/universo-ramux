@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@theme {
+    --color-ramux: #0ea5e9;
+    --color-ramuxvis: #8b5cf6;
+    --color-brand: #F76B1C;
+
+    /* Retro-Futuristic Custom Variables */
+    --color-bg-deep: #050505;
+    --color-accent-glow: #7B39FC;
+    --color-text-main: #FAFAFA;
+
+    --animate-fade-in: fadeIn 0.8s ease-out forwards;
+    --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    --animate-tracking-in: trackingIn 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+    --animate-text-shimmer: shimmer 3s ease-in-out infinite alternate;
+    --animate-marquee: marquee 30s linear infinite;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes trackingIn {
+        0% {
+            letter-spacing: -0.5em;
+            opacity: 0;
+        }
+
+        40% {
+            opacity: 0.6;
+        }
+
+        100% {
+            letter-spacing: normal;
+            opacity: 1;
+        }
+    }
+
+    @keyframes shimmer {
+        0% {
+            text-shadow: 0 0 0px rgba(255, 255, 255, 0);
+        }
+
+        100% {
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+        }
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+/* === FONDO FIJO === */
+.fixed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at top center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-main, #FAFAFA);
+    overflow-x: hidden;
+    background: var(--color-bg-deep, #050505);
+    font-family: 'Rajdhani', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-orbitron {
+    font-family: 'Orbitron', 'Arial Rounded MT Bold', sans-serif;
+}
+
+/* === SCANLINE EFFECT REMOVED === */
+
+/* === GLOW BUTTON EFFCT === */
+.glow-button {
+    box-shadow: 0 0 15px var(--color-accent-glow, #7B39FC);
+    transition: all 0.3s ease;
+}
+
+.glow-button:hover {
+    box-shadow: 0 0 25px var(--color-accent-glow, #7B39FC), inset 0 0 10px rgba(123, 57, 252, 0.5);
+}
+
+/* === EFECTOS GLASSMORPHISM === */
+.glass-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);
+    border-color: rgba(14, 165, 233, 0.4);
+}
+
+/* Navbar Glass */
+.glass-nav {
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-title {
+    background: linear-gradient(to right, #38bdf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.social-icon {
+    transition: all 0.3s ease;
+    color: #94a3b8;
+}
+
+.social-icon:hover {
+    color: #0ea5e9;
+    transform: scale(1.1);
+}
+
+/* Inputs */
+.login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.login-input:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+    background: rgba(15, 23, 42, 0.9);
+}
+
+/* === BCRA WIDGETS PERFORMANCE CSS === */
+@keyframes pulse-opacity {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.skeleton-fast {
+    animation: pulse-opacity 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    background-color: #1e293b;
+    /* slate-800 */
+}
+
+/* 
+ * LA CLASE CLAVE DEL RENDIMIENTO 
+ * Sin backdrop-filter, sin opacitys compuestos
+ */
+.widget-card-performance {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+        0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+.widget-card-performance:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+        0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Mercado - RAMUX</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        ramux: '#0ea5e9',    /* Azul Principal */
+                        ramuxvis: '#8b5cf6', /* Violeta Secundario */
+                        brand: '#F76B1C',    /* Naranja Marca */
+                        dark: '#020617',     /* Fondo Oscuro */
+                        bull: '#10b981',     /* Verde Mercado */
+                        bear: '#ef4444',     /* Rojo Mercado */
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f1f5f9;
+        }
+
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 40%, #020617 100%);
+        }
+
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(56, 189, 248, 0.25);
+        }
+
+        /* Input styling */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+    <div class="fixed-background"></div>
+
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+
+            <!-- 1. Navigation & Profile (Left) -->
+            <div class="w-1/3 flex items-center gap-6">
+                <!-- Home Button -->
+                <a href="dashboard.html"
+                    class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
+                    title="Ir al Inicio">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors">
+                        <i class="fas fa-home text-slate-300"></i>
+                    </div>
+                </a>
+
+                <!-- Profile (Compact) -->
+                <a href="profile.html" class="flex items-center gap-3 group cursor-pointer text-decoration-none">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors overflow-hidden">
+                        <i id="header-avatar" class="fas fa-user-astronaut text-slate-300"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider">Bienvenido</p>
+                        <p id="header-username"
+                            class="text-sm font-bold text-white group-hover:text-ramux transition-colors">Cargando...
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 2. Logo/Title (Center) -->
+            <div class="w-1/3 flex justify-center text-center">
+                <span class="font-black text-xl text-white tracking-wide">SIMULADOR</span>
+            </div>
+
+            <!-- 3. Notifications (Right) -->
+            <div class="w-1/3 flex justify-end items-center gap-6 relative">
+                <button onclick="toggleNotifications()"
+                    class="text-slate-400 hover:text-white transition-colors relative z-50">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </button>
+
+                <!-- Dropdown -->
+                <div id="notif-dropdown"
+                    class="hidden absolute top-12 right-0 w-80 glass-panel rounded-xl border border-slate-700 overflow-hidden shadow-2xl z-40 bg-slate-900/95">
+                    <div class="p-4 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50">
+                        <span class="font-bold text-white text-sm">Notificaciones</span>
+                        <span class="text-[10px] text-ramux cursor-pointer hover:underline">Marcar leídas</span>
+                    </div>
+                    <div class="max-h-64 overflow-y-auto">
+                        <div
+                            class="p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors cursor-pointer">
+                            <p class="text-xs text-slate-300"><span class="font-bold text-white">Ana_Trader</span>
+                                comentó en tu publicación.</p>
+                            <span class="text-[10px] text-slate-500 mt-1 block">Hace 5 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[60] bg-slate-950/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center justify-center space-y-8">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-white text-2xl">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="m1_x9z_secure.html" class="text-2xl font-bold text-white hover:text-ramux transition-colors">Volver al
+            Módulo</a>
+        <div class="text-center">
+            <p class="text-xs text-slate-400 uppercase tracking-widest mb-2">Saldo Virtual</p>
+            <p class="text-3xl font-mono font-bold text-emerald-400" id="mobile-cash">$0.00</p>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <main class="flex-grow pt-28 pb-6 px-4 max-w-7xl mx-auto w-full flex flex-col">
+        <!-- Back Button within Content -->
+        <div class="text-left mb-4">
+            <a href="dashboard.html"
+                class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700/50 hover:border-ramux">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+        </div>
+
+        <!-- DASHBOARD GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- CHART SECTION (Left, Larger) -->
+            <div class="lg:col-span-8 space-y-6">
+
+                <!-- Chart Container -->
+                <div class="glass-panel rounded-2xl p-6 h-[500px] flex flex-col relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                                <img src="https://ui-avatars.com/api/?name=R+M&background=F76B1C&color=fff&size=32"
+                                    class="rounded-full w-8 h-8" alt="RMX">
+                                RMX / USD
+                                <span class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded ml-2">1 oz Gold
+                                    Eq.</span>
+                            </h2>
+                            <p class="text-3xl font-mono font-bold text-white mt-1" id="current-price">$0.00</p>
+                            <span class="text-sm font-medium flex items-center gap-1 mt-1" id="price-change">
+                                <i class="fas fa-caret-up"></i> 0.00%
+                            </span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="px-3 py-1 rounded bg-slate-800 text-xs text-slate-300 hover:text-white transition-colors">1H</button>
+                            <button
+                                class="px-3 py-1 rounded bg-slate-700 text-xs text-white font-bold transition-colors">1D</button>
+                            <button
+                                class="px-3 py-1 rounded bg-slate-800 text-xs text-slate-300 hover:text-white transition-colors">1W</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow w-full h-full relative">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Market Info -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="glass-panel p-4 rounded-xl">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">Volumen (24h)</p>
+                        <p class="text-lg font-mono font-bold text-white">1,245 RMX</p>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">Max (24h)</p>
+                        <p class="text-lg font-mono font-bold text-white">$2,780.45</p>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl">
+                        <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">Min (24h)</p>
+                        <p class="text-lg font-mono font-bold text-white">$2,610.12</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SIDEBAR: TRADING & PORTFOLIO (Right, Smaller) -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- AI Advisor Panel -->
+                <div class="glass-panel rounded-2xl p-6 border-t-2 border-ramux/50 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-robot text-6xl text-ramux"></i>
+                    </div>
+
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-ramux/20 flex items-center justify-center text-ramux border border-ramux/50 shadow-[0_0_15px_rgba(14,165,233,0.3)]">
+                            <i class="fas fa-brain animate-pulse-slow"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Ramux IA</h3>
+                            <p class="text-[10px] text-slate-400">Asesor de Inversión</p>
+                        </div>
+                    </div>
+
+                    <div id="ai-output" class="hidden space-y-4 animate-fade-in">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-400">Sentimiento</span>
+                            <span id="ai-sentiment"
+                                class="font-bold text-sm px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Neutral</span>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-400">Confianza</span>
+                                <span id="ai-confidence" class="text-white font-mono">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                <div id="ai-confidence-bar" class="bg-ramux h-full w-0 transition-all duration-1000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
+                            <p id="ai-reason" class="text-xs text-slate-300 italic leading-relaxed">
+                                "Analizando patrones de mercado..."
+                            </p>
+                        </div>
+                    </div>
+
+                    <button onclick="analyzeMarket()" id="btn-analyze"
+                        class="w-full mt-4 py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-ramux to-ramuxvis hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-all flex items-center justify-center gap-2 group-hover:scale-[1.02]">
+                        <i class="fas fa-wand-magic-sparkles"></i> CONSULTAR IA
+                    </button>
+                </div>
+
+                <!-- Trading Form -->
+                <div class="glass-panel rounded-2xl p-6">
+                    <div class="flex bg-slate-900/50 p-1 rounded-lg mb-6">
+                        <button onclick="setMode('buy')" id="btn-buy"
+                            class="flex-1 py-2 rounded-md text-sm font-bold transition-all bg-bull text-white shadow-lg">COMPRAR</button>
+                        <button onclick="setMode('sell')" id="btn-sell"
+                            class="flex-1 py-2 rounded-md text-sm font-bold transition-all text-slate-400 hover:text-white">VENDER</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block flex justify-between">
+                                <span>Precio de Mercado</span>
+                                <span class="text-slate-500">USD/RMX</span>
+                            </label>
+                            <div
+                                class="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-right font-mono text-slate-300 cursor-not-allowed select-none">
+                                <span id="trade-price">---</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-slate-400 mb-1.5 block flex justify-between">
+                                <span>Cantidad</span>
+                                <span class="text-ramux cursor-pointer hover:underline"
+                                    onclick="setMaxAmount()">Máx</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" id="trade-amount" placeholder="0.00"
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-right font-mono text-white focus:outline-none focus:border-ramux transition-colors"
+                                    step="0.01" oninput="calculateTotal()">
+                                <span class="absolute left-4 top-3 text-slate-500 font-bold text-sm">RMX</span>
+                            </div>
+                        </div>
+
+                        <div class="py-4 border-t border-slate-800">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm text-slate-400">Total Estimado</span>
+                                <span class="text-lg font-bold text-white font-mono" id="trade-total">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-slate-500">Disponible:</span>
+                                <span class="text-xs text-slate-300 font-mono" id="trade-balance">---</span>
+                            </div>
+                        </div>
+
+                        <button onclick="executeTrade()" id="btn-action"
+                            class="w-full py-4 rounded-xl font-bold text-white bg-bull hover:bg-emerald-400 transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+                            COMPRAR RMX
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Portfolio Summary -->
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Mi Portafolio</h3>
+
+                    <div class="space-y-4">
+                        <div
+                            class="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 border border-slate-700/50">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Efectivo USD</p>
+                                    <p class="text-sm font-bold text-white font-mono" id="pf-cash">$0.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 border border-slate-700/50">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-brand/20 flex items-center justify-center text-brand">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400">Tenencia RMX</p>
+                                    <p class="text-sm font-bold text-white font-mono" id="pf-rmx">0.0000</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 mt-2 border-t border-slate-800">
+                            <div class="flex justify-between items-end">
+                                <span class="text-sm text-slate-400">Valor Total</span>
+                                <span class="text-xl font-bold text-white font-mono" id="pf-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <button onclick="resetPortfolio()"
+                            class="w-full py-2 text-xs text-slate-500 hover:text-red-400 transition-colors border border-transparent hover:border-red-900/30 rounded">
+                            <i class="fas fa-rotate-left mr-1"></i> Reiniciar Simulador
+                        </button>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </main>
+
+
+    <script>
+        // --- CONSTANTS & STATE ---
+        const INITIAL_CASH = 10000;
+        const RMX_BASE_PRICE = 2650; // Approx Gold Price
+
+        let state = {
+            cash: 0,
+            rmx: 0,
+            history: []
+        };
+
+        // Mock Market Data State
+        let currentPrice = RMX_BASE_PRICE;
+        let priceHistory = [];
+        let labels = [];
+        let chartInstance = null;
+        let tradeMode = 'buy'; // 'buy' or 'sell'
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            initChart();
+            updateUI();
+
+            // Start Simulation Loop
+            setInterval(() => {
+                simulateMarketTick();
+                updateChart();
+                updateUI(); // Update price displays
+            }, 2000); // New price every 2 seconds
+        });
+
+        function loadState() {
+            const saved = localStorage.getItem('ramux_sim_state');
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                state = { cash: INITIAL_CASH, rmx: 0, history: [] };
+                saveState();
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('ramux_sim_state', JSON.stringify(state));
+        }
+
+        function resetPortfolio() {
+            if (confirm('¿Estás seguro de querer reiniciar tu portafolio a $10,000 USD?')) {
+                state = { cash: INITIAL_CASH, rmx: 0, history: [] };
+                saveState();
+                updateUI();
+            }
+        }
+
+        // --- MARKET SIMULATION ---
+        function initChart() {
+            // Generate initial history (last 50 points)
+            let price = RMX_BASE_PRICE;
+            const now = new Date();
+            for (let i = 50; i > 0; i--) {
+                price = generateNextPrice(price);
+                priceHistory.push(price);
+
+                // Mock time labels
+                const d = new Date(now.getTime() - i * 60000); // minutes ago
+                labels.push(d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'));
+            }
+            currentPrice = price;
+
+            const ctx = document.getElementById('marketChart').getContext('2d');
+
+            // Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(14, 165, 233, 0.5)'); // ramux color
+            gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Precio RMX (USD)',
+                        data: priceHistory,
+                        borderColor: '#0ea5e9',
+                        backgroundColor: gradient,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#cbd5e1',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(56, 189, 248, 0.2)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: (context) => '$ ' + context.parsed.y.toFixed(2)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false, // Hide X axis for clean look
+                            grid: { display: false }
+                        },
+                        y: {
+                            position: 'right',
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                callback: (value) => '$' + value
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateNextPrice(prevPrice) {
+            // Random walk: +/- 0.5% max change
+            const volatility = 0.002;
+            const change = prevPrice * volatility * (Math.random() - 0.5);
+            return prevPrice + change;
+        }
+
+        function simulateMarketTick() {
+            currentPrice = generateNextPrice(currentPrice);
+
+            // Update Data arrays
+            priceHistory.push(currentPrice);
+            priceHistory.shift(); // Remove oldest
+
+            const now = new Date();
+            const timeLabel = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
+            labels.push(now.getMinutes() + ':' + String(now.getSeconds()).padStart(2, '0'));
+            labels.shift();
+        }
+
+        function updateChart() {
+            if (!chartInstance) return;
+            chartInstance.data.datasets[0].data = priceHistory;
+            chartInstance.data.labels = labels;
+
+            // Dynamic Color based on trend vs start of window
+            const startPrice = priceHistory[0];
+            const endPrice = priceHistory[priceHistory.length - 1];
+            const color = endPrice >= startPrice ? '#10b981' : '#ef4444'; // Green or Red
+            const bgGradient = chartInstance.ctx.createLinearGradient(0, 0, 0, 400);
+            bgGradient.addColorStop(0, endPrice >= startPrice ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)');
+            bgGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            chartInstance.data.datasets[0].borderColor = color;
+            chartInstance.data.datasets[0].backgroundColor = bgGradient;
+
+            chartInstance.update('none'); // Update without full re-render for performance
+        }
+
+        // --- TRADING LOGIC ---
+        function setMode(mode) {
+            tradeMode = mode;
+            const btnBuy = document.getElementById('btn-buy');
+            const btnSell = document.getElementById('btn-sell');
+            const btnAction = document.getElementById('btn-action');
+
+            if (mode === 'buy') {
+                btnBuy.className = "flex-1 py-2 rounded-md text-sm font-bold transition-all bg-bull text-white shadow-lg";
+                btnSell.className = "flex-1 py-2 rounded-md text-sm font-bold transition-all text-slate-400 hover:text-white";
+                btnAction.className = "w-full py-4 rounded-xl font-bold text-white bg-bull hover:bg-emerald-400 transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95";
+                btnAction.innerText = "COMPRAR RMX";
+            } else {
+                btnBuy.className = "flex-1 py-2 rounded-md text-sm font-bold transition-all text-slate-400 hover:text-white";
+                btnSell.className = "flex-1 py-2 rounded-md text-sm font-bold transition-all bg-bear text-white shadow-lg";
+                btnAction.className = "w-full py-4 rounded-xl font-bold text-white bg-bear hover:bg-red-400 transition-all shadow-lg hover:shadow-red-500/20 active:scale-95";
+                btnAction.innerText = "VENDER RMX";
+            }
+            calculateTotal();
+            updateUI();
+        }
+
+        function calculateTotal() {
+            const amount = parseFloat(document.getElementById('trade-amount').value) || 0;
+            const total = amount * currentPrice;
+            document.getElementById('trade-total').innerText = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function setMaxAmount() {
+            if (tradeMode === 'buy') {
+                // Max based on Cash
+                const max = state.cash / currentPrice;
+                // Round down to 4 decimals to avoid float issues
+                document.getElementById('trade-amount').value = Math.floor(max * 10000) / 10000;
+            } else {
+                // Max based on Holdings
+                document.getElementById('trade-amount').value = state.rmx;
+            }
+            calculateTotal();
+        }
+
+        function executeTrade() {
+            const amount = parseFloat(document.getElementById('trade-amount').value);
+            if (!amount || amount <= 0) {
+                alert("Por favor ingrese una cantidad válida.");
+                return;
+            }
+
+            const totalCost = amount * currentPrice;
+
+            if (tradeMode === 'buy') {
+                if (state.cash >= totalCost) {
+                    state.cash -= totalCost;
+                    state.rmx += amount;
+                    alert(`¡Orden Ejecutada! Compraste ${amount} RMX a $${currentPrice.toFixed(2)}`);
+                } else {
+                    alert("Fondos insuficientes.");
+                    return;
+                }
+            } else {
+                if (state.rmx >= amount) {
+                    state.cash += totalCost;
+                    state.rmx -= amount;
+                    alert(`¡Orden Ejecutada! Vendiste ${amount} RMX a $${currentPrice.toFixed(2)}`);
+                } else {
+                    alert("Fondos de RMX insuficientes.");
+                    return;
+                }
+            }
+
+            saveState();
+            updateUI();
+            document.getElementById('trade-amount').value = '';
+            calculateTotal();
+        }
+
+        function updateUI() {
+            // Current Price Headers
+            document.getElementById('current-price').innerText = '$' + currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('trade-price').innerText = '$' + currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // % Change (Mock calculation based on base price)
+            const change = ((currentPrice - RMX_BASE_PRICE) / RMX_BASE_PRICE) * 100;
+            const changeEl = document.getElementById('price-change');
+            changeEl.className = `text-sm font-bold flex items-center gap-1 mt-1 ${change >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+            changeEl.innerHTML = `<i class="fas fa-caret-${change >= 0 ? 'up' : 'down'}"></i> ${Math.abs(change).toFixed(2)}%`;
+
+            // Portfolio Data
+            document.getElementById('pf-cash').innerText = '$' + state.cash.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('pf-rmx').innerText = state.rmx.toLocaleString('en-US', { minimumFractionDigits: 4 });
+
+            const totalValue = state.cash + (state.rmx * currentPrice);
+            document.getElementById('pf-total').innerText = '$' + totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Available Balance helper in form
+            const avail = tradeMode === 'buy' ? '$' + state.cash.toFixed(2) : state.rmx.toFixed(4) + ' RMX';
+            document.getElementById('trade-balance').innerText = avail;
+        }
+
+        // --- MOBILE MENU ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+                // Update mobile balance
+
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        // --- AI ADVISOR LOGIC ---
+        function analyzeMarket() {
+            const btn = document.getElementById('btn-analyze');
+            const output = document.getElementById('ai-output');
+
+            // UI Loading State
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> ANALIZANDO...';
+            output.classList.add('hidden');
+
+            // Simulate Processing Delay
+            setTimeout(() => {
+                // Calculate Indicators
+                const lookback = 14;
+                if (priceHistory.length < lookback) {
+                    alert("Recopilando más datos de mercado... Espere unos segundos.");
+                    resetBtn();
+                    return;
+                }
+
+                const prices = priceHistory.slice(-lookback);
+                const rsi = calculateRSI(prices);
+                const current = prices[prices.length - 1];
+                const sma = prices.reduce((a, b) => a + b, 0) / prices.length;
+
+                // Generate Signal
+                let sentiment = 'Neutral';
+                let sentimentClass = 'text-slate-300 border-slate-600';
+                let confidence = 50 + Math.random() * 20; // Base confidence
+                let reason = "Mercado lateral sin tendencia clara.";
+
+                if (rsi < 35) {
+                    sentiment = 'COMPRA (Bullish)';
+                    sentimentClass = 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10';
+                    confidence = 80 + Math.random() * 15;
+                    reason = `Detectada sobreventa (RSI ${rsi.toFixed(0)} < 35). Probable rebote técnico al alza.`;
+                } else if (rsi > 65) {
+                    sentiment = 'VENTA (Bearish)';
+                    sentimentClass = 'text-red-400 border-red-500/50 bg-red-500/10';
+                    confidence = 80 + Math.random() * 15;
+                    reason = `Detectada sobrecompra (RSI ${rsi.toFixed(0)} > 65). Probable corrección de precio.`;
+                } else if (current > sma * 1.001) {
+                    sentiment = 'ALCISTA LEVE';
+                    sentimentClass = 'text-emerald-300 border-emerald-500/30';
+                    confidence = 60 + Math.random() * 10;
+                    reason = "Precio por encima de la media móvil (SMA). Tendencia positiva.";
+                } else if (current < sma * 0.999) {
+                    sentiment = 'BAJISTA LEVE';
+                    sentimentClass = 'text-red-300 border-red-500/30';
+                    confidence = 60 + Math.random() * 10;
+                    reason = "Precio por debajo de la media móvil (SMA). Debilidad a corto plazo.";
+                }
+
+                // Update UI
+                document.getElementById('ai-sentiment').innerText = sentiment;
+                document.getElementById('ai-sentiment').className = `font-bold text-sm px-2 py-0.5 rounded border ${sentimentClass}`;
+                document.getElementById('ai-confidence').innerText = confidence.toFixed(0) + '%';
+                document.getElementById('ai-confidence-bar').style.width = confidence + '%';
+                document.getElementById('ai-reason').innerText = `"${reason}"`;
+
+                output.classList.remove('hidden');
+                resetBtn();
+
+            }, 1500);
+        }
+
+        function resetBtn() {
+            const btn = document.getElementById('btn-analyze');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> CONSULTAR IA';
+        }
+
+        function calculateRSI(prices) {
+            let gains = 0;
+            let losses = 0;
+
+            for (let i = 1; i < prices.length; i++) {
+                const diff = prices[i] - prices[i - 1];
+                if (diff >= 0) {
+                    gains += diff;
+                } else {
+                    losses -= diff;
+                }
+            }
+
+            if (losses === 0) return 100;
+            const rs = gains / losses;
+            return 100 - (100 / (1 + rs));
+        }
+
+        // STANDARD HEADER JS (Appended)
+        document.addEventListener('DOMContentLoaded', () => {
+            const name = localStorage.getItem('cnv_user_name') || 'Usuario Ramux';
+            const avatar = localStorage.getItem('cnv_user_avatar') || 'astro';
+            const nameEl = document.getElementById('header-username');
+            if (nameEl) nameEl.textContent = name;
+            const avatarMap = { 'astro': 'fa-user-astronaut', 'secret': 'fa-user-secret', 'ninja': 'fa-user-ninja', 'grad': 'fa-user-graduate', 'tie': 'fa-user-tie', 'robot': 'fa-robot', 'dragon': 'fa-dragon', 'chart': 'fa-chart-line' };
+            const iconClass = avatarMap[avatar] || 'fa-user-astronaut';
+            const avatarEl = document.getElementById('header-avatar');
+            if (avatarEl) avatarEl.className = `fas ${iconClass} text-slate-300`;
+        });
+        function toggleNotifications() { document.getElementById('notif-dropdown').classList.toggle('hidden'); }
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            const dropdown = document.getElementById('notif-dropdown');
+            if (!btn && dropdown && !dropdown.contains(e.target) && !dropdown.classList.contains('hidden')) { dropdown.classList.add('hidden'); }
+        });
+    </script>
+</body>
+
+</html>
