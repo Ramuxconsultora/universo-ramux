@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas Normativa IA - RAMUX</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Marked integration to render markdown (bolding, lists) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        ramux: '#0ea5e9',
+                        ramuxvis: '#8b5cf6',
+                        brand: '#F76B1C',
+                        darkbg: '#020617',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        /* Scrollbar custom */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            position: relative;
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 0.2rem;
+        }
+
+        .bot-bubble {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            align-self: flex-start;
+            margin-right: auto;
+            border-bottom-left-radius: 0.2rem;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen text-slate-200 flex flex-col md:flex-row overflow-hidden">
+
+    <div class="fixed-background"></div>
+
+    <!-- SIDEBAR (Mobile hidden by default) -->
+    <aside id="sidebar"
+        class="glass-card w-64 flex-shrink-0 flex flex-col h-screen transform -translate-x-full md:translate-x-0 transition-transform duration-300 fixed md:relative z-40 bg-slate-900/95 border-r border-slate-700/50">
+
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-slate-700/50 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-slate-300 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left"></i>
+                <span class="font-bold text-sm">Volver</span>
+            </a>
+            <button id="close-sidebar" class="md:hidden text-slate-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- New Chat Button -->
+        <div class="p-4">
+            <button onclick="createNewChat()"
+                class="w-full bg-ramux/10 hover:bg-ramux/20 border border-ramux/50 text-ramux font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                <i class="fas fa-plus"></i>
+                Nuevo Chat
+            </button>
+        </div>
+
+        <!-- History List -->
+        <div class="flex-grow overflow-y-auto px-2" id="history-list">
+            <!-- Items injected by JS -->
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-slate-700/50 text-xs text-center text-slate-500">
+            RAMUX AI • Historial Local
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow flex flex-col h-screen relative w-full">
+
+        <!-- HEADER -->
+        <header class="fixed top-0 left-0 w-full z-50 glass-nav h-20 flex items-center">
+            <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+
+                <!-- 1. Navigation & Profile (Left) -->
+                <div class="w-1/3 flex items-center gap-6">
+                    <!-- Home Button -->
+                    <a href="dashboard.html"
+                        class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
+                        title="Ir al Inicio">
+                        <div
+                            class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors">
+                            <i class="fas fa-home text-slate-300"></i>
+                        </div>
+                    </a>
+
+                    <!-- Profile (Compact) -->
+                    <a href="profile.html" class="flex items-center gap-3 group cursor-pointer text-decoration-none">
+                        <div
+                            class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors overflow-hidden">
+                            <i id="header-avatar" class="fas fa-user-astronaut text-slate-300"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 uppercase tracking-wider">Bienvenido</p>
+                            <p id="header-username"
+                                class="text-sm font-bold text-white group-hover:text-ramux transition-colors">
+                                Cargando...</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- 2. Logo/Title (Center) -->
+                <div class="w-1/3 flex justify-center text-center">
+                    <span class="font-black text-xl text-white tracking-wide">RAMUX IA</span>
+                </div>
+
+                <!-- 3. Notifications (Right) -->
+                <div class="w-1/3 flex justify-end items-center gap-6 relative">
+                    <button onclick="toggleNotifications()"
+                        class="text-slate-400 hover:text-white transition-colors relative z-50">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    </button>
+
+                    <!-- Dropdown -->
+                    <div id="notif-dropdown"
+                        class="hidden absolute top-12 right-0 w-80 glass-panel rounded-xl border border-slate-700 overflow-hidden shadow-2xl z-40 bg-slate-900/95">
+                        <div class="p-4 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50">
+                            <span class="font-bold text-white text-sm">Notificaciones</span>
+                            <span class="text-[10px] text-ramux cursor-pointer hover:underline">Marcar leídas</span>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto">
+                            <div
+                                class="p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors cursor-pointer">
+                                <p class="text-xs text-slate-300"><span class="font-bold text-white">Ana_Trader</span>
+                                    comentó en tu publicación.</p>
+                                <span class="text-[10px] text-slate-500 mt-1 block">Hace 5 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- CHAT AREA -->
+        <div id="chat-container" class="flex-grow overflow-y-auto p-4 md:p-6 scroll-smooth">
+            <!-- Welcome Message -->
+            <div class="bot-bubble chat-bubble" id="welcome-msg">
+                <div class="flex items-center gap-2 mb-2 text-ramux text-xs font-bold uppercase">
+                    <i class="fas fa-robot"></i> Asistente Normativo
+                </div>
+                <p>Hola 👋 Soy tu asistente de inteligencia artificial entrenado con la normativa de la CNV.</p>
+                <p class="mt-2 text-slate-400 text-sm">Pregúntame sobre leyes, plazos, el Manual del IAMC o cualquier
+                    duda para tu examen.</p>
+            </div>
+        </div>
+
+        <!-- INPUT AREA -->
+        <div class="w-full p-4 bg-slate-900 border-t border-slate-700/50 flex-shrink-0 z-20">
+            <div class="max-w-3xl mx-auto glass-card p-2 rounded-2xl flex gap-2 items-end relative">
+                <textarea id="user-input" rows="1"
+                    class="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-ramux focus:ring-1 focus:ring-ramux resize-none overflow-hidden transition-all placeholder-slate-500"
+                    placeholder="Escribe tu pregunta aquí..."></textarea>
+
+                <button id="send-btn"
+                    class="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-ramux to-blue-600 rounded-xl flex items-center justify-center hover:opacity-90 transition-transform active:scale-95 text-white shadow-lg shadow-ramux/25">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- OVERLAY for mobile -->
+    <div id="sidebar-overlay"
+        class="fixed inset-0 bg-black/50 z-30 hidden md:hidden glass-card opacity-0 transition-opacity duration-300">
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const historyList = document.getElementById('history-list');
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+        const closeSidebarBtn = document.getElementById('close-sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const welcomeMsg = document.getElementById('welcome-msg');
+
+        const API_URL = 'http://localhost:5001/ask';
+
+        // STATE
+        let currentChatId = null;
+        let chats = JSON.parse(localStorage.getItem('ramux_chats')) || {};
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderHistoryList();
+            // Start a new chat if none selected or verify if cleaning needed
+            if (!currentChatId) createNewChat(false);
+        });
+
+        // --- SIDEBAR LOGIC ---
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('opacity-0');
+                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        toggleSidebarBtn.addEventListener('click', toggleSidebar);
+        closeSidebarBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // --- CHAT HISTORY LOGIC ---
+
+        function createNewChat(render = true) {
+            currentChatId = Date.now().toString();
+            chats[currentChatId] = {
+                title: 'Nuevo Chat',
+                messages: []
+            };
+            saveToLocalStorage();
+
+            // Clear UI
+            chatContainer.innerHTML = '';
+            chatContainer.appendChild(welcomeMsg); // Keep welcome message
+
+            if (render) {
+                renderHistoryList();
+                // On mobile, close sidebar after creation
+                if (window.innerWidth < 768) toggleSidebar();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('ramux_chats', JSON.stringify(chats));
+        }
+
+        function deleteChat(e, id) {
+            e.stopPropagation();
+            if (confirm('¿Borrar este chat?')) {
+                delete chats[id];
+                saveToLocalStorage();
+                renderHistoryList();
+                if (currentChatId === id) createNewChat();
+            }
+        }
+
+        function loadChat(id) {
+            if (!chats[id]) return;
+            currentChatId = id;
+
+            // Render Messages
+            chatContainer.innerHTML = '';
+            chatContainer.appendChild(welcomeMsg); // Always top
+
+            chats[id].messages.forEach(msg => {
+                addMessageToUI(msg.content, msg.role, msg.isHTML, false); // false = don't save again
+            });
+
+            // Highlight in sidebar
+            renderHistoryList();
+
+            // On mobile, close sidebar after selection
+            if (window.innerWidth < 768) toggleSidebar();
+        }
+
+        function renderHistoryList() {
+            historyList.innerHTML = '';
+
+            // Sort by ID desc (newest first)
+            const ids = Object.keys(chats).sort((a, b) => b - a);
+
+            ids.forEach(id => {
+                const chat = chats[id];
+                const isActive = id === currentChatId;
+
+                const btn = document.createElement('div');
+                btn.className = `p-3 rounded-lg cursor-pointer mb-1 flex justify-between items-center group transition-colors ${isActive ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'}`;
+                btn.onclick = () => loadChat(id);
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <i class="fas fa-message text-xs"></i>
+                        <span class="text-sm truncate w-32 font-medium">${chat.title}</span>
+                    </div>
+                    <button onclick="deleteChat(event, '${id}')" class="opacity-0 group-hover:opacity-100 hover:text-red-400 transition-opacity p-1">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                `;
+
+                historyList.appendChild(btn);
+            });
+        }
+
+        function updateChatTitle(firstMessage) {
+            if (chats[currentChatId].title === 'Nuevo Chat') {
+                // Take first 25 chars
+                let title = firstMessage.substring(0, 25);
+                if (firstMessage.length > 25) title += '...';
+                chats[currentChatId].title = title;
+                saveToLocalStorage();
+                renderHistoryList();
+            }
+        }
+
+        // --- MESSAGING LOGIC ---
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if (this.value === '') this.style.height = 'auto';
+        });
+
+        // Enviar con Enter
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // 1. Mostrar y guardar mensaje del usuario
+            addMessageToUI(text, 'user', false, true);
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            // Actualizar titulo si es el primero
+            if (chats[currentChatId].messages.length === 1) {
+                updateChatTitle(text);
+            }
+
+            // 2. Loading
+            const loadingId = addLoading();
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: text })
+                });
+
+                const data = await response.json();
+                removeMessage(loadingId);
+
+                if (data.answer) {
+                    const aiContent = typeof marked !== 'undefined' ? marked.parse(data.answer) : data.answer;
+                    addMessageToUI(aiContent, 'bot', true, true);
+
+                    // Manejar fuentes (las guardamos como parte del HTML del mensaje del bot o separado?)
+                    // Para simplificar el historial, lo agregaremos al HTML del mensaje del bot antes de guardar
+                    if (data.sources && data.sources.length > 0) {
+                        let sourcesHTML = `
+                            <div class="mt-4 pt-3 border-t border-slate-700/50">
+                                <p class="text-[10px] text-slate-500 font-bold mb-2 uppercase tracking-wider flex items-center gap-1">
+                                    <i class="fas fa-book"></i> Fuentes Consultadas
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                        `;
+                        data.sources.forEach(source => {
+                            const icon = (source.toUpperCase().includes("LEY") || source.toUpperCase().includes("DECRETO")) ? "⚖️" : "📘";
+                            const encodedSource = encodeURIComponent(source);
+                            sourcesHTML += `
+                                <a href="biblioteca.html?doc=${encodedSource}" target="_blank" class="text-[10px] bg-slate-950/50 text-slate-400 px-2 py-1 rounded border border-slate-800 hover:text-white hover:border-ramux transition-colors">
+                                    ${icon} ${source} <i class="fas fa-external-link-alt ml-1 opacity-50"></i>
+                                </a>
+                             `;
+                        });
+                        sourcesHTML += `</div></div>`;
+
+                        // Append to the last message bubble in DOM
+                        const lastMsg = chatContainer.lastElementChild;
+                        const sourcesDiv = document.createElement('div');
+                        sourcesDiv.innerHTML = sourcesHTML;
+                        lastMsg.appendChild(sourcesDiv);
+
+                        // Update in storage
+                        const lastMsgIndex = chats[currentChatId].messages.length - 1;
+                        chats[currentChatId].messages[lastMsgIndex].content += sourcesHTML;
+                        saveToLocalStorage();
+                    }
+
+                } else if (data.error) {
+                    addMessageToUI("❌ Error: " + data.error, 'bot', false, false);
+                }
+
+            } catch (error) {
+                removeMessage(loadingId);
+                console.error(error);
+                addMessageToUI("❌ Error de conexión. Verifica que el servidor esté corriendo.", 'bot', false, false);
+            }
+        }
+
+        function addMessageToUI(content, role, isHTML = false, save = true) {
+            const div = document.createElement('div');
+            div.className = `chat-bubble ${role === 'user' ? 'user-bubble' : 'bot-bubble'}`;
+
+            if (role === 'bot') {
+                const header = `
+                    <div class="flex items-center gap-2 mb-2 text-ramux text-xs font-bold uppercase">
+                        <i class="fas fa-robot"></i> Asistente
+                    </div>`;
+                div.innerHTML = header + (isHTML ? content : `<p>${content}</p>`);
+            } else {
+                div.innerHTML = `<p>${content.replace(/\n/g, '<br>')}</p>`;
+            }
+
+            chatContainer.appendChild(div);
+            scrollToBottom();
+
+            if (save && currentChatId) {
+                chats[currentChatId].messages.push({ role, content, isHTML });
+                saveToLocalStorage();
+            }
+        }
+
+        function addLoading() {
+            const div = document.createElement('div');
+            div.className = 'bot-bubble chat-bubble animate-pulse';
+            div.innerHTML = `
+                <div class="flex items-center gap-1 h-6">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            div.id = 'loading-' + Date.now();
+            chatContainer.appendChild(div);
+            scrollToBottom();
+            return div.id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // STANDARD HEADER JS (Appended)
+        document.addEventListener('DOMContentLoaded', () => {
+            const name = localStorage.getItem('cnv_user_name') || 'Usuario Ramux';
+            const avatar = localStorage.getItem('cnv_user_avatar') || 'astro';
+            const nameEl = document.getElementById('header-username');
+            if (nameEl) nameEl.textContent = name;
+            const avatarMap = { 'astro': 'fa-user-astronaut', 'secret': 'fa-user-secret', 'ninja': 'fa-user-ninja', 'grad': 'fa-user-graduate', 'tie': 'fa-user-tie', 'robot': 'fa-robot', 'dragon': 'fa-dragon', 'chart': 'fa-chart-line' };
+            const iconClass = avatarMap[avatar] || 'fa-user-astronaut';
+            const avatarEl = document.getElementById('header-avatar');
+            if (avatarEl) avatarEl.className = `fas ${iconClass} text-slate-300`;
+        });
+        function toggleNotifications() { document.getElementById('notif-dropdown').classList.toggle('hidden'); }
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            const dropdown = document.getElementById('notif-dropdown');
+            if (!btn && dropdown && !dropdown.contains(e.target) && !dropdown.classList.contains('hidden')) { dropdown.classList.add('hidden'); }
+        });
+    </script>
+</body>
+
+</html>

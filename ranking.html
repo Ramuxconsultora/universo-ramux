@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Global - RAMUX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: { ramux: '#0ea5e9', ramuxvis: '#8b5cf6', brand: '#F76B1C', dark: '#020617' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f1f5f9;
+        }
+
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at top center, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+        }
+
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .rank-row {
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-row:hover {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .gold {
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .silver {
+            color: #94a3b8;
+            text-shadow: 0 0 10px rgba(148, 163, 184, 0.5);
+        }
+
+        .bronze {
+            color: #d97706;
+            text-shadow: 0 0 10px rgba(217, 119, 6, 0.5);
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col items-center">
+
+    <div class="fixed-background"></div>
+
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+
+            <!-- 1. Navigation & Profile (Left) -->
+            <div class="w-1/3 flex items-center gap-6">
+                <!-- Home Button -->
+                <a href="dashboard.html"
+                    class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
+                    title="Ir al Inicio">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors">
+                        <i class="fas fa-home text-slate-300"></i>
+                    </div>
+                </a>
+
+                <!-- Profile (Compact) -->
+                <a href="profile.html" class="flex items-center gap-3 group cursor-pointer text-decoration-none">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors overflow-hidden">
+                        <i id="header-avatar" class="fas fa-user-astronaut text-slate-300"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 uppercase tracking-wider">Bienvenido</p>
+                        <p id="header-username"
+                            class="text-sm font-bold text-white group-hover:text-ramux transition-colors">Cargando...
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 2. Logo/Title (Center) -->
+            <div class="w-1/3 flex justify-center text-center">
+                <span class="font-black text-xl text-white tracking-wide">RANKING GLOBAL</span>
+            </div>
+
+            <!-- 3. Notifications (Right) -->
+            <div class="w-1/3 flex justify-end items-center gap-6 relative">
+                <button onclick="toggleNotifications()"
+                    class="text-slate-400 hover:text-white transition-colors relative z-50">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                </button>
+
+                <!-- Dropdown -->
+                <div id="notif-dropdown"
+                    class="hidden absolute top-12 right-0 w-80 glass-panel rounded-xl border border-slate-700 overflow-hidden shadow-2xl z-40 bg-slate-900/95">
+                    <div class="p-4 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50">
+                        <span class="font-bold text-white text-sm">Notificaciones</span>
+                        <span class="text-[10px] text-ramux cursor-pointer hover:underline">Marcar leídas</span>
+                    </div>
+                    <div class="max-h-64 overflow-y-auto">
+                        <div
+                            class="p-4 border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors cursor-pointer">
+                            <p class="text-xs text-slate-300"><span class="font-bold text-white">Ana_Trader</span>
+                                comentó en tu publicación.</p>
+                            <span class="text-[10px] text-slate-500 mt-1 block">Hace 5 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-32 pb-12 px-4 max-w-5xl mx-auto w-full">
+        <!-- Back Button within Content -->
+        <div class="text-left mb-8">
+            <a href="dashboard.html"
+                class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700/50 hover:border-ramux">
+                <i class="fas fa-arrow-left"></i> Volver al Dashboard
+            </a>
+        </div>
+
+        <div class="glass-panel rounded-2xl overflow-hidden p-1">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-900/80 text-xs uppercase text-slate-400 font-bold border-b border-white/10">
+                        <th class="p-4 text-center w-16">Rank</th>
+                        <th class="p-4">Usuario</th>
+                        <th class="p-4 text-center">Nivel</th>
+                        <th class="p-4 text-right">ROI Mercado</th>
+                        <th class="p-4 text-right">Social Score</th>
+                        <th class="p-4 text-right text-brand">Puntuación Total</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body">
+                    <!-- JS Generated -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('cnv_user_name') || 'Usuario';
+            const currentXP = parseInt(localStorage.getItem('cnv_xp') || '150'); // Mock XP usage
+            const currentSocial = parseInt(localStorage.getItem('ramux_social_score') || '0');
+            const roi = 12.5; // Mock ROI for now
+
+            // Calc Total Score: (XP * 1) + (Social * 2) + (ROI * 100)
+            const myScore = currentXP + (currentSocial * 2) + Math.round(roi * 10);
+
+            const mockUsers = [
+                { name: 'Ana_Trader', lvl: 4, xp: 2500, social: 450, roi: 45.2 },
+                { name: 'CryptoKing', lvl: 3, xp: 1800, social: 1200, roi: 120.5 },
+                { name: 'JuanPerez', lvl: 2, xp: 800, social: 100, roi: -5.0 },
+                { name: 'SofiaBull', lvl: 5, xp: 3200, social: 800, roi: 28.4 },
+                { name: 'BearWhale', lvl: 3, xp: 1500, social: 200, roi: 15.0 },
+                { name: currentUser, lvl: 1, xp: currentXP, social: currentSocial, roi: roi, isMe: true }
+            ];
+
+            // Calculate Totals & Sort
+            mockUsers.forEach(u => {
+                u.total = u.xp + (u.social * 2) + Math.round(u.roi * 10);
+            });
+
+            mockUsers.sort((a, b) => b.total - a.total);
+
+            // Render
+            const tbody = document.getElementById('ranking-body');
+            tbody.innerHTML = mockUsers.map((u, index) => {
+                let rankIcon = `<span class="text-slate-500 font-mono font-bold">#${index + 1}</span>`;
+                if (index === 0) rankIcon = '<i class="fas fa-crown gold text-lg"></i>';
+                if (index === 1) rankIcon = '<i class="fas fa-medal silver text-lg"></i>';
+                if (index === 2) rankIcon = '<i class="fas fa-medal bronze text-lg"></i>';
+
+                const rowClass = u.isMe ? 'bg-ramux/10 border-l-4 border-l-ramux' : '';
+                const nameClass = u.isMe ? 'text-ramux font-bold' : 'text-white font-bold';
+
+                return `
+                <tr class="rank-row ${rowClass}">
+                    <td class="p-4 text-center">${rankIcon}</td>
+                    <td class="p-4 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs text-slate-400">
+                           <i class="fas fa-user"></i>
+                        </div>
+                        <span class="${nameClass}">${u.name} ${u.isMe ? '(Tú)' : ''}</span>
+                    </td>
+                    <td class="p-4 text-center text-slate-300 font-mono">${u.lvl}</td>
+                    <td class="p-4 text-right font-mono ${u.roi >= 0 ? 'text-emerald-400' : 'text-red-400'}">${u.roi > 0 ? '+' : ''}${u.roi}%</td>
+                    <td class="p-4 text-right font-mono text-blue-300">${u.social}</td>
+                    <td class="p-4 text-right font-black text-white text-lg">${u.total.toLocaleString()}</td>
+                </tr>
+                `;
+            }).join('');
+        });
+
+        // STANDARD HEADER JS (Appended)
+        document.addEventListener('DOMContentLoaded', () => {
+            const name = localStorage.getItem('cnv_user_name') || 'Usuario Ramux';
+            const avatar = localStorage.getItem('cnv_user_avatar') || 'astro';
+            const nameEl = document.getElementById('header-username');
+            if (nameEl) nameEl.textContent = name;
+            const avatarMap = { 'astro': 'fa-user-astronaut', 'secret': 'fa-user-secret', 'ninja': 'fa-user-ninja', 'grad': 'fa-user-graduate', 'tie': 'fa-user-tie', 'robot': 'fa-robot', 'dragon': 'fa-dragon', 'chart': 'fa-chart-line' };
+            const iconClass = avatarMap[avatar] || 'fa-user-astronaut';
+            const avatarEl = document.getElementById('header-avatar');
+            if (avatarEl) avatarEl.className = `fas ${iconClass} text-slate-300`;
+        });
+        function toggleNotifications() { document.getElementById('notif-dropdown').classList.toggle('hidden'); }
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            const dropdown = document.getElementById('notif-dropdown');
+            if (!btn && dropdown && !dropdown.contains(e.target) && !dropdown.classList.contains('hidden')) { dropdown.classList.add('hidden'); }
+        });
+    </script>
+</body>
+
+</html>

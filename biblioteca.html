@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital - RAMUX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        ramux: '#0ea5e9',
+                        brand: '#F76B1C',
+                        darkbg: '#020617',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+
+        .doc-content pre {
+            white-space: pre-wrap;
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen text-slate-200 flex flex-col md:flex-row overflow-hidden">
+
+    <div class="fixed-background"></div>
+
+    <!-- SIDEBAR DOCUMENT LIST -->
+    <aside
+        class="w-full md:w-80 flex-shrink-0 flex flex-col h-[40vh] md:h-screen bg-slate-900/95 border-r border-slate-700/50 z-20">
+
+        <!-- Header -->
+        <div class="p-4 border-b border-slate-700/50 flex justify-between items-center">
+            <h2 class="font-bold text-lg text-white flex items-center gap-2">
+                <i class="fas fa-book text-ramux"></i> Biblioteca
+            </h2>
+            <a href="ia_normativa.html" class="text-xs text-ramux hover:underline">Ir a la IA</a>
+        </div>
+
+        <!-- Search -->
+        <div class="p-3">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-3 text-slate-500 text-xs"></i>
+                <input type="text" id="search-doc" placeholder="Buscar documento..."
+                    class="w-full bg-slate-800 rounded-lg pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-ramux">
+            </div>
+        </div>
+
+        <!-- List -->
+        <div id="doc-list" class="flex-grow overflow-y-auto px-2 pb-4 space-y-1">
+            <div class="text-center text-slate-500 text-xs mt-4">Cargando documentos...</div>
+        </div>
+
+        <div class="p-3 border-t border-slate-700/50 text-center">
+            <a href="dashboard.html" class="text-xs text-slate-400 hover:text-white"><i class="fas fa-home"></i> Volver
+                al
+                Inicio</a>
+        </div>
+    </aside>
+
+    <!-- CONTENT VIEWER -->
+    <main class="flex-grow flex flex-col h-[60vh] md:h-screen relative w-full bg-slate-900/50">
+
+        <!-- Toolbar -->
+        <div
+            class="h-14 border-b border-slate-700/50 flex items-center justify-between px-6 bg-slate-900/80 backdrop-blur">
+            <h1 id="doc-title" class="font-bold text-white truncate max-w-lg">Selecciona un documento</h1>
+            <div class="flex items-center gap-2">
+                <!-- Actions like print/download could go here -->
+                <button onclick="copyContent()" class="text-slate-400 hover:text-white" title="Copiar texto"><i
+                        class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <!-- Document Content -->
+        <div class="flex-grow overflow-y-auto p-6 md:p-10 scroll-smooth doc-content">
+            <div id="content-viewer" class="text-slate-300 text-sm leading-relaxed max-w-4xl mx-auto">
+                <div class="flex flex-col items-center justify-center h-full text-slate-500 gap-4 mt-20">
+                    <i class="fas fa-book-open text-6xl opacity-20"></i>
+                    <p>Selecciona un documento de la lista para leerlo completo.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:5001/api';
+        let allDocs = [];
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDocuments();
+
+            // Check URL param ?doc=filename
+            const urlParams = new URLSearchParams(window.location.search);
+            const docName = urlParams.get('doc');
+            if (docName) {
+                loadDocument(docName);
+            }
+        });
+
+        // Search Filter
+        document.getElementById('search-doc').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allDocs.filter(d => d.name.toLowerCase().includes(term));
+            renderDocList(filtered);
+        });
+
+        async function fetchDocuments() {
+            try {
+                const res = await fetch(`${API_URL}/documents`);
+                allDocs = await res.json();
+                renderDocList(allDocs);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('doc-list').innerHTML = '<div class="text-red-400 text-xs p-4">Error cargando lista. Asegurate de correr server.py</div>';
+            }
+        }
+
+        function renderDocList(docs) {
+            const container = document.getElementById('doc-list');
+            container.innerHTML = '';
+
+            if (docs.length === 0) {
+                container.innerHTML = '<div class="text-slate-500 text-xs p-4 text-center">No se encontraron documentos</div>';
+                return;
+            }
+
+            docs.forEach(doc => {
+                const isLaw = doc.name.toUpperCase().includes('LEY') || doc.name.toUpperCase().includes('DECRETO');
+                const icon = isLaw ? 'fa-scale-balanced' : 'fa-file-lines';
+                const color = isLaw ? 'text-brand' : 'text-blue-400';
+
+                // Quitamos la extensión .txt para mostrar
+                const displayName = doc.name.replace(/\.txt$/i, '');
+
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3 rounded-lg hover:bg-slate-800 transition-colors flex items-start gap-3 group';
+                btn.onclick = () => loadDocument(doc.name); // Usamos nombre completo para cargar
+
+                btn.innerHTML = `
+                    <i class="fas ${icon} ${color} mt-0.5 text-xs"></i>
+                    <div class="overflow-hidden">
+                        <div class="text-xs font-semibold text-slate-300 group-hover:text-white truncate" title="${displayName}">${displayName}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        async function loadDocument(filename) {
+            // Update UI Title (sin .txt)
+            document.getElementById('doc-title').innerText = filename.replace(/\.txt$/i, '');
+            const viewer = document.getElementById('content-viewer');
+            viewer.innerHTML = '<div class="text-ramux animate-pulse p-4">Cargando contenido...</div>';
+
+            // Fetch content
+            try {
+                const res = await fetch(`${API_URL}/document/content?name=${encodeURIComponent(filename)}`);
+                const data = await res.json();
+
+                if (data.error) {
+                    viewer.innerHTML = `<div class="text-red-400">Error: ${data.error}</div>`;
+                } else {
+                    // Formateamos el texto mejorado
+                    const formattedHTML = formatLegalText(data.content);
+
+                    viewer.innerHTML = `
+                        <div class="prose prose-invert max-w-none">
+                            <div class="font-sans text-base md:text-lg text-slate-300 leading-relaxed space-y-4">
+                                ${formattedHTML}
+                            </div>
+                        </div>
+                    `;
+
+                    // Update URL without reload
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set('doc', filename);
+                    window.history.pushState({}, '', newUrl);
+                }
+            } catch (e) {
+                viewer.innerHTML = '<div class="text-red-400">Error de conexión con el servidor.</div>';
+            }
+        }
+
+        function formatLegalText(text) {
+            if (!text) return '';
+
+            // 1. Escapar HTML básico para seguridad
+            let safeText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // 2. Procesar línea por línea
+            const lines = safeText.split('\n');
+            let html = '';
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) {
+                    html += '<br>'; // Espacio vacío
+                    return;
+                }
+
+                // DETECCIÓN DE PATRONES
+
+                // Patrón TÍTULO / CAPÍTULO (Mayúsculas y empieza con esas palabras)
+                if (/^(T[ÍI]TULO|CAP[ÍI]TULO|SECCI[ÓO]N)\s+[IVX0-9]+/i.test(trimmed)) {
+                    html += `<h2 class="text-xl md:text-2xl font-bold text-white mt-8 mb-4 border-b border-ramux/30 pb-2">${trimmed}</h2>`;
+                }
+                // Patrón ARTÍCULO (Empieza con Art. o Articulo)
+                else if (/^(ART[ÍI]CULO|ART\.)\s+\d+/i.test(trimmed)) {
+                    html += `<h3 class="text-lg font-bold text-brand mt-6 mb-2">${trimmed}</h3>`;
+                }
+                // Patrón ANEXO
+                else if (/^ANEXO\s+[IVX0-9A-Z]+/i.test(trimmed)) {
+                    html += `<h2 class="text-xl font-bold text-ramux mt-8 mb-4">${trimmed}</h2>`;
+                }
+                // Incisos (a), b), 1., 2.) - Indentación visual
+                else if (/^(\w\)|[0-9]+\.)\s+/.test(trimmed) && trimmed.length < 200) {
+                    html += `<div class="pl-4 md:pl-8 text-slate-300 py-1">${trimmed}</div>`;
+                }
+                // Texto normal
+                else {
+                    html += `<p class="mb-2 text-justify opacity-90 hover:opacity-100 transition-opacity">${trimmed}</p>`;
+                }
+            });
+
+            return html;
+        }
+
+        function copyContent() {
+            const content = document.getElementById('content-viewer').innerText;
+            navigator.clipboard.writeText(content);
+            alert("Texto copiado al portapapeles");
+        }
+    </script>
+</body>
+
+</html>

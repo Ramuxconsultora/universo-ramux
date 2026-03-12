@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full overflow-hidden">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticia - RAMUX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        ramux: '#0ea5e9',
+                        ramuxvis: '#8b5cf6',
+                        brand: '#F76B1C',
+                        dark: '#020617',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 40%, #020617 100%);
+        }
+
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9;
+        }
+    </style>
+</head>
+
+<body class="antialiased h-screen flex flex-col selection:bg-ramux/30 text-base overflow-hidden bg-slate-950">
+
+    <div class="fixed-background"></div>
+
+    <!-- HEADER (Standardized) -->
+    <header class="flex-shrink-0 w-full z-50 glass-nav h-20 flex items-center relative border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+
+            <!-- Left: Back to Dashboard -->
+            <div class="w-1/3 flex items-center gap-6">
+                <a href="dashboard.html"
+                    class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
+                    title="Volver al Dashboard">
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-ramux transition-colors">
+                        <i class="fas fa-arrow-left text-slate-300"></i>
+                    </div>
+                    <span class="hidden md:block font-bold">Volver</span>
+                </a>
+            </div>
+
+            <!-- Center: Logo -->
+            <div class="w-1/3 flex justify-center text-center">
+                <span class="font-black text-xl text-white tracking-wide flex items-center gap-2">
+                    <i class="fas fa-newspaper text-ramux"></i> RAMUX NEWS
+                </span>
+            </div>
+
+            <!-- Right: Font Size -->
+            <div class="w-1/3 flex justify-end items-center gap-4 relative">
+                <div class="flex items-center bg-slate-800/50 rounded-lg p-1 border border-slate-700">
+                    <button onclick="setFontSize(0)"
+                        class="w-8 h-8 flex items-center justify-center rounded text-xs font-bold text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">A</button>
+                    <button onclick="setFontSize(1)"
+                        class="w-8 h-8 flex items-center justify-center rounded text-sm font-bold text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">A+</button>
+                    <button onclick="setFontSize(2)"
+                        class="w-8 h-8 flex items-center justify-center rounded text-base font-bold text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">A++</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-grow flex overflow-hidden w-full relative min-h-0">
+
+        <!-- Sidebar (Fixed Layout Requirement) -->
+        <aside
+            class="hidden xl:block w-80 flex-shrink-0 h-full overflow-y-auto pl-6 pr-4 scrollbar-thin pb-6 border-r border-white/5 bg-slate-950/30">
+            <div class="py-6">
+                <p
+                    class="font-black text-slate-400 mb-6 uppercase tracking-widest text-xs px-4 border-b border-slate-800 pb-2">
+                    Últimas Noticias</p>
+                <div id="sidebar-news-list" class="space-y-3 pr-2">
+                    <!-- Populated via JS -->
+                    <div class="animate-pulse h-20 bg-slate-800/50 rounded-xl"></div>
+                    <div class="animate-pulse h-20 bg-slate-800/50 rounded-xl"></div>
+                    <div class="animate-pulse h-20 bg-slate-800/50 rounded-xl"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow h-full overflow-y-auto scrollbar-thin relative bg-slate-900/50">
+            <div class="max-w-4xl mx-auto px-6 py-12 animate-fade-in" id="article-container">
+
+                <!-- ID: Dynamic Content Injection -->
+                <div class="text-center py-20 text-slate-500">
+                    <i class="fas fa-circle-notch fa-spin text-4xl mb-4 text-ramux"></i>
+                    <p>Cargando noticia...</p>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // === FONT SIZE LOGIC ===
+        function setFontSize(level) {
+            const sizes = ['16px', '18px', '20px'];
+            document.documentElement.style.fontSize = sizes[level] || '16px';
+            localStorage.setItem('cnv_font_size', level);
+        }
+
+        // === NEWS LOADER ===
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load Font
+            const savedFont = parseInt(localStorage.getItem('cnv_font_size')) || 0;
+            setFontSize(savedFont);
+
+            // Get ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const newsId = urlParams.get('id');
+
+            try {
+                // Fetch Data (Simulated fetch from local src/data)
+                // In production this would be a real fetch endpoint. 
+                // Creating a mock fetch since we are in a static environment without a live backend serving 'src'.
+                // We will rely on fetching the json file relative to this html if served correctly, 
+                // OR mocking the data here if file protocol restricts 'fetch'.
+
+                // For this environment, we'll try to fetch relative.
+                const response = await fetch('src/data/news.json');
+                const newsData = await response.json();
+
+                renderSidebar(newsData, newsId);
+
+                if (newsId) {
+                    const article = newsData.find(n => n.id === newsId);
+                    if (article) {
+                        renderArticle(article);
+                    } else {
+                        document.getElementById('article-container').innerHTML = `<div class="text-center text-red-400 py-10">Noticia no encontrada.</div>`;
+                    }
+                } else {
+                    document.getElementById('article-container').innerHTML = `<div class="text-center text-slate-400 py-10">Seleccione una noticia.</div>`;
+                }
+
+            } catch (error) {
+                console.error("Error fetching news:", error);
+                document.getElementById('article-container').innerHTML = `<div class="text-center text-red-400 py-10">Error cargando noticias. (Verifique que src/data/news.json es accesible).</div>`;
+            }
+        });
+
+        function renderArticle(article) {
+            const container = document.getElementById('article-container');
+
+            // Format Date
+            const date = new Date(article.date).toLocaleDateString("es-AR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            container.innerHTML = `
+                <div class="mb-4 flex items-center gap-3">
+                    <span class="px-3 py-1 rounded bg-ramux/20 text-ramux text-xs font-bold uppercase tracking-wider border border-ramux/30">${article.category}</span>
+                    <span class="text-slate-500 text-sm"><i class="far fa-clock mr-1"></i> ${date}</span>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-black text-white mb-8 leading-tight">${article.title}</h1>
+
+                ${article.image ? `<img src="${article.image}" class="w-full h-96 object-cover rounded-3xl mb-10 shadow-2xl border border-white/10" alt="${article.title}">` : ''}
+
+                <div class="glass-panel p-8 rounded-2xl mb-10 border-l-4 border-brand italic text-slate-300 text-lg">
+                    "${article.summary}"
+                </div>
+
+                <div class="prose prose-invert prose-lg max-w-none text-slate-200 leading-loose">
+                    ${article.content.split('\n').map(p => `<p class="mb-6">${p}</p>`).join('')}
+                </div>
+
+                <div class="mt-12 pt-8 border-t border-slate-700 flex justify-between items-center">
+                    <p class="text-slate-500 text-sm">Fuente original: ${article.source_name || 'Desconocida'}</p>
+                    <a href="${article.source_url}" target="_blank" class="px-6 py-3 bg-white text-slate-900 rounded-xl font-bold hover:scale-105 transition-transform flex items-center gap-2">
+                        <span>Visitar Sitio Oficial</span> <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            `;
+        }
+
+        function renderSidebar(newsData, currentId) {
+            const list = document.getElementById('sidebar-news-list');
+            list.innerHTML = newsData.map(item => `
+                <a href="news_viewer.html?id=${item.id}" class="block p-4 rounded-xl border border-slate-800 hover:bg-slate-800/50 transition-all ${item.id === currentId ? 'bg-slate-800 border-ramux/50' : 'bg-slate-900/40'}">
+                    <span class="text-[10px] font-bold text-brand uppercase mb-1 block">${item.category}</span>
+                    <h4 class="text-white font-bold text-sm leading-snug mb-2 line-clamp-2">${item.title}</h4>
+                    <div class="flex items-center justify-between text-[10px] text-slate-500">
+                        <span>Ver más</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>

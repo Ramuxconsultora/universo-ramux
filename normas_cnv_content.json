@@ -1,0 +1,154 @@
+{
+    "levels": [
+        {
+            "level_id": 1,
+            "title": "Transparencia y Ámbito de Aplicación",
+            "executive_summary": "El Régimen de Transparencia es la piedra angular del mercado. Este nivel desglosa cómo la Ley garantiza la oferta pública y cómo las Normas operativizan esa garantía en el día a día.",
+            "key_concepts": [
+                "**Oferta Pública**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 82/83)</strong><br>Define la oferta pública como la invitación al público en general para realizar actos jurídicos con valores negociables.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XII, Cap. I)</strong><br>Establece que la oferta pública autorizada garantiza la transparencia mediante la difusión obligatoria de información. Sin autorización de CNV, la oferta es irregular.",
+                "**Sujetos Alcanzados**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 47)</strong><br>Enumera taxativamente a los Agentes, Mercados y Cámaras como sujetos obligados.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Títulos II, VII y VIII)</strong><br>Reglamenta los requisitos técnicos de inscripción (patrimonio, oficina, sistemas) para cada categoría.",
+                "**Igualdad de Trato**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 1)</strong><br>Establece como principio rector la protección del inversor y la igualdad de acceso.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XII)</strong><br>Prohíbe explícitamente cualquier ventaja informativa o 'selective disclosure' a favor de inversores institucionales o grupos de control."
+            ],
+            "case_study": {
+                "title": "La Igualdad de Acceso",
+                "scenario": "Una emisora adelanta sus resultados a un fondo de inversión 'amigo' horas antes de publicarlos en la AIF.",
+                "lessons_learned": "Violación flagrante del Título XII. La información debe ser pública para todos al mismo instante."
+            }
+        },
+        {
+            "level_id": 2,
+            "title": "Obligaciones de los Participantes",
+            "executive_summary": "La obligación de informar no es genérica; tiene plazos y formas estrictas definidas tanto en la Ley como en las Normas.",
+            "key_concepts": [
+                "**Deber de Informar**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 102)</strong><br>Impone la obligación de informar 'en forma veraz, suficiente y oportuna' cualquier hecho relevante.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título II)</strong><br>Precisa que 'oportuna' significa 'en forma inmediata' a la ocurrencia del hecho o la toma de decisión.",
+                "**Régimen Informativo**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 60)</strong><br>Exige la presentación genérica de estados contables.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título IV)</strong><br>Reglamenta el detalle: Estados anuales (70 días), trimestrales (42 días), reseñas informativas y actas (2 días).",
+                "**Canales Oficiales**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 2)</strong><br>Promueve el uso de tecnología para la transparencia.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XII)</strong><br>Instituye la 'Autopista de la Información Financiera' (AIF) como el ÚNICO medio válido para cumplir con el deber de informar."
+            ],
+            "case_study": {
+                "title": "El Anuncio Tardío",
+                "scenario": "El Directorio aprueba una fusión el viernes a las 17hs pero lo sube a la AIF el lunes a las 10hs. El viernes a las 18hs salió en los diarios.",
+                "lessons_learned": "Incumplimiento de Normas (Título II). Debió informarse inmediatamente tras la reunión."
+            }
+        },
+        {
+            "level_id": 3,
+            "title": "Conductas Contrarias a la Transparencia",
+            "executive_summary": "Identificar las conductas prohibidas requiere distinguir entre la tipificación legal general y los supuestos específicos reglamentarios.",
+            "key_concepts": [
+                "**Manipulación de Mercado**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 117)</strong><br>Tipifica la conducta de quien 'realice operaciones simuladas' para alterar precios.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XII, Cap. II)</strong><br>Detalla prácticas específicas prohibidas como el 'Wash Trading' (autocartera) y el 'Spoofing' (órdenes falsas).",
+                "**Deber de Reserva (Insider Trading)**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 117 inc b)</strong><br>Prohíbe el uso de información privilegiada.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XII)</strong><br>Define 'Información Privilegiada' como concreta y no pública, y extiende la prohibición a los 'insiders accidentales'.",
+                "**Partes Relacionadas**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 72)</strong><br>Regula los contratos con directores y accionistas de control.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título II)</strong><br>Estipula el procedimiento: Opinión previa y vinculante del Comité de Auditoría."
+            ],
+            "case_study": {
+                "title": "La Orden Fantasma",
+                "scenario": "Un operador carga una orden de compra gigante para subir el precio y la cancela segundos antes de que se ejecute (Spoofing).",
+                "lessons_learned": "Es una práctica de manipulación detallada y prohibida por el Título XII de las Normas."
+            }
+        },
+        {
+            "level_id": 4,
+            "title": "Procedimiento ante Incumplimientos",
+            "executive_summary": "El poder de policía de la CNV se estructura en un proceso legal garantista reglamentado minuciosamente.",
+            "key_concepts": [
+                "**Potestad Sancionatoria**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 132)</strong><br>Faculta a la CNV a fiscalizar y sancionar.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII, Cap. I)</strong><br>Establece el Sumario Administrativo como vía obligatoria, garantizando el debido proceso.",
+                "**Tipos de Sanciones**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 141)</strong><br>Enumera: Apercibimiento, Multa, Inhabilitación y Suspensión.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII)</strong><br>Aclara que las multas pueden elevarse hasta 5 veces el beneficio obtenido ilícitamente.",
+                "**Medidas Preventivas**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 51)</strong><br>Permite suspender preventivamente la oferta pública.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII)</strong><br>Faculta a separar preventivamente a los órganos de administración si hay peligro grave."
+            ],
+            "case_study": {
+                "title": "Suspensión Preventiva",
+                "scenario": "Ante balances falsos evidentes, la CNV suspende la cotización de la acción sin esperar al fin del sumario.",
+                "lessons_learned": "La protección del inversor (Ley Art. 1) justifica medidas rápidas antes de la sanción final."
+            }
+        },
+        {
+            "level_id": 5,
+            "title": "Denuncias: Concepto y Tratamiento",
+            "executive_summary": "El canal de denuncias es la herramienta ciudadana para activar la fiscalización, regulada para proteger al denunciante.",
+            "key_concepts": [
+                "**La Denuncia**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831)</strong><br>Consagra la facultad de investigar, aunque no detalla el proceso de denuncia.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII)</strong><br>Regula la denuncia como acto formal. Exige verosimilitud en los hechos relatados.",
+                "**Protección al Denunciante**:<br><br>⚖️ <strong>MARCO LEGAL</strong><br>N/A (No detallado en la Ley general).<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII)</strong><br>Garantiza la reserva de identidad del denunciante durante la etapa investigativa para evitar represalias.",
+                "**Trámite**:<br><br>⚖️ <strong>DECRETO / REGLAMENTACIÓN</strong><br>Exige formalidad administrativa.<br><br>📜 <strong>MARCO NORMATIVO</strong><br>Obliga al uso de la plataforma TAD (Trámites a Distancia) para dar fecha cierta."
+            ],
+            "case_study": {
+                "title": "Investigación de Oficio",
+                "scenario": "A raíz de una denuncia anónima en TAD sobre desvío de fondos, la CNV inicia una inspección in situ.",
+                "lessons_learned": "La denuncia es el disparador ('notitia criminis') para la investigación de la CNV."
+            }
+        },
+        {
+            "level_id": 6,
+            "title": "Reclamos y Consultas",
+            "executive_summary": "Distinguir 'Reclamo' de 'Denuncia' es vital. El reclamo busca resolver un conflicto privado; la denuncia busca sancionar una falta pública.",
+            "key_concepts": [
+                "**El Reclamo**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Lo define como la presentación del cliente ante el Agente por disconformidad con servicios.<br><br><strong>OBLIGACIÓN:</strong> El Agente debe tener un 'Responsable de Relaciones con el Público' para tratarlos.",
+                "**Plazos de Impugnación**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Otorga al cliente un plazo de 60 días corridos desde la recepción del resumen para impugnarlo.",
+                "**Vía Judicial**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 46)</strong><br>Permite el arbitraje para resolver disputas patrimoniales.<br><br>📜 <strong>MARCO NORMATIVO</strong><br>Aclara que la CNV no ordena indemnizaciones económicas a particulares; eso corresponde a la justicia."
+            ],
+            "case_study": {
+                "title": "El Plazo Vencido",
+                "scenario": "Un cliente reclama un error de hace 6 meses. El Agente rechaza el reclamo por extemporáneo (Título VII).",
+                "lessons_learned": "El control activo de la cuenta es responsabilidad del inversor."
+            }
+        },
+        {
+            "level_id": 7,
+            "title": "Código de Conducta: Obligaciones con Clientes",
+            "executive_summary": "El comportamiento ético no es opcional. Está codificado en la Ley y detallado en las Normas de Conducta de la CNV.",
+            "key_concepts": [
+                "**Prioridad del Interés del Cliente**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 2)</strong><br>Principio base de protección al inversor.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Obliga a ejecutar ordenes del cliente ANTES que las propias (prohibición de Front Running).",
+                "**Conocimiento del Cliente (KYC)**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII y XI)</strong><br>Exige conformar un legajo completo y definir el 'Perfil del Inversor' (Test de Idoneidad) ANTES de cursar órdenes.",
+                "**Transparencia de Costos**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Obliga a informar detalladamente todas las comisiones y gastos antes de la operación."
+            ],
+            "case_study": {
+                "title": "Conflicto de Interés",
+                "scenario": "El Agente vende a sus clientes bonos que tiene en su propia cartera a un precio superior al de mercado.",
+                "lessons_learned": "Violación grave de la lealtad (Título VII). Privilegió su ganancia sobre el cliente."
+            }
+        },
+        {
+            "level_id": 8,
+            "title": "Obligaciones con los Empleadores",
+            "executive_summary": "El personal de los Agentes está sujeto a una doble regulación: la societaria general y la específica bursátil.",
+            "key_concepts": [
+                "**Lealtad y Diligencia**:<br><br>⚖️ <strong>MARCO LEGAL (LGS Art. 59)</strong><br>Estándar del 'buen hombre de negocios'.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Exige que los empleados actúen con idoneidad y profesionalismo.",
+                "**Conflicto de Interés**:<br><br>⚖️ <strong>MARCO LEGAL (LGS Art. 272)</strong><br>Prohíbe a directores intervenir en operaciones con interés contrario.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título VII)</strong><br>Obliga a empleados a declarar cuentas personales y prohíbe operar contra clientes.",
+                "**Secreto Bursátil**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 53)</strong><br>Establece el secreto de las operaciones.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV)</strong><br>Refuerza el deber de confidencialidad absoluta sobre la identidad de los clientes."
+            ],
+            "case_study": {
+                "title": "La Fuga de Datos",
+                "scenario": "Un empleado se lleva la base de datos de clientes al renunciar.",
+                "lessons_learned": "Violación del deber de confidencialidad y lealtad."
+            }
+        },
+        {
+            "level_id": 9,
+            "title": "Responsable de Relaciones con el Público (RRPI)",
+            "executive_summary": "La figura del RRPI centraliza la responsabilidad informativa. Es la cara visible de la entidad ante el regulador.",
+            "key_concepts": [
+                "**Designación y Jerarquía**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 23)</strong><br>Menciona la responsabilidad genérica de los emisores.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título II)</strong><br>Obliga a designar un RRPI titular y suplente. Debe ser Director o Gerente de primera línea.",
+                "**Funciones Específicas**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título II)</strong><br>El RRPI firma y sube toda información a la AIF, y es el interlocutor válido ante la CNV.",
+                "**Responsabilidad**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XIII)</strong><br>El incumplimiento del deber de informar recae directamente sobre el RRPI y solidariamente sobre el Directorio."
+            ],
+            "case_study": {
+                "title": "La Firma Faltante",
+                "scenario": "Se sube un balance a la AIF sin la validación digital del RRPI. La CNV lo considera 'no presentado'.",
+                "lessons_learned": "La formalidad del RRPI en las Normas (Título II) es condición de validez."
+            }
+        },
+        {
+            "level_id": 10,
+            "title": "Oficina de Atención al Inversor",
+            "executive_summary": "La CNV asume un rol proactivo en la educación y defensa directa del público, reglamentado en el Título XVI.",
+            "key_concepts": [
+                "**Misión de Protección**:<br><br>⚖️ <strong>MARCO LEGAL (Ley 26.831 - Art. 1)</strong><br>Objetivo fundamental.<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XVI)</strong><br>Crea la 'Oficina de Atención al Inversor' para recibir consultas y orientar.",
+                "**Educación Financiera**:<br><br>📜 <strong>MARCO NORMATIVO (Normas CNV - Título XVI)</strong><br>Establece programas de difusión de derechos y riesgos obligatorios para la CNV.",
+                "**Alertas al Inversor**:<br><br>📜 <strong>PRÁCTICA CNV / NORMAS</strong><br>Publicación de advertencias sobre entidades no reguladas para prevenir estafas."
+            ],
+            "case_study": {
+                "title": "Consulta Salvadora",
+                "scenario": "Un inversor sospecha de una oferta. Consulta a la Oficina, que le informa que la entidad no está registrada.",
+                "lessons_learned": "La función preventiva de la Oficina (Título XVI) evita estafas."
+            }
+        }
+    ]
+}

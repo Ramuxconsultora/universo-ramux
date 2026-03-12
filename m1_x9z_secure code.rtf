@@ -1,0 +1,608 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="es">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>M\'f3dulo 1: Marco Normativo - RAMUX</title>\
+    \
+    <script src="https://cdn.tailwindcss.com"></script>\
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">\
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">\
+    \
+    <script>\
+        tailwind.config = \{\
+            theme: \{\
+                extend: \{\
+                    fontFamily: \{ sans: ['Outfit', 'sans-serif'] \},\
+                    colors: \{\
+                        ramux: '#0ea5e9',    /* Azul Principal */\
+                        ramuxvis: '#8b5cf6', /* Violeta Secundario */\
+                        brand: '#F76B1C',    /* Naranja Marca */\
+                        dark: '#020617',     /* Fondo Oscuro */\
+                    \},\
+                    fontSize: \{\
+                        'base': '1.125rem',   /* 18px - Base m\'e1s grande */\
+                        'lg': '1.25rem',      /* 20px */\
+                        'xl': '1.5rem',       /* 24px */\
+                        '2xl': '1.875rem',    /* 30px */\
+                    \},\
+                    animation: \{\
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',\
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',\
+                        'tracking-in': 'trackingIn 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both',\
+                        'text-shimmer': 'shimmer 3s ease-in-out infinite alternate',\
+                    \},\
+                    keyframes: \{\
+                        fadeIn: \{\
+                            '0%': \{ opacity: '0', transform: 'translateY(15px)' \},\
+                            '100%': \{ opacity: '1', transform: 'translateY(0)' \},\
+                        \},\
+                        trackingIn: \{\
+                            '0%': \{ letterSpacing: '-0.5em', opacity: '0' \},\
+                            '40%': \{ opacity: '0.6' \},\
+                            '100%': \{ letterSpacing: 'normal', opacity: '1' \},\
+                        \},\
+                        shimmer: \{\
+                            '0%': \{ textShadow: '0 0 0px rgba(255,255,255,0)' \},\
+                            '100%': \{ textShadow: '0 0 15px rgba(14, 165, 233, 0.6)' \},\
+                        \}\
+                    \}\
+                \}\
+            \}\
+        \}\
+    </script>\
+    <style>\
+        body \{ background-color: #020617; color: #f1f5f9; \}\
+        \
+        /* Fondo Premium */\
+        .fixed-background \{\
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;\
+            background: radial-gradient(circle at top right, #1e1b4b 0%, #0f172a 40%, #020617 100%);\
+        \}\
+        \
+        /* Paneles de Vidrio Optimizados */\
+        .glass-nav \{\
+            background: rgba(2, 6, 23, 0.95); \
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);\
+            backdrop-filter: blur(8px);\
+        \}\
+        .glass-panel \{\
+            background: rgba(15, 23, 42, 0.85); /* M\'e1s opaco para mejor lectura */\
+            border: 1px solid rgba(56, 189, 248, 0.15);\
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);\
+        \}\
+        \
+        /* Tipograf\'eda y Lectura */\
+        .theory-title \{ \
+            font-size: 2rem; \
+            font-weight: 800; \
+            color: white; \
+            margin-bottom: 1.5rem; \
+            padding-bottom: 1rem;\
+            border-bottom: 2px solid rgba(14, 165, 233, 0.3);\
+            display: flex; \
+            align-items: center; \
+            gap: 1rem; \
+            letter-spacing: -0.02em;\
+        \}\
+        .theory-subtitle \{ \
+            font-size: 1.5rem; \
+            font-weight: 700; \
+            color: #38bdf8; \
+            margin-top: 2.5rem; \
+            margin-bottom: 1rem; \
+        \}\
+        .theory-text \{\
+            font-size: 1.15rem; /* ~18.4px */\
+            line-height: 1.8;   /* Mayor espaciado entre l\'edneas */\
+            color: #cbd5e1;     /* Gris muy claro para alto contraste */\
+            margin-bottom: 1.5rem;\
+        \}\
+        .highlight \{ color: #F76B1C; font-weight: 600; \}\
+        \
+        /* Scrollbar */\
+        ::-webkit-scrollbar \{ width: 10px; \}\
+        ::-webkit-scrollbar-track \{ background: #0f172a; \}\
+        ::-webkit-scrollbar-thumb \{ background: #334155; border-radius: 5px; border: 2px solid #0f172a; \}\
+        ::-webkit-scrollbar-thumb:hover \{ background: #0ea5e9; \}\
+        \
+        /* Barra de Progreso de Lectura */\
+        #scroll-progress \{\
+            position: fixed; top: 0; left: 0; height: 3px; background: #F76B1C; z-index: 100; width: 0%; transition: width 0.1s;\
+            box-shadow: 0 0 10px #F76B1C;\
+        \}\
+\
+        .social-icon \{ transition: all 0.3s ease; color: #94a3b8; \}\
+        .social-icon:hover \{ color: #0ea5e9; transform: scale(1.1); \}\
+        .text-glow \{ transition: text-shadow 0.3s ease; \}\
+        .group:hover .text-glow \{ text-shadow: 0 0 20px rgba(255, 255, 255, 0.6); \}\
+    </style>\
+</head>\
+<body class="antialiased min-h-screen flex flex-col selection:bg-ramux/30">\
+\
+    <div class="fixed-background"></div>\
+    <div id="scroll-progress"></div>\
+\
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav transition-all duration-300 h-20 flex items-center">\
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">\
+            \
+            <div class="w-1/3 flex flex-col justify-center items-start">\
+                <a href="index.html" class="text-sm text-slate-400 hover:text-white mb-0.5 flex items-center gap-1.5 transition-colors font-medium">\
+                    <i class="fas fa-chevron-left text-xs"></i> Volver al Inicio\
+                </a>\
+                <span class="text-base text-white font-bold tracking-wide">M\'f3dulo 1</span>\
+            </div>\
+\
+            <div class="w-1/3 flex justify-center items-end group cursor-default pb-1">\
+                <span class="font-black text-3xl text-white leading-none animate-tracking-in animate-text-shimmer text-glow">RAMUX</span>\
+                <span class="w-2.5 h-2.5 bg-brand rounded-full animate-pulse-slow shadow-[0_0_12px_#F76B1C] ml-1 mb-[5px]"></span>\
+            </div>\
+\
+            <div class="w-1/3 flex justify-end items-center gap-6">\
+                <div id="user-display" class="hidden md:flex items-center gap-3 text-right border-r border-slate-700 pr-6 mr-2">\
+                    <div class="flex flex-col">\
+                        <span id="header-username" class="text-sm font-bold text-ramux">Estudiante</span>\
+                        <span class="text-[10px] text-slate-500 uppercase tracking-wider font-bold">En L\'ednea</span>\
+                    </div>\
+                    <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">\
+                        <i class="fas fa-user text-slate-400 text-sm"></i>\
+                    </div>\
+                </div>\
+                <div class="flex items-center gap-4">\
+                    <a href="https://wa.me/message/WATOKPKLCBMPK1" target="_blank" class="social-icon text-xl"><i class="fab fa-whatsapp"></i></a>\
+                    <a href="https://www.instagram.com/ramuxconsultora/?hl=es-la" target="_blank" class="social-icon text-xl"><i class="fab fa-instagram"></i></a>\
+                    <a href="https://www.linkedin.com/company/ramuxconsultora" target="_blank" class="social-icon text-xl"><i class="fab fa-linkedin"></i></a>\
+                </div>\
+            </div>\
+        </div>\
+    </header>\
+\
+    <div class="flex-grow pt-28 pb-12 px-4 max-w-[1400px] mx-auto w-full flex gap-10">\
+        \
+        <aside class="hidden xl:block w-72 flex-shrink-0 fixed h-[calc(100vh-140px)] overflow-y-auto pr-4 scrollbar-thin">\
+            <nav class="space-y-1">\
+                <p class="font-black text-slate-500 mb-6 uppercase tracking-widest text-xs px-4 border-b border-slate-800 pb-2">\'cdndice de Temas</p>\
+                \
+                <a href="javascript:void(0)" onclick="goToSection('intro')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">1. Introducci\'f3n y CNV</a>\
+                <a href="javascript:void(0)" onclick="goToSection('competencias')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">2. Competencias y Facultades</a>\
+                <a href="javascript:void(0)" onclick="goToSection('oferta')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">3. Oferta P\'fablica</a>\
+                <a href="javascript:void(0)" onclick="goToSection('emisoras')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">4. Emisoras y Prospecto</a>\
+                <a href="javascript:void(0)" onclick="goToSection('irregular')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">5. Oferta Irregular</a>\
+                <a href="javascript:void(0)" onclick="goToSection('opa')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">6. R\'e9gimen de OPA</a>\
+                <a href="javascript:void(0)" onclick="goToSection('secreto')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">7. Secreto y Sanciones</a>\
+                <a href="javascript:void(0)" onclick="goToSection('pyme')" class="nav-link block text-slate-400 hover:text-white hover:bg-white/5 py-3 px-4 rounded-lg transition-all text-sm font-medium border-l-2 border-transparent">8. PyMEs en el Mercado</a>\
+                \
+                <div class="mt-8 pt-6 border-t border-slate-800">\
+                     <button onclick="switchTab('practice')" class="w-full text-left py-4 px-5 rounded-xl bg-gradient-to-r from-ramux to-blue-600 text-white font-bold shadow-lg hover:shadow-ramux/25 hover:-translate-y-1 transition-all flex items-center justify-between group">\
+                        <span><i class="fas fa-gamepad mr-2"></i> Ir al Simulador</span>\
+                        <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform text-sm"></i>\
+                    </button>\
+                </div>\
+            </nav>\
+        </aside>\
+\
+        <main class="xl:ml-80 flex-grow w-full max-w-5xl">\
+            \
+            <div class="flex justify-center mb-10 bg-slate-900/90 p-2 rounded-full w-fit mx-auto border border-slate-700 sticky top-24 z-40 backdrop-blur-xl shadow-2xl">\
+                <button onclick="switchTab('theory')" id="btn-theory" class="px-8 py-3 rounded-full font-bold text-base transition-all bg-ramux text-white shadow-lg flex items-center gap-2">\
+                    <i class="fas fa-book-open"></i> MATERIAL TE\'d3RICO\
+                </button>\
+                <button onclick="switchTab('practice')" id="btn-practice" class="px-8 py-3 rounded-full font-bold text-base transition-all text-slate-400 hover:text-white flex items-center gap-2">\
+                    <i class="fas fa-check-circle"></i> EXAMEN (30)\
+                </button>\
+            </div>\
+\
+            <div id="theory-content" class="animate-fade-in space-y-16 pb-32">\
+                \
+                <section id="intro" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-university text-brand text-3xl"></i> La CNV y el Marco Normativo</h2>\
+                    \
+                    <p class="theory-text">\
+                        La <strong>Ley N\'b0 26.831</strong> (Ley de Mercado de Capitales) es la columna vertebral del sistema burs\'e1til argentino. Su prop\'f3sito es desarrollar un mercado de capitales federal, transparente y accesible.\
+                    </p>\
+\
+                    <h3 class="theory-subtitle">\'bfQu\'e9 es la CNV?</h3>\
+                    <p class="theory-text">\
+                        La <strong>Comisi\'f3n Nacional de Valores</strong> es una entidad aut\'e1rquica que funciona bajo la \'f3rbita del Ministerio de Econom\'eda. Tiene jurisdicci\'f3n en <strong>toda la Rep\'fablica Argentina</strong>.\
+                    </p>\
+\
+                    <div class="grid md:grid-cols-2 gap-6 mt-6">\
+                        <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50">\
+                            <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fas fa-bullseye text-ramux"></i> Objetivos (Art. 1)</h4>\
+                            <ul class="space-y-3 text-slate-300">\
+                                <li class="flex items-start gap-3"><i class="fas fa-check text-ramux mt-1.5 text-xs"></i> <span>Promover el acceso al mercado de capitales.</span></li>\
+                                <li class="flex items-start gap-3"><i class="fas fa-check text-ramux mt-1.5 text-xs"></i> <span>Proteger a los inversores (especialmente minoristas).</span></li>\
+                                <li class="flex items-start gap-3"><i class="fas fa-check text-ramux mt-1.5 text-xs"></i> <span>Fomentar la simplificaci\'f3n de la negociaci\'f3n.</span></li>\
+                                <li class="flex items-start gap-3"><i class="fas fa-check text-ramux mt-1.5 text-xs"></i> <span>Propender a la integridad y transparencia.</span></li>\
+                                <li class="flex items-start gap-3"><i class="fas fa-check text-ramux mt-1.5 text-xs"></i> <span>Propender a la federalizaci\'f3n del mercado.</span></li>\
+                            </ul>\
+                        </div>\
+                        <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 flex flex-col justify-center">\
+                            <h4 class="text-xl font-bold text-white mb-2">Definici\'f3n Clave</h4>\
+                            <p class="text-slate-300 italic leading-relaxed">\
+                                "El mercado de capitales es el \'e1mbito donde se canaliza el ahorro hacia la inversi\'f3n productiva mediante la negociaci\'f3n de valores."\
+                            </p>\
+                        </div>\
+                    </div>\
+                </section>\
+\
+                <section id="competencias" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-scale-balanced text-ramux text-3xl"></i> Competencias y Facultades</h2>\
+                    \
+                    <p class="theory-text">\
+                        La CNV concentra el poder de polic\'eda del mercado. Sus facultades (Art. 19) son amplias para evitar la fragmentaci\'f3n regulatoria.\
+                    </p>\
+\
+                    <div class="space-y-4">\
+                        <div class="flex gap-4 items-start bg-slate-800/40 p-5 rounded-xl border-l-4 border-ramux">\
+                            <i class="fas fa-gavel text-2xl text-ramux mt-1"></i>\
+                            <div>\
+                                <h4 class="font-bold text-white text-lg">Regulaci\'f3n y Supervisi\'f3n</h4>\
+                                <p class="text-slate-300">Dicta las normas (Normas CNV 2013) que deben cumplir todos los participantes: Mercados, Agentes (ALyC), Emisoras y C\'e1maras Compensadoras.</p>\
+                            </div>\
+                        </div>\
+                        <div class="flex gap-4 items-start bg-slate-800/40 p-5 rounded-xl border-l-4 border-ramuxvis">\
+                            <i class="fas fa-search text-2xl text-ramuxvis mt-1"></i>\
+                            <div>\
+                                <h4 class="font-bold text-white text-lg">Fiscalizaci\'f3n</h4>\
+                                <p class="text-slate-300">Puede realizar inspecciones e investigaciones, solicitar informes y documentaci\'f3n sin necesidad de aviso previo.</p>\
+                            </div>\
+                        </div>\
+                        <div class="flex gap-4 items-start bg-slate-800/40 p-5 rounded-xl border-l-4 border-brand">\
+                            <i class="fas fa-hand-paper text-2xl text-brand mt-1"></i>\
+                            <div>\
+                                <h4 class="font-bold text-white text-lg">Facultades Preventivas (Art. 20)</h4>\
+                                <p class="text-slate-300">En situaciones graves, puede: 1) Designar veedores con facultad de veto. 2) Separar a los \'f3rganos de administraci\'f3n de la entidad por hasta 180 d\'edas.</p>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </section>\
+\
+                <section id="oferta" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-bullhorn text-brand text-3xl"></i> Oferta P\'fablica (OP)</h2>\
+                    \
+                    <p class="theory-text">\
+                        Es el coraz\'f3n del sistema. Se define como la invitaci\'f3n que se hace a personas en general, o a sectores o grupos determinados, para realizar cualquier acto jur\'eddico con valores negociables.\
+                    </p>\
+\
+                    <div class="grid md:grid-cols-2 gap-8 my-8">\
+                        <div>\
+                            <h4 class="text-xl font-bold text-white mb-2">Medios de Difusi\'f3n</h4>\
+                            <p class="text-slate-400">Puede realizarse por ofrecimientos personales, publicaciones period\'edsticas, transmisiones radiotelef\'f3nicas, televisivas, internet o cualquier otro medio masivo.</p>\
+                        </div>\
+                        <div>\
+                            <h4 class="text-xl font-bold text-white mb-2">Requisito Excluyente</h4>\
+                            <p class="text-slate-400">Requiere <span class="text-ramux font-bold">Autorizaci\'f3n Previa</span> de la CNV. Sin esta autorizaci\'f3n, la oferta es ilegal.</p>\
+                        </div>\
+                    </div>\
+\
+                    <h3 class="theory-subtitle">Valores Negociables (Art. 2)</h3>\
+                    <p class="theory-text">\
+                        Son los instrumentos objeto de la oferta. Incluyen acciones, obligaciones negociables (ON), valores fiduciarios, cheques de pago diferido (CPD), pagar\'e9s burs\'e1tiles, CEDEARs, cuotapartes de fondos comunes (FCI), entre otros.\
+                    </p>\
+                </section>\
+\
+                <section id="emisoras" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-building text-ramux text-3xl"></i> Emisoras y Prospecto</h2>\
+                    \
+                    <p class="theory-text">\
+                        Las <strong>Emisoras</strong> son las empresas que salen al mercado a buscar financiamiento. Al hacerlo, asumen obligaciones de informaci\'f3n peri\'f3dica (balances trimestrales, anuales) y eventual (hechos relevantes).\
+                    </p>\
+\
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-8 rounded-2xl border border-slate-700 my-6">\
+                        <h3 class="text-2xl font-bold text-white mb-4"><i class="fas fa-file-contract text-brand mr-2"></i> El Prospecto (Art. 83)</h3>\
+                        <p class="theory-text">\
+                            Es el documento legal m\'e1s importante. Debe contener toda la informaci\'f3n <strong>veraz, suficiente y oportuna</strong> sobre la empresa y los valores a emitir.\
+                        </p>\
+                        <ul class="list-disc list-inside text-slate-300 space-y-2 text-lg">\
+                            <li>Es una <strong>Declaraci\'f3n Jurada</strong> de los administradores y \'f3rganos de fiscalizaci\'f3n.</li>\
+                            <li>Debe publicarse y estar a disposici\'f3n <strong>ANTES</strong> de la suscripci\'f3n.</li>\
+                            <li>Si hay cambios importantes, se debe publicar un "Suplemento de Prospecto".</li>\
+                        </ul>\
+                    </div>\
+\
+                    <h3 class="theory-subtitle">Categor\'edas de Inversores</h3>\
+                    <div class="flex flex-col md:flex-row gap-6">\
+                        <div class="flex-1 bg-slate-900/50 p-6 rounded-xl border-t-4 border-emerald-500">\
+                            <h4 class="font-bold text-white text-lg mb-2">Inversor Calificado / Institucional</h4>\
+                            <p class="text-slate-400">Bancos, compa\'f1\'edas de seguros, FCI, el Estado, o personas con alto patrimonio. Se presume que tienen experiencia y no requieren tanta tutela regulatoria.</p>\
+                        </div>\
+                        <div class="flex-1 bg-slate-900/50 p-6 rounded-xl border-t-4 border-blue-500">\
+                            <h4 class="font-bold text-white text-lg mb-2">P\'fablico Inversor (Retail)</h4>\
+                            <p class="text-slate-400">El inversor minorista. Es el principal sujeto de protecci\'f3n de las normas de la CNV (transparencia, prospecto obligatorio).</p>\
+                        </div>\
+                    </div>\
+                </section>\
+\
+                <section id="irregular" class="glass-panel p-10 rounded-3xl border-2 border-red-900/40">\
+                    <h2 class="theory-title text-red-400"><i class="fas fa-ban mr-3"></i> Oferta Irregular (Art. 129)</h2>\
+                    <p class="theory-text">\
+                        Es la oferta p\'fablica realizada <strong>sin autorizaci\'f3n de la CNV</strong>. Est\'e1 terminantemente prohibida.\
+                    </p>\
+                    <p class="theory-text">\
+                        Tambi\'e9n se considera irregular la publicidad que:\
+                        <br>1. No aclare si es una oferta autorizada.\
+                        <br>2. Contenga informaci\'f3n enga\'f1osa o fraudulenta.\
+                        <br>3. Prometa rendimientos asegurados sin sustento.\
+                    </p>\
+                    <div class="bg-red-950/30 p-4 rounded-lg text-red-200 text-center font-bold border border-red-900/50">\
+                        La CNV puede ordenar el cese inmediato de la publicidad y aplicar fuertes sanciones.\
+                    </div>\
+                </section>\
+\
+                <section id="opa" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-hand-holding-dollar text-brand text-3xl"></i> R\'e9gimen de OPA y DUVA</h2>\
+                    <p class="theory-text">\
+                        La <strong>Oferta P\'fablica de Adquisici\'f3n (OPA)</strong> es un mecanismo para proteger a los accionistas minoritarios, asegurando que reciban un trato equitativo en situaciones cr\'edticas de la empresa.\
+                    </p>\
+\
+                    <div class="space-y-8 mt-8">\
+                        <div class="flex gap-6">\
+                            <div class="flex-shrink-0 w-12 h-12 bg-ramux rounded-full flex items-center justify-center font-bold text-white text-xl">1</div>\
+                            <div>\
+                                <h3 class="text-xl font-bold text-white mb-2">OPA por Toma de Control (Art. 87)</h3>\
+                                <p class="text-slate-300 text-lg">Cuando una persona o grupo adquiere una "participaci\'f3n de control" (acciones suficientes para formar la voluntad social), est\'e1 obligada a ofrecer comprar las acciones de <strong>todos</strong> los dem\'e1s accionistas a un "Precio Equitativo". Evita que el control se venda con una prima que no se comparta con los minoritarios.</p>\
+                            </div>\
+                        </div>\
+\
+                        <div class="flex gap-6">\
+                            <div class="flex-shrink-0 w-12 h-12 bg-ramuxvis rounded-full flex items-center justify-center font-bold text-white text-xl">2</div>\
+                            <div>\
+                                <h3 class="text-xl font-bold text-white mb-2">OPA por Retiro del R\'e9gimen (Art. 97)</h3>\
+                                <p class="text-slate-300 text-lg">Si una empresa decide voluntariamente salir de la bolsa ("Deslistarse"), debe lanzar una OPA para darle salida a los accionistas que no quieran quedar atrapados en una sociedad cerrada (sin mercado).</p>\
+                            </div>\
+                        </div>\
+\
+                        <div class="flex gap-6">\
+                            <div class="flex-shrink-0 w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center font-bold text-white text-xl">3</div>\
+                            <div>\
+                                <h3 class="text-xl font-bold text-white mb-2">Participaci\'f3n Residual (DUVA - Art. 91)</h3>\
+                                <p class="text-slate-300 text-lg">Se da cuando el controlante posee casi la totalidad del capital (ej: m\'e1s del 95%).</p>\
+                                <ul class="list-disc list-inside text-slate-400 mt-2 ml-4">\
+                                    <li><strong>Squeeze-out:</strong> El controlante puede exigir a los minoritarios que le vendan.</li>\
+                                    <li><strong>Sell-out:</strong> Los minoritarios pueden exigir al controlante que les compre.</li>\
+                                </ul>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </section>\
+\
+                <section id="secreto" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-lock text-ramux text-3xl"></i> Secreto y Sanciones</h2>\
+                    \
+                    <h3 class="theory-subtitle">Secreto Burs\'e1til (Art. 26)</h3>\
+                    <p class="theory-text">\
+                        La CNV, mercados y agentes deben guardar secreto sobre las operaciones. Sin embargo, este secreto <strong>NO es absoluto</strong>.\
+                        <br><span class="text-brand font-bold">Excepciones:</span> Se levanta ante requerimientos judiciales o en investigaciones de la propia CNV (incluso para colaborar con organismos extranjeros como la SEC o IOSCO).\
+                    </p>\
+\
+                    <h3 class="theory-subtitle mt-8">R\'e9gimen Disciplinario (Art. 132)</h3>\
+                    <p class="theory-text">La CNV juzga las infracciones administrativas. Las sanciones son:</p>\
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">\
+                        <div class="bg-slate-800 p-4 rounded text-center font-bold text-slate-300">Apercibimiento</div>\
+                        <div class="bg-slate-800 p-4 rounded text-center font-bold text-slate-300">Multa Econ\'f3mica</div>\
+                        <div class="bg-slate-800 p-4 rounded text-center font-bold text-slate-300">Inhabilitaci\'f3n (hasta 5 a\'f1os)</div>\
+                        <div class="bg-slate-800 p-4 rounded text-center font-bold text-slate-300">Suspensi\'f3n Preventiva</div>\
+                        <div class="bg-slate-800 p-4 rounded text-center font-bold text-slate-300">Prohibici\'f3n de Oferta</div>\
+                    </div>\
+                </section>\
+\
+                <section id="pyme" class="glass-panel p-10 rounded-3xl">\
+                    <h2 class="theory-title"><i class="fas fa-seedling text-green-500 text-3xl"></i> PyMEs en el Mercado</h2>\
+                    <p class="theory-text">\
+                        La CNV promueve activamente el financiamiento PyME. Para ser considerada PyME CNV, la empresa debe cumplir con los par\'e1metros de facturaci\'f3n/empleados definidos por la <strong>SEPYME</strong>.\
+                    </p>\
+                    \
+                    <div class="bg-slate-900/60 border border-green-500/30 p-6 rounded-2xl mt-6">\
+                        <h4 class="text-xl font-bold text-white mb-2">R\'e9gimen PyME CNV Garantizada</h4>\
+                        <p class="text-slate-300 text-lg">\
+                            Es el instrumento estrella. La PyME emite una Obligaci\'f3n Negociable (ON) o Cheque avalado por una Sociedad de Garant\'eda Rec\'edproca (SGR).\
+                        </p>\
+                        <ul class="mt-4 space-y-2 text-slate-300">\
+                            <li><i class="fas fa-arrow-right text-green-500 mr-2"></i> Tr\'e1mite 100% digital y simplificado.</li>\
+                            <li><i class="fas fa-arrow-right text-green-500 mr-2"></i> Tasas similares a las grandes empresas (gracias al aval).</li>\
+                            <li><i class="fas fa-arrow-right text-green-500 mr-2"></i> Acceso al mercado de capitales sin requisitos complejos de informaci\'f3n.</li>\
+                        </ul>\
+                    </div>\
+                </section>\
+\
+            </div>\
+\
+            <div id="practice-content" class="hidden animate-fade-in max-w-4xl mx-auto">\
+                <div class="glass-panel p-8 rounded-3xl mb-8 border-l-8 border-ramux flex flex-col md:flex-row justify-between items-center gap-6">\
+                    <div>\
+                        <h2 class="text-3xl font-black text-white mb-2">Simulador de Examen</h2>\
+                        <p class="text-lg text-slate-400">30 Preguntas de opci\'f3n m\'faltiple (V/F). Retroalimentaci\'f3n inteligente.</p>\
+                    </div>\
+                    <div class="text-center bg-slate-900/80 p-4 rounded-xl border border-slate-700">\
+                        <span class="text-xs uppercase tracking-widest text-slate-500 font-bold block mb-1">Aciertos</span>\
+                        <div class="text-4xl font-black text-ramux"><span id="score-val">0</span><span class="text-slate-600 text-2xl">/30</span></div>\
+                    </div>\
+                </div>\
+\
+                <div id="questions-container" class="space-y-6 pb-32">\
+                    <div class="text-center text-slate-500 py-10">\
+                        <i class="fas fa-circle-notch fa-spin text-4xl mb-4 text-ramux"></i>\
+                        <p>Cargando simulador...</p>\
+                    </div>\
+                </div>\
+\
+                <button onclick="resetExam()" class="fixed bottom-10 right-10 bg-gradient-to-r from-ramux to-blue-600 text-white w-16 h-16 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center z-50 ring-4 ring-slate-900" title="Reiniciar Examen">\
+                    <i class="fas fa-redo-alt text-2xl"></i>\
+                </button>\
+            </div>\
+\
+        </main>\
+    </div>\
+\
+    <footer class="w-full py-10 px-6 border-t border-white/5 bg-slate-950 relative z-10 mt-auto">\
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">\
+            <div class="text-center md:text-left w-full md:w-1/3 order-2 md:order-1">\
+                <p class="text-base font-bold text-slate-300 tracking-wide">Cursos de Educaci\'f3n Financiera</p>\
+                <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-semibold">Preparaci\'f3n examen id\'f3neo CNV ARG</p>\
+            </div>\
+            <div class="text-center w-full md:w-1/3 order-1 md:order-2">\
+                <p class="text-base text-slate-400 font-medium">\
+                    Desarrollado con <i class="fas fa-heart text-brand animate-pulse mx-1"></i> por <span class="font-black text-white tracking-wide">RAMUX<span class="text-brand">.</span></span>\
+                </p>\
+            </div>\
+            <div class="text-center md:text-right w-full md:w-1/3 order-3 md:order-3">\
+                <p class="text-base font-bold text-white tracking-wide">Fernando Silguero Ramirez</p>\
+                <p class="text-xs text-ramux mt-1 uppercase tracking-widest font-black">CEO & Founder</p>\
+            </div>\
+        </div>\
+    </footer>\
+\
+    <script>\
+        // === BARRA DE PROGRESO ===\
+        window.onscroll = function() \{\
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;\
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;\
+            let scrolled = (winScroll / height) * 100;\
+            document.getElementById("scroll-progress").style.width = scrolled + "%";\
+        \};\
+\
+        // Verificaci\'f3n de Usuario\
+        if (!localStorage.getItem('cnv_auth')) \{\
+            window.location.href = 'index.html';\
+        \} else \{\
+            document.getElementById('header-username').textContent = localStorage.getItem('cnv_user_name');\
+        \}\
+\
+        // === BANCO DE PREGUNTAS (30 ITEMS) ===\
+        const questions = [\
+            \{ id: 1, q: "La CNV es una entidad aut\'e1rquica bajo la \'f3rbita del Banco Central.", a: false, exp: "Falso. Depende del Ministerio de Econom\'eda (Art. 1 Ley 26.831).", ref: "intro" \},\
+            \{ id: 2, q: "Uno de los objetivos de la CNV es promover el acceso al mercado de capitales.", a: true, exp: "Verdadero. Busca canalizar el ahorro hacia la inversi\'f3n productiva.", ref: "intro" \},\
+            \{ id: 3, q: "El Secreto Burs\'e1til es absoluto y nunca puede levantarse.", a: false, exp: "Falso. Se levanta por orden judicial o investigaciones de la CNV.", ref: "secreto" \},\
+            \{ id: 4, q: "Toda Oferta P\'fablica requiere autorizaci\'f3n previa de la CNV.", a: true, exp: "Verdadero. Sin autorizaci\'f3n es una 'Oferta Irregular'.", ref: "oferta" \},\
+            \{ id: 5, q: "El Prospecto es una declaraci\'f3n jurada de los administradores de la emisora.", a: true, exp: "Verdadero. Son responsables civil y penalmente por su contenido.", ref: "emisoras" \},\
+            \{ id: 6, q: "La CNV solo puede multar, no puede inhabilitar agentes.", a: false, exp: "Falso. Puede inhabilitar hasta por 5 a\'f1os (Art. 132).", ref: "secreto" \},\
+            \{ id: 7, q: "La OPA es obligatoria cuando se adquiere el control de una sociedad listada.", a: true, exp: "Verdadero. Protege al minoritario para que reciba un precio equitativo.", ref: "opa" \},\
+            \{ id: 8, q: "El Tribunal Arbitral es obligatorio para el inversor.", a: false, exp: "Falso. Es obligatorio para el agente, pero optativo para el inversor.", ref: "competencias" \},\
+            \{ id: 9, q: "La 'Oferta Irregular' incluye la publicidad enga\'f1osa.", a: true, exp: "Verdadero. Art. 129. Est\'e1 prohibida y sancionada.", ref: "irregular" \},\
+            \{ id: 10, q: "Las PyMEs deben cumplir los mismos requisitos que las grandes empresas.", a: false, exp: "Falso. Tienen reg\'edmenes simplificados como CNV Garantizada.", ref: "pyme" \},\
+            \{ id: 11, q: "Las emisoras deben 'Cumplir o Explicar' sobre Gobierno Corporativo.", a: true, exp: "Verdadero. Deben justificar si no adhieren al c\'f3digo.", ref: "emisoras" \},\
+            \{ id: 12, q: "El deslistado voluntario (retiro) no requiere OPA.", a: false, exp: "Falso. Requiere OPA de retiro para proteger a los que se quedan.", ref: "opa" \},\
+            \{ id: 13, q: "DUVA aplica cuando el controlante tiene casi todo el capital (ej: 95%).", a: true, exp: "Verdadero. Permite la compra/venta forzosa del remanente.", ref: "opa" \},\
+            \{ id: 14, q: "La CNV tiene jurisdicci\'f3n federal en todo el pa\'eds.", a: true, exp: "Verdadero. No se limita solo a Buenos Aires.", ref: "intro" \},\
+            \{ id: 15, q: "Los inversores institucionales (Bancos) necesitan m\'e1s protecci\'f3n que Do\'f1a Rosa.", a: false, exp: "Falso. Se consideran 'Inversores Calificados' con experiencia.", ref: "emisoras" \},\
+            \{ id: 16, q: "El Prospecto debe publicarse DESPU\'c9S de vender las acciones.", a: false, exp: "Falso. Debe publicarse ANTES para que el inversor decida informado.", ref: "emisoras" \},\
+            \{ id: 17, q: "La CNV puede colaborar con la SEC de Estados Unidos.", a: true, exp: "Verdadero. Puede intercambiar info con organismos an\'e1logos.", ref: "secreto" \},\
+            \{ id: 18, q: "La CNV puede separar a los directores de una empresa preventivamente.", a: true, exp: "Verdadero. Art. 20. Es una facultad preventiva grave.", ref: "competencias" \},\
+            \{ id: 19, q: "La manipulaci\'f3n de mercado est\'e1 permitida para dar liquidez.", a: false, exp: "Falso. Es un delito contra la transparencia.", ref: "secreto" \},\
+            \{ id: 20, q: "Los directores deben actuar con lealtad y diligencia.", a: true, exp: "Verdadero. Como un 'buen hombre de negocios'.", ref: "emisoras" \},\
+            \{ id: 21, q: "Se puede hacer oferta p\'fablica por Instagram sin autorizaci\'f3n.", a: false, exp: "Falso. Cualquier medio masivo requiere autorizaci\'f3n previa.", ref: "oferta" \},\
+            \{ id: 22, q: "La definici\'f3n de PyME CNV sigue los criterios de la SEPYME.", a: true, exp: "Verdadero. Se basa en facturaci\'f3n/empleados.", ref: "pyme" \},\
+            \{ id: 23, q: "Las ON (Obligaciones Negociables) son t\'edtulos de deuda.", a: true, exp: "Verdadero. Representan un pr\'e9stamo a la empresa.", ref: "oferta" \},\
+            \{ id: 24, q: "La CNV busca centralizar todo el mercado en Buenos Aires.", a: false, exp: "Falso. Uno de sus objetivos es la FEDERALIZACI\'d3N.", ref: "intro" \},\
+            \{ id: 25, q: "El 'Squeeze-out' permite al controlante echar a los minoritarios residuales.", a: true, exp: "Verdadero. Si tiene m\'e1s del 95% puede exigir comprarles.", ref: "opa" \},\
+            \{ id: 26, q: "La publicidad de valores debe aclarar si es autorizada.", a: true, exp: "Verdadero. Para no inducir a error.", ref: "irregular" \},\
+            \{ id: 27, q: "Los Mercados (ej: BYMA) tienen facultades de autorregulaci\'f3n.", a: true, exp: "Verdadero. Dictan sus reglamentos bajo supervisi\'f3n CNV.", ref: "intro" \},\
+            \{ id: 28, q: "Las sanciones de la CNV son inapelables.", a: false, exp: "Falso. Se pueden apelar ante la justicia federal.", ref: "secreto" \},\
+            \{ id: 29, q: "El agente debe priorizar su comisi\'f3n sobre el cliente.", a: false, exp: "Falso. Debe priorizar siempre el inter\'e9s del cliente.", ref: "intro" \},\
+            \{ id: 30, q: "El precio de la OPA debe ser equitativo.", a: true, exp: "Verdadero. Validado por la CNV.", ref: "opa" \}\
+        ];\
+\
+        let score = 0;\
+\
+        function renderQuestions() \{\
+            const container = document.getElementById('questions-container');\
+            // OPTIMIZACI\'d3N: Generamos todo el HTML en una sola variable string\
+            const htmlBuffer = questions.map((q, idx) => `\
+                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden group hover:border-slate-500 transition-colors">\
+                    <div class="flex gap-5">\
+                        <span class="flex-shrink-0 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center font-black text-slate-400 border border-slate-700 text-lg">$\{idx+1\}</span>\
+                        <div class="w-full">\
+                            <p class="text-xl text-slate-200 mb-5 font-medium leading-relaxed">$\{q.q\}</p>\
+                            <div class="flex gap-4" id="opts-$\{q.id\}">\
+                                <button onclick="check($\{q.id\}, true)" class="flex-1 py-4 bg-slate-900/40 border border-slate-600 rounded-xl hover:bg-slate-800 text-slate-300 font-bold transition-all text-lg flex items-center justify-center gap-2"><i class="fas fa-check"></i> VERDADERO</button>\
+                                <button onclick="check($\{q.id\}, false)" class="flex-1 py-4 bg-slate-900/40 border border-slate-600 rounded-xl hover:bg-slate-800 text-slate-300 font-bold transition-all text-lg flex items-center justify-center gap-2"><i class="fas fa-times"></i> FALSO</button>\
+                            </div>\
+                            <div id="feedback-$\{q.id\}" class="hidden mt-6 p-5 rounded-xl text-base border-l-4 animate-fade-in bg-slate-900/80"></div>\
+                        </div>\
+                    </div>\
+                </div>\
+            `).join('');\
+            \
+            container.innerHTML = htmlBuffer;\
+        \}\
+\
+        function check(id, userAns) \{\
+            const item = questions.find(x => x.id === id);\
+            const feedDiv = document.getElementById(`feedback-$\{id\}`);\
+            const btns = document.getElementById(`opts-$\{id\}`).getElementsByTagName('button');\
+            \
+            for(let btn of btns) \{ btn.disabled = true; btn.classList.add('opacity-40', 'cursor-not-allowed'); \}\
+\
+            feedDiv.classList.remove('hidden');\
+\
+            if (userAns === item.a) \{\
+                score++;\
+                document.getElementById('score-val').textContent = score;\
+                feedDiv.classList.add('border-emerald-500');\
+                feedDiv.innerHTML = `<p class="text-emerald-400 font-bold text-lg mb-1"><i class="fas fa-check-circle mr-2"></i>\'a1Correcto!</p><p class="text-slate-300">$\{item.exp\}</p>`;\
+                btns[userAns ? 0 : 1].classList.remove('opacity-40', 'bg-slate-900/40');\
+                btns[userAns ? 0 : 1].classList.add('bg-emerald-600', 'text-white', 'border-emerald-500', 'opacity-100');\
+\
+            \} else \{\
+                feedDiv.classList.add('border-red-500');\
+                feedDiv.innerHTML = `\
+                    <p class="text-red-400 font-bold text-lg mb-1"><i class="fas fa-times-circle mr-2"></i>Incorrecto</p>\
+                    <p class="text-slate-300 mb-3">$\{item.exp\}</p>\
+                    <button onclick="goToSection('$\{item.ref\}')" class="text-sm bg-slate-800 hover:bg-ramux text-white py-2 px-4 rounded-lg transition-colors uppercase font-bold tracking-wider flex items-center gap-2">\
+                        <i class="fas fa-arrow-up"></i> Repasar Tema\
+                    </button>\
+                `;\
+                btns[userAns ? 0 : 1].classList.remove('opacity-40', 'bg-slate-900/40');\
+                btns[userAns ? 0 : 1].classList.add('bg-red-600', 'text-white', 'border-red-500', 'opacity-100');\
+            \}\
+        \}\
+\
+        // Navegaci\'f3n Eficiente\
+        function switchTab(tab) \{\
+            const t = document.getElementById('theory-content');\
+            const p = document.getElementById('practice-content');\
+            const bt = document.getElementById('btn-theory');\
+            const bp = document.getElementById('btn-practice');\
+\
+            if(tab === 'theory') \{\
+                t.classList.remove('hidden'); p.classList.add('hidden');\
+                bt.classList.add('bg-ramux', 'text-white', 'shadow-lg'); bt.classList.remove('text-slate-400');\
+                bp.classList.remove('bg-ramux', 'text-white', 'shadow-lg'); bp.classList.add('text-slate-400');\
+            \} else \{\
+                t.classList.add('hidden'); p.classList.remove('hidden');\
+                bp.classList.add('bg-ramux', 'text-white', 'shadow-lg'); bp.classList.remove('text-slate-400');\
+                bt.classList.remove('bg-ramux', 'text-white', 'shadow-lg'); bt.classList.add('text-slate-400');\
+            \}\
+            window.scrollTo(0,0);\
+        \}\
+        \
+        function goToSection(refId) \{\
+            switchTab('theory');\
+            setTimeout(() => \{\
+                const el = document.getElementById(refId);\
+                if(el) \{\
+                    el.scrollIntoView(\{ behavior: 'smooth', block: 'start' \});\
+                \}\
+            \}, 100);\
+        \}\
+\
+        function resetExam() \{\
+            score = 0;\
+            document.getElementById('score-val').textContent = '0';\
+            renderQuestions();\
+            window.scrollTo(0,0);\
+        \}\
+\
+        // Iniciar\
+        renderQuestions();\
+    </script>\
+</body>\
+</html>}

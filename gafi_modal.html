@@ -1,0 +1,197 @@
+<!-- GAFI MODAL -->
+<div id="gafi-modal" class="fixed inset-0 z-[9999] hidden justify-center items-center backdrop-blur-md bg-black/80">
+    <div
+        class="bg-slate-900 border border-slate-700 w-full max-w-5xl h-[90vh] rounded-3xl shadow-2xl relative flex flex-col overflow-hidden animate-fade-in mx-4">
+
+        <!-- Header -->
+        <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-950/50">
+            <h3 class="text-2xl font-black text-white flex items-center gap-3">
+                <i class="fas fa-globe-americas text-ramux"></i>
+                Las 40 Recomendaciones del GAFI
+            </h3>
+            <button
+                onclick="document.getElementById('gafi-modal').classList.add('hidden'); document.getElementById('gafi-modal').classList.remove('flex')"
+                class="w-10 h-10 rounded-full bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-500 transition-colors flex items-center justify-center">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8 overflow-y-auto custom-scrollbar flex-grow">
+            <div class="space-y-12 max-w-4xl mx-auto">
+
+                <!-- A -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">A. Políticas y
+                        Coordinación (Rec. 1-2)</h4>
+                    <p class="text-sm text-slate-400 mb-4 italic">Son la base del sistema. Exigen que los países
+                        entiendan sus riesgos antes de actuar.</p>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">1. Evaluación de riesgos y
+                                enfoque basado en riesgo:</strong> Los países y sujetos obligados deben identificar sus
+                            riesgos y asignar recursos donde el riesgo sea mayor.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">2. Cooperación y
+                                coordinación nacional:</strong> Debe haber mecanismos para que las autoridades (UIF,
+                            policía, supervisores) trabajen juntas.</li>
+                    </ul>
+                </div>
+
+                <!-- B -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">B. Lavado de Activos y
+                        Decomiso (Rec. 3-4)</h4>
+                    <p class="text-sm text-slate-400 mb-4 italic">Define el delito y las herramientas para quitarle las
+                        ganancias a los criminales.</p>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">3. Delito de lavado de
+                                activos:</strong> Los países deben tipificar el delito conforme a la Convención de Viena
+                            y Palermo.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">4. Decomiso y medidas
+                                provisionales:</strong> Autoridad para congelar, incautar y decomisar bienes ilícitos.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- C -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">C. Financiamiento del
+                        Terrorismo y Proliferación (Rec. 5-8)</h4>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">5. Delito de financiamiento
+                                del terrorismo:</strong> Tipificarlo no solo para actos terroristas, sino para
+                            organizaciones y terroristas individuales.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">6. Sanciones financieras
+                                dirigidas (Terrorismo):</strong> Congelamiento inmediato de fondos de personas en listas
+                            de la ONU.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">7. Sanciones financieras
+                                dirigidas (Proliferación):</strong> Congelamiento relacionado con armas de destrucción
+                            masiva.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">8. Organizaciones sin fines
+                                de lucro (ONGs):</strong> Proteger a las ONGs de ser abusadas para el financiamiento del
+                            terrorismo.</li>
+                    </ul>
+                </div>
+
+                <!-- D -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">D. Medidas Preventivas
+                        (Rec. 9-23)</h4>
+                    <p class="text-sm text-slate-400 mb-4 italic">Este es el bloque más denso y el que afecta
+                        directamente a los sujetos obligados.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <ul class="space-y-4 text-slate-300">
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">9. Leyes sobre el
+                                    secreto:</strong> El secreto bancario no puede impedir la implementación.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">10. Debida diligencia
+                                    del cliente (DDC):</strong> Conocer al cliente, verificar su identidad y entender su
+                                negocio. (Clave).</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">11. Mantenimiento de
+                                    registros:</strong> Guardar la información por al menos 5 años.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">12. Personas Expuestas
+                                    Políticamente (PEP):</strong> Medidas reforzadas.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">13. Banca
+                                    corresponsal:</strong> Controles sobre relaciones transfronterizas.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">14. Transferencia de
+                                    dinero/valores:</strong> Deben tener licencia y estar supervisados.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">15. Nuevas
+                                    tecnologías:</strong> (Actualizada) Regulación de Activos Virtuales (VASP).</li>
+                        </ul>
+                        <ul class="space-y-4 text-slate-300">
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">16. Transferencias
+                                    electrónicas:</strong> Regla de viaje (Travel Rule).</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">17. Dependencia en
+                                    terceros:</strong> Reglas para confiar en otros.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">18. Controles
+                                    internos:</strong> Programas de cumplimiento a nivel grupo.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">19. Países de mayor
+                                    riesgo:</strong> Medidas reforzadas (Lista gris/negra).</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">20. Reporte de
+                                    operaciones sospechosas (ROS):</strong> Obligación clave.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">21.
+                                    Tipping-off:</strong> Prohibido avisar al cliente.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">22-23. APNFD:</strong>
+                                DDC para sector no financiero.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- E -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">E. Transparencia y
+                        Beneficiario Final (Rec. 24-25)</h4>
+                    <p class="text-sm text-slate-400 mb-4 italic">Área de gran foco actual para evitar el uso de
+                        empresas "fantasma".</p>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">24. Personas
+                                jurídicas:</strong> Información precisa sobre el dueño real.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">25. Otras
+                                estructuras:</strong> Aplica a Fideicomisos y similares.</li>
+                    </ul>
+                </div>
+
+                <!-- F -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">F. Facultades de
+                        Autoridades (Rec. 26-35)</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <ul class="space-y-4 text-slate-300">
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">26. Regulación:</strong>
+                                Instituciones financieras.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">27.
+                                    Supervisores:</strong> Poderes de inspección.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">28. APNFD:</strong>
+                                Supervisión del sector.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">29. UIF:</strong>
+                                Autonomía y funciones.</li>
+                        </ul>
+                        <ul class="space-y-4 text-slate-300">
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">30-31. Orden
+                                    público:</strong> Responsabilidades y facultades.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">32. Efectivo:</strong>
+                                Controles en fronteras.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">33.
+                                    Estadísticas:</strong> Medir eficacia.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">34. Feedback:</strong>
+                                Guía a sujetos obligados.</li>
+                            <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">35. Sanciones:</strong>
+                                Disuasivas y proporcionales.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- G -->
+                <div class="bg-slate-800/30 p-6 rounded-2xl border border-slate-700/50">
+                    <h4 class="font-bold text-white text-lg border-b border-slate-700 pb-2 mb-4">G. Cooperación
+                        Internacional (Rec. 36-40)</h4>
+                    <ul class="space-y-4 text-slate-300">
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">36. Instrumentos:</strong>
+                            Ratificar convenciones.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">37-38. Asistencia legal
+                                mutua:</strong> Ayuda rápida, congelamiento.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">39. Extradición:</strong>
+                            Facilitar procesos.</li>
+                        <li class="pl-4 border-l-2 border-ramux"><strong class="text-ramux">40. Intercambio de
+                                información:</strong> Entre autoridades homólogas.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-6 border-t border-slate-700 bg-slate-950/50 flex justify-end">
+            <button
+                onclick="document.getElementById('gafi-modal').classList.add('hidden'); document.getElementById('gafi-modal').classList.remove('flex')"
+                class="px-8 py-3 bg-ramux hover:bg-blue-600 text-white font-bold rounded-xl transition-colors">
+                ENTENDIDO
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openGafiModal() {
+        const modal = document.getElementById('gafi-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+</script>

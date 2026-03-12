@@ -1,0 +1,8 @@
+chromadb
+flask
+flask-cors
+langchain-community
+langchain-groq
+langchain-text-splitters
+
+fastembed

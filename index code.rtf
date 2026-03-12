@@ -1,0 +1,372 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="es">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Prep CNV - RAMUX</title>\
+    \
+    <script src="https://cdn.tailwindcss.com"></script>\
+    \
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">\
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">\
+\
+    <script>\
+        tailwind.config = \{\
+            theme: \{\
+                extend: \{\
+                    fontFamily: \{\
+                        sans: ['Outfit', 'sans-serif'],\
+                    \},\
+                    colors: \{\
+                        ramux: '#0ea5e9',    /* Azul Ramux Tech */\
+                        ramuxvis: '#8b5cf6', /* Violeta */\
+                        brand: '#F76B1C',    /* Naranja Marca */\
+                    \},\
+                    animation: \{\
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',\
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',\
+                        'tracking-in': 'trackingIn 1.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both',\
+                        'text-shimmer': 'shimmer 3s ease-in-out infinite alternate',\
+                    \},\
+                    keyframes: \{\
+                        fadeIn: \{\
+                            '0%': \{ opacity: '0', transform: 'translateY(20px)' \},\
+                            '100%': \{ opacity: '1', transform: 'translateY(0)' \},\
+                        \},\
+                        trackingIn: \{\
+                            '0%': \{ letterSpacing: '-0.5em', opacity: '0' \},\
+                            '40%': \{ opacity: '0.6' \},\
+                            '100%': \{ letterSpacing: 'normal', opacity: '1' \},\
+                        \},\
+                        shimmer: \{\
+                            '0%': \{ textShadow: '0 0 0px rgba(255,255,255,0)' \},\
+                            '100%': \{ textShadow: '0 0 10px rgba(14, 165, 233, 0.5)' \},\
+                        \}\
+                    \}\
+                \}\
+            \}\
+        \}\
+    </script>\
+\
+    <style>\
+        /* === FONDO FIJO === */\
+        .fixed-background \{\
+            position: fixed;\
+            top: 0;\
+            left: 0;\
+            width: 100%;\
+            height: 100%;\
+            z-index: -1;\
+            background: radial-gradient(circle at top center, #1e1b4b 0%, #0f172a 50%, #020617 100%);\
+        \}\
+\
+        html, body \{\
+            height: 100%;\
+            margin: 0;\
+            padding: 0;\
+            color: #e2e8f0;\
+            overflow-x: hidden; \
+        \}\
+\
+        /* === EFECTOS GLASSMORPHISM === */\
+        .glass-card \{\
+            background: rgba(15, 23, 42, 0.6); \
+            backdrop-filter: blur(12px);\
+            -webkit-backdrop-filter: blur(12px); \
+            border: 1px solid rgba(139, 92, 246, 0.15);\
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);\
+            transition: all 0.3s ease;\
+        \}\
+        \
+        .glass-card:hover \{\
+            transform: translateY(-5px);\
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);\
+            border-color: rgba(14, 165, 233, 0.4);\
+        \}\
+\
+        /* Navbar Glass */\
+        .glass-nav \{\
+            background: rgba(2, 6, 23, 0.8); \
+            backdrop-filter: blur(15px);\
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);\
+        \}\
+\
+        .hero-title \{\
+            background: linear-gradient(to right, #38bdf8, #a78bfa);\
+            -webkit-background-clip: text;\
+            -webkit-text-fill-color: transparent;\
+        \}\
+\
+        .social-icon \{\
+            transition: all 0.3s ease;\
+            color: #94a3b8;\
+        \}\
+        .social-icon:hover \{\
+            color: #0ea5e9;\
+            transform: scale(1.1);\
+        \}\
+\
+        /* Inputs */\
+        .login-input \{\
+            width: 100%;\
+            padding: 12px;\
+            margin-bottom: 16px;\
+            background: rgba(15, 23, 42, 0.6);\
+            border: 1px solid #334155;\
+            border-radius: 8px;\
+            color: white;\
+            outline: none;\
+            transition: all 0.3s;\
+            text-align: center;\
+        \}\
+        .login-input:focus \{\
+            border-color: #0ea5e9;\
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);\
+            background: rgba(15, 23, 42, 0.9);\
+        \}\
+\
+        .hidden \{ display: none; \}\
+    </style>\
+</head>\
+<body class="antialiased selection:bg-ramux/30 flex flex-col min-h-screen justify-between">\
+\
+    <div class="fixed-background"></div>\
+\
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav transition-all duration-300">\
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">\
+            \
+            <div class="w-1/3 flex justify-start">\
+                <span class="text-sm text-slate-400 font-light tracking-wide">Bienvenido/a a</span>\
+            </div>\
+\
+            <div class="w-1/3 flex justify-center items-end group cursor-default">\
+                <span class="font-black text-3xl text-white leading-none animate-tracking-in animate-text-shimmer">RAMUX</span>\
+                \
+                <span class="w-2.5 h-2.5 bg-brand rounded-full animate-pulse-fast shadow-[0_0_10px_#F76B1C] ml-1 mb-[5px]"></span>\
+            </div>\
+\
+            <div class="w-1/3 flex justify-end items-center gap-6">\
+                <div id="user-display" class="hidden md:flex items-center gap-2 text-right border-r border-slate-700 pr-6 mr-2">\
+                    <div class="flex flex-col">\
+                        <span id="header-username" class="text-sm font-bold text-ramux">Usuario</span>\
+                        <span class="text-[10px] text-slate-500 uppercase tracking-wider">Acceso Permitido</span>\
+                    </div>\
+                </div>\
+\
+                <div class="flex items-center gap-4">\
+                    <a href="https://wa.me/message/WATOKPKLCBMPK1" target="_blank" title="WhatsApp" class="social-icon text-lg"><i class="fab fa-whatsapp"></i></a>\
+                    <a href="https://www.instagram.com/ramuxconsultora/?hl=es-la" target="_blank" title="Instagram" class="social-icon text-lg"><i class="fab fa-instagram"></i></a>\
+                    <a href="https://www.linkedin.com/company/ramuxconsultora" target="_blank" title="LinkedIn" class="social-icon text-lg"><i class="fab fa-linkedin"></i></a>\
+                    \
+                    <button id="logout-btn" onclick="logout()" class="hidden text-xs text-red-400 hover:text-red-300 ml-2 transition-colors" title="Cerrar Sesi\'f3n">\
+                        <i class="fas fa-power-off"></i>\
+                    </button>\
+                </div>\
+            </div>\
+        </div>\
+    </header>\
+\
+    <div class="flex-grow flex flex-col justify-center items-center w-full pt-[120px] pb-10 px-4 relative z-10">\
+\
+        <section id="login-section" class="w-full max-w-md animate-fade-in">\
+            <div class="glass-card p-10 rounded-3xl text-center border-t-4 border-ramux">\
+                <div class="mb-8">\
+                    <div class="w-16 h-16 bg-ramux/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-ramux/30">\
+                        <i class="fas fa-user-astronaut text-3xl text-ramux"></i>\
+                    </div>\
+                    <h2 class="text-2xl font-bold text-white">Plataforma CNV</h2>\
+                    <p class="text-slate-400 text-sm mt-2">Ingresa tus credenciales para comenzar.</p>\
+                </div>\
+                \
+                <form id="login-form" class="text-left space-y-4">\
+                    <input type="text" id="user-name" class="login-input" placeholder="Tu Nombre Completo" required>\
+                    <input type="password" id="access-code" class="login-input" placeholder="C\'f3digo de Acceso" required>\
+                    \
+                    <p id="error-msg" class="text-red-400 text-sm hidden text-center bg-red-900/20 py-2 rounded border border-red-900/50">\
+                        <i class="fas fa-ban mr-1"></i> Acceso Denegado\
+                    </p>\
+\
+                    <button type="submit" class="w-full mt-2 bg-gradient-to-r from-ramux to-ramuxvis hover:opacity-90 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-ramux/25 transform hover:scale-[1.02]">\
+                        INGRESAR\
+                    </button>\
+                </form>\
+            </div>\
+        </section>\
+\
+        <section id="course-content" class="hidden w-full max-w-6xl animate-fade-in">\
+            \
+            <div class="text-center mb-12">\
+                <span class="px-3 py-1 rounded-full border border-ramux/30 bg-ramux/10 text-ramux text-xs font-bold uppercase tracking-widest mb-4 inline-block">\
+                    Programa Oficial\
+                </span>\
+                <h2 class="hero-title text-5xl md:text-7xl font-black mb-6 tracking-tight">\
+                    Preparaci\'f3n Id\'f3neo<br>Mercado de Capitales\
+                </h2>\
+                <p class="text-lg text-slate-300 max-w-2xl mx-auto font-light">\
+                    Plataforma de estudio intensivo para la obtenci\'f3n de la matr\'edcula CNV Argentina. Teor\'eda, pr\'e1ctica y simuladores.\
+                </p>\
+            </div>\
+\
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full text-left">\
+                \
+                <a href="m1_x9z_secure.html" class="glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden block h-full hover:border-ramux">\
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:scale-110 duration-500">\
+                        <i class="fas fa-scale-balanced text-9xl text-white"></i>\
+                    </div>\
+                    <div class="relative z-10 flex flex-col h-full">\
+                        <div class="w-10 h-10 rounded bg-gradient-to-br from-ramux to-blue-600 flex items-center justify-center mb-4 text-white font-bold shadow-lg shadow-ramux/30">01</div>\
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-ramux transition-colors">Marco Normativo</h3>\
+                        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Ley 26.831, Emisoras, Oferta P\'fablica, OPA y Gobierno Corporativo.</p>\
+                        <div class="mt-auto flex items-center gap-2 text-ramux font-bold text-sm group-hover:translate-x-2 transition-transform">\
+                            Comenzar <i class="fas fa-arrow-right ml-1"></i>\
+                        </div>\
+                    </div>\
+                </a>\
+\
+                <div class="glass-card p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all cursor-not-allowed border-slate-700">\
+                    <div class="w-10 h-10 rounded bg-slate-800 flex items-center justify-center mb-4 text-slate-500 font-bold">02</div>\
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Lavado de Activos</h3>\
+                    <p class="text-slate-500 text-sm mb-6">Prevenci\'f3n, UIF, Sujetos obligados y Financiamiento del terrorismo.</p>\
+                    <div class="mt-auto text-slate-600 text-xs font-bold uppercase tracking-widest"><i class="fas fa-lock mr-1"></i> Bloqueado</div>\
+                </div>\
+\
+                <div class="glass-card p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all cursor-not-allowed border-slate-700">\
+                    <div class="w-10 h-10 rounded bg-slate-800 flex items-center justify-center mb-4 text-slate-500 font-bold">03</div>\
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Transparencia</h3>\
+                    <p class="text-slate-500 text-sm mb-6">R\'e9gimen informativo, C\'f3digo de conducta y Protecci\'f3n al inversor.</p>\
+                    <div class="mt-auto text-slate-600 text-xs font-bold uppercase tracking-widest"><i class="fas fa-lock mr-1"></i> Bloqueado</div>\
+                </div>\
+\
+                <div class="glass-card p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all cursor-not-allowed border-slate-700">\
+                    <div class="w-10 h-10 rounded bg-slate-800 flex items-center justify-center mb-4 text-slate-500 font-bold">04</div>\
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Matem\'e1tica Financiera</h3>\
+                    <p class="text-slate-500 text-sm mb-6">VAN, TIR, Valuaci\'f3n de Bonos y Acciones, An\'e1lisis T\'e9cnico.</p>\
+                    <div class="mt-auto text-slate-600 text-xs font-bold uppercase tracking-widest"><i class="fas fa-lock mr-1"></i> Bloqueado</div>\
+                </div>\
+                \
+                <div class="glass-card p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all cursor-not-allowed border-slate-700">\
+                    <div class="w-10 h-10 rounded bg-slate-800 flex items-center justify-center mb-4 text-slate-500 font-bold">05</div>\
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Instrumentos</h3>\
+                    <p class="text-slate-500 text-sm mb-6">Agentes, Derivados, Futuros, Opciones y Garant\'edas.</p>\
+                    <div class="mt-auto text-slate-600 text-xs font-bold uppercase tracking-widest"><i class="fas fa-lock mr-1"></i> Bloqueado</div>\
+                </div>\
+\
+                <div class="glass-card p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all cursor-not-allowed border-slate-700">\
+                    <div class="w-10 h-10 rounded bg-slate-800 flex items-center justify-center mb-4 text-slate-500 font-bold">06</div>\
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">Fondos Comunes</h3>\
+                    <p class="text-slate-500 text-sm mb-6">FCI, Fideicomisos Financieros y Marcos normativos espec\'edficos.</p>\
+                    <div class="mt-auto text-slate-600 text-xs font-bold uppercase tracking-widest"><i class="fas fa-lock mr-1"></i> Bloqueado</div>\
+                </div>\
+\
+            </div>\
+        </section>\
+\
+    </div>\
+\
+    <footer class="w-full py-8 px-6 border-t border-white/5 bg-slate-950 relative z-10 mt-auto">\
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">\
+            \
+            <div class="text-center md:text-left w-full md:w-1/3 order-2 md:order-1">\
+                <p class="text-sm font-bold text-slate-300 tracking-wide">Cursos de Educaci\'f3n Financiera</p>\
+                <p class="text-xs text-slate-500 mt-1 uppercase tracking-wider">Preparaci\'f3n examen id\'f3neo CNV ARG</p>\
+            </div>\
+\
+            <div class="text-center w-full md:w-1/3 order-1 md:order-2">\
+                <p class="text-sm text-slate-400 font-medium">\
+                    Desarrollado con <i class="fas fa-heart text-brand animate-pulse mx-1"></i> por <span class="font-black text-white tracking-wide">RAMUX<span class="text-brand">.</span></span>\
+                </p>\
+            </div>\
+\
+            <div class="text-center md:text-right w-full md:w-1/3 order-3 md:order-3">\
+                <p class="text-sm font-bold text-white tracking-wide">Fernando Silguero Ramirez</p>\
+                <p class="text-[10px] text-ramux mt-1 uppercase tracking-widest font-bold">CEO & Founder</p>\
+            </div>\
+\
+        </div>\
+    </footer>\
+\
+    <script>\
+        // === SEGURIDAD ACTUALIZADA (COMPATIBLE LOCAL) ===\
+        // Usamos codificaci\'f3n Base64 en lugar de SHA-256 para evitar problemas\
+        // con los navegadores al abrir el archivo localmente (file://).\
+        \
+        // Esta cadena es "cnv.ramux2026" codificada.\
+        const CLAVE_ENCRIPTADA = "Y252LnJhbXV4MjAyNg==";\
+\
+        document.addEventListener('DOMContentLoaded', () => \{\
+            const loginSection = document.getElementById('login-section');\
+            const courseContent = document.getElementById('course-content');\
+            const form = document.getElementById('login-form');\
+            const errorMsg = document.getElementById('error-msg');\
+            const headerUsername = document.getElementById('header-username');\
+            const userDisplay = document.getElementById('user-display');\
+            const logoutBtn = document.getElementById('logout-btn');\
+\
+            // 1. Verificar sesi\'f3n guardada\
+            const storedName = localStorage.getItem('cnv_user_name');\
+            const storedAuth = localStorage.getItem('cnv_auth');\
+\
+            if (storedAuth === 'true' && storedName) \{\
+                mostrarContenido(storedName);\
+            \}\
+\
+            // 2. Manejar Login\
+            form.addEventListener('submit', (e) => \{\
+                e.preventDefault();\
+                const nameInput = document.getElementById('user-name').value;\
+                const codeInput = document.getElementById('access-code').value;\
+\
+                // Encriptamos lo que escribi\'f3 el usuario y comparamos\
+                // btoa() es una funci\'f3n nativa que convierte texto a Base64\
+                try \{\
+                    if (btoa(codeInput) === CLAVE_ENCRIPTADA) \{\
+                        // \'c9xito\
+                        localStorage.setItem('cnv_user_name', nameInput);\
+                        localStorage.setItem('cnv_auth', 'true');\
+                        mostrarContenido(nameInput);\
+                    \} else \{\
+                        lanzarError();\
+                    \}\
+                \} catch (err) \{\
+                    lanzarError(); // Por si ingresan caracteres raros\
+                \}\
+            \});\
+\
+            function lanzarError() \{\
+                errorMsg.classList.remove('hidden');\
+                const card = loginSection.querySelector('.glass-card');\
+                card.style.transform = "translateX(10px)";\
+                setTimeout(() => card.style.transform = "translateX(-10px)", 100);\
+                setTimeout(() => card.style.transform = "translateX(5px)", 200);\
+                setTimeout(() => card.style.transform = "translateX(0)", 300);\
+            \}\
+\
+            // Funci\'f3n para cambiar la vista al Dashboard\
+            function mostrarContenido(nombre) \{\
+                loginSection.classList.add('hidden');\
+                courseContent.classList.remove('hidden');\
+                \
+                // Actualizar Header\
+                headerUsername.textContent = nombre;\
+                userDisplay.classList.remove('hidden');\
+                logoutBtn.classList.remove('hidden');\
+            \}\
+        \});\
+\
+        // Funci\'f3n de Salir\
+        function logout() \{\
+            localStorage.removeItem('cnv_user_name');\
+            localStorage.removeItem('cnv_auth');\
+            location.reload(); \
+        \}\
+    </script>\
+\
+</body>\
+</html>}
