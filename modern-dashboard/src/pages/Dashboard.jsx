@@ -115,7 +115,7 @@ function Dashboard() {
 
 
                     {/* Content Area */}
-                    <div className="space-y-8 animate-fade-in">
+                    <div className="space-y-8">
                         {activeTab === 'news' && (
                             <div className="space-y-6">
                                 {/* Scope Filters */}
