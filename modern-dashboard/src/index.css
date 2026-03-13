@@ -17,15 +17,15 @@
     --animate-marquee: marquee 30s linear infinite;
 
     @keyframes fadeIn {
+    @keyframes fadeIn {
         0% {
             opacity: 0;
-            transform: translateY(20px);
         }
 
         100% {
             opacity: 1;
-            transform: translateY(0);
         }
+    }
     }
 
     @keyframes trackingIn {
@@ -78,13 +78,19 @@
 
 html,
 body {
-    height: 100%;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     color: var(--color-text-main, #FAFAFA);
     overflow-x: hidden;
-    background: var(--color-bg-deep, #050505);
+    background-color: var(--color-bg-deep, #050505);
     font-family: 'Rajdhani', sans-serif;
+    /* Restore native Mac/iOS bounce and fluidity */
+    overscroll-behavior-y: auto;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
 }
 
 h1,
