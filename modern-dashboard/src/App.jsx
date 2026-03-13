@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
@@ -33,15 +32,18 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/quienes-somos" element={<Institucional />} />
         <Route path="/servicios" element={<Servicios />} />
-        {/* We keep Dashboard for the main view which will include widgets and news */}
+        
+        {/* Dashboard principal */}
         <Route
           path="/dashboard"
           element={<Dashboard />}
         />
+        
         <Route
           path="/noticias"
-          element={<Dashboard />} // Reusing Dashboard for now, we can create a dedicated Noticias page or just keep Dashboard as the main feed
+          element={<Dashboard />} 
         />
+        
         <Route
           path="/news/:id"
           element={
@@ -50,27 +52,42 @@ function App() {
             </ProtectedRoute>
           }
         />
+        
         <Route
           path="/academy"
           element={<RamuxAcademy />}
         />
+        
         <Route
           path="/library"
           element={<Library />}
         />
+        
         <Route
           path="/radar-laboral"
           element={<RadarLaboral />}
         />
+        
         <Route
           path="/expansion-global"
           element={<ExpansionGlobal />}
         />
+        
         <Route
           path="/ranking"
           element={
             <ProtectedRoute>
               <Ranking />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Ruta para el perfil de usuario */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
