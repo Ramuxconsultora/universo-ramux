@@ -12,6 +12,7 @@ import Ranking from './pages/Ranking';
 import Institucional from './pages/Institucional';
 import Servicios from './pages/Servicios';
 import RadarLaboral from './pages/RadarLaboral';
+import ExpansionGlobal from './pages/ExpansionGlobal';
 
 // Protected Route Wrapper using Supabase Auth
 const ProtectedRoute = ({ children }) => {
@@ -60,6 +61,10 @@ function App() {
         <Route
           path="/radar-laboral"
           element={<RadarLaboral />}
+        />
+        <Route
+          path="/expansion-global"
+          element={<ExpansionGlobal />}
         />
         <Route
           path="/ranking"
