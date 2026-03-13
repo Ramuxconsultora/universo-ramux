@@ -88,7 +88,7 @@ const SidebarLink = ({
                 {!badge && <div className="mt-1"></div>}
 
                 <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
-                {subtitle && <p className="text-xs text-slate-400 mb-1 truncate">{subtitle}</p>}
+                {subtitle && <p className="text-xs text-slate-300 mb-1 leading-relaxed">{subtitle}</p>}
 
             </div>
         </GlassPanel>
