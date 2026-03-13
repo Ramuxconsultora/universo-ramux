@@ -6,7 +6,7 @@ import MarketSimulator from '../widgets/MarketSimulator';
 import {
     Building2, Newspaper, Briefcase, GraduationCap,
     BarChart2, Zap, MessageSquare, Trophy, Instagram, Linkedin, Youtube,
-    ChevronDown, ChevronUp, Menu, BookOpen, Scale
+    ChevronDown, ChevronUp, Menu, BookOpen, Scale, Globe
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -55,6 +55,15 @@ const Sidebar = () => {
                         badge="HOT"
                         badgeColor="amber"
                         colorClass="amber"
+                    />
+                    <SidebarLink
+                        title="Expansión Global"
+                        subtitle="Estrategia Internacional"
+                        path="/expansion-global"
+                        icon={Globe}
+                        badge="HOT"
+                        badgeColor="emerald"
+                        colorClass="emerald"
                     />
                 </SidebarSection>
 
