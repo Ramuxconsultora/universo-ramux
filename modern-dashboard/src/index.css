@@ -118,11 +118,12 @@ h6,
 /* === EFECTOS GLASSMORPHISM === */
 .glass-card {
     background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(139, 92, 246, 0.15);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     transition: all 0.3s ease;
+    will-change: transform;
 }
 
 .glass-card:hover {
@@ -134,13 +135,15 @@ h6,
 /* Navbar Glass */
 .glass-nav {
     background: rgba(2, 6, 23, 0.8);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    will-change: transform;
 }
 
 .hero-title {
     background: linear-gradient(to right, #38bdf8, #a78bfa);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
