@@ -41,7 +41,7 @@ const RadarLaboral = () => {
                             <Scale className={themeColors.primaryText} size={32} />
                         </div>
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Dashboard Normativo</h1>
+                            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Radar Laboral</h1>
                             <p className={`${themeColors.primaryText} font-mono mt-1 text-sm tracking-wide`}>{themeColors.titleText}</p>
                         </div>
                     </div>
