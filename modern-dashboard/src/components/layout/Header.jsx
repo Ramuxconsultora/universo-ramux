@@ -14,7 +14,7 @@ const Header = () => {
     };
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center bg-slate-950/95 border-b border-white/10 backdrop-blur-md">
+        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center bg-slate-950 border-b border-white/10">
             <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
 
                 {/* 1. User Profile Link (Left) */}
