@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import GlassPanel from '../ui/GlassPanel';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Briefcase } from 'lucide-react';
 import ramuxSello from '../../assets/ramux-sello.png';
 
 const WelcomeHero = () => {
+    const navigate = useNavigate();
+
     return (
         <GlassPanel className="relative overflow-hidden group mb-6 border-sky-500/30 min-h-[250px] flex items-center justify-center p-6 shadow-[0_0_20px_rgba(14,165,233,0.15)] bg-[#02050A]">
 
@@ -33,21 +36,31 @@ const WelcomeHero = () => {
                     <p className="text-sky-300 font-mono text-xs sm:text-sm md:text-base tracking-wide flex text-left leading-relaxed">
                         <span className="mr-2">&gt;</span>
                         <span>
-                            Ramux es una plataforma de consultoría y formación estratégica dedicada a la transformación del conocimiento. Ejecutamos programas de capacitación continua enfocados en la implementación de Inteligencia Artificial y finanzas integrales, desde la gestión personal hasta el análisis técnico y la legislación de nivel experto. Asimismo, desarrollamos el liderazgo dentro de las organizaciones, optimizando resultados mediante la automatización de procesos y la comunicación estratégica.<span className="animate-[pulse_1s_ease-in-out_infinite] ml-1">_</span>
+                            Ramux es un ecosistema de consultoría estratégica y formación avanzada diseñado para liderar la transformación del conocimiento en la era digital. Nuestra misión es dotar a profesionales y empresas de las herramientas críticas para navegar los mercados actuales, integrando la gestión de capital humano, el comercio internacional y las finanzas estratégicas.<span className="animate-[pulse_1s_ease-in-out_infinite] ml-1">_</span>
                         </span>
                     </p>
                 </div>
 
-                {/* WhatsApp Call to Action */}
-                <a
-                    href="https://wa.me/message/WATOKPKLCBMPK1"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full transition-all duration-300 glow-button shadow-[0_0_20px_rgba(16,185,129,0.4)] border border-emerald-400/50 hover:scale-105"
-                >
-                    <MessageCircle size={22} className="text-white" />
-                    <span className="tracking-wide">COMENCEMOS</span>
-                </a>
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                    <button
+                        onClick={() => navigate('/servicios')}
+                        className="flex items-center gap-3 px-8 py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full transition-all duration-300 border border-white/20 hover:border-sky-400/50 hover:scale-105 w-full sm:w-auto justify-center"
+                    >
+                        <Briefcase size={20} className="text-sky-400" />
+                        <span className="tracking-wide uppercase text-sm">Nuestros Servicios</span>
+                    </button>
+
+                    <a
+                        href="https://wa.me/message/WATOKPKLCBMPK1"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-3 px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-full transition-all duration-300 glow-button shadow-[0_0_20px_rgba(16,185,129,0.4)] border border-emerald-400/50 hover:scale-105 w-full sm:w-auto justify-center"
+                    >
+                        <MessageCircle size={22} className="text-white" />
+                        <span className="tracking-wide uppercase text-sm">Contactanos</span>
+                    </a>
+                </div>
 
             </div>
             {/* Local effects removed for performance */}
