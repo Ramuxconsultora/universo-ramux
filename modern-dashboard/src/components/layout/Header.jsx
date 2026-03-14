@@ -1,90 +1,66 @@
-import React, { useState } from 'react';
-import { User, Bell, Languages, LogIn } from 'lucide-react';
-import GlassPanel from '../ui/GlassPanel';
+import { Link } from 'react-router-dom';
+import { User, LogIn, Instagram, Linkedin, Youtube } from 'lucide-react';
+import NeumorphicPanel from '../ui/NeumorphicPanel';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 
 const Header = () => {
-    const [notificationsOpen, setNotificationsOpen] = useState(false);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { user } = useAuth();
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
-    };
-
     return (
-        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center bg-slate-950 border-b border-white/10">
+        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center bg-[#080c17] border-b border-white/5">
             <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
 
-                {/* 1. User Profile Link (Left) */}
-                {user ? (
-                    <a href="/profile" className="w-1/3 flex items-center gap-4 group cursor-pointer no-underline">
-                        <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center group-hover:border-sky-400 transition-colors uppercase font-bold text-sky-400">
-                            {user.email ? user.email.charAt(0) : <User size={20} />}
-                        </div>
-                        <div>
-                            <p className="text-sm font-bold text-white group-hover:text-sky-400 transition-colors">{t('Bienvenido/a a Universo Ramux')}</p>
-                        </div>
-                    </a>
-                ) : (
-                    <a href="/login" className="w-1/3 flex items-center gap-3 group cursor-pointer no-underline">
-                        <div className="flex items-center gap-2 bg-sky-600/20 hover:bg-sky-600 text-sky-400 hover:text-white px-4 py-2 border border-sky-500/30 rounded-lg transition-all font-bold text-sm">
-                            <LogIn size={16} /> Ingresar / Registrarse
-                        </div>
-                    </a>
-                )}
-
-                {/* 2. Logo/Title (Center) */}
-                <div className="w-1/3 flex justify-center items-end pb-1">
-                    <span className="font-black text-2xl text-white leading-none tracking-tight">RAMUX</span>
-                    <span className="w-2 h-2 bg-orange-500 rounded-full ml-1 mb-1 animate-pulse"></span>
+                {/* 1. User Profile / Access (Left) */}
+                <div className="flex-1 flex justify-start items-center">
+                    {user ? (
+                        <a href="/profile" className="flex items-center gap-4 group cursor-pointer no-underline">
+                            <div className="w-10 h-10 rounded-xl bg-[#1a1f2b] border border-white/5 flex items-center justify-center group-hover:border-[#F76B1C] transition-colors uppercase font-bold text-[#F76B1C] shadow-sm">
+                                {user.email ? user.email.charAt(0) : <User size={20} />}
+                            </div>
+                            <div className="hidden md:block">
+                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('STATUS_ONLINE')}</p>
+                                <p className="text-xs font-bold text-white group-hover:text-[#F76B1C] transition-colors">{user.email?.split('@')[0]}</p>
+                            </div>
+                        </a>
+                    ) : (
+                        <a href="/login" className="flex items-center gap-3 group cursor-pointer no-underline w-fit">
+                            <NeumorphicPanel className="px-6 py-2.5 group-hover:text-[#F76B1C] transition-all">
+                                <span className="flex items-center gap-2 font-black text-[11px] uppercase tracking-widest">
+                                    <LogIn size={14} /> Log in
+                                </span>
+                            </NeumorphicPanel>
+                        </a>
+                    )}
                 </div>
 
-                {/* 3. Utilities (Right) */}
-                <div className="w-1/3 flex justify-end items-center gap-6 relative">
-
-                    {/* Language Selector */}
-                    <div className="flex bg-slate-800/80 rounded-lg p-1 border border-slate-700">
-                        <button
-                            onClick={() => changeLanguage('es')}
-                            className={`px-2 py-1 text-xs font-bold rounded transition-colors ${i18n.language.startsWith('es') ? 'bg-sky-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-700'}`}
-                        >
-                            ES
-                        </button>
-                        <button
-                            onClick={() => changeLanguage('en')}
-                            className={`px-2 py-1 text-xs font-bold rounded transition-colors ${i18n.language.startsWith('en') ? 'bg-sky-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-700'}`}
-                        >
-                            EN
-                        </button>
+                {/* 2. Logo/Title (Center) */}
+                <Link to="/dashboard" className="flex-none flex justify-center items-center no-underline group">
+                    <div className="flex items-baseline">
+                        <span className="font-black text-[34px] text-white leading-none tracking-tight group-hover:text-[#F76B1C] transition-colors">RAMUX</span>
+                        <div className="w-2.5 h-2.5 bg-[#F76B1C] rounded-full animate-pulse shadow-[0_0_12px_#F76B1C] ml-2 translate-y-[2px]" />
                     </div>
+                </Link>
 
-                    <button
-                        onClick={() => setNotificationsOpen(!notificationsOpen)}
-                        className="text-slate-400 hover:text-white transition-colors relative z-50 flex items-center"
-                    >
-                        <Bell size={20} />
-                        <span className="absolute -top-1 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                    </button>
-
-                    {/* Dropdown */}
-                    {notificationsOpen && (
-                        <div className="absolute top-12 right-0 w-80 z-40">
-                            <GlassPanel className="p-0 overflow-hidden bg-slate-900/95">
-                                <div className="p-4 border-b border-slate-700/50 flex justify-between items-center bg-slate-900/50">
-                                    <span className="font-bold text-white text-sm">Notificaciones</span>
-                                    <span className="text-[10px] text-sky-400 cursor-pointer hover:underline">Marcar leídas</span>
-                                </div>
-                                <div className="max-h-64 overflow-y-auto p-2 space-y-2">
-                                    <div className="p-3 hover:bg-slate-800/50 rounded-lg cursor-pointer transition-colors">
-                                        <p className="text-xs text-slate-300"><span className="font-bold text-white">Ana_Trader</span> comentó en tu publicación.</p>
-                                        <span className="text-[10px] text-slate-500 mt-1 block">Hace 5 min</span>
-                                    </div>
-                                </div>
-                            </GlassPanel>
-                        </div>
-                    )}
+                {/* 3. Social Media Links (Right) */}
+                <div className="flex-1 flex justify-end items-center">
+                    <div className="flex items-center gap-2 bg-[#12161f] rounded-2xl p-1.5 border border-black/20 shadow-inner">
+                        <a href="https://www.instagram.com/ramuxconsultora/?hl=es-la" target="_blank" rel="noreferrer" className="p-2.5 text-slate-500 hover:text-[#F76B1C] transition-all hover:scale-110">
+                            <Instagram size={18} />
+                        </a>
+                        <a href="https://www.linkedin.com/company/ramuxconsultora" target="_blank" rel="noreferrer" className="p-2.5 text-slate-500 hover:text-[#F76B1C] transition-all hover:scale-110">
+                            <Linkedin size={18} />
+                        </a>
+                        <a href="https://www.tiktok.com/@ramuxconsultora" target="_blank" rel="noreferrer" className="p-2.5 text-slate-500 hover:text-[#F76B1C] transition-all hover:scale-110">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-tiktok">
+                                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                            </svg>
+                        </a>
+                        <a href="https://www.youtube.com/@ramuxconsultora" target="_blank" rel="noreferrer" className="p-2.5 text-slate-500 hover:text-[#F76B1C] transition-all hover:scale-110">
+                            <Youtube size={18} />
+                        </a>
+                    </div>
                 </div>
 
             </div>
