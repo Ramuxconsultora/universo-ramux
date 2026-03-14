@@ -51,7 +51,7 @@ const NewsCard = ({ item }) => {
                         </span>
                     </div>
 
-                    <h3 className="text-xl font-black text-white mb-3 group-hover:text-white/80 transition-colors leading-[1.3] tracking-tight">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-white/80 transition-colors leading-[1.2] tracking-tight">
                         {item.title}
                     </h3>
 
