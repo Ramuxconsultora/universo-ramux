@@ -1,14 +1,17 @@
 import React from 'react';
 import Header from './Header';
-import ramuxSello from '../../assets/ramux-sello.png';
+import galacticBackground from '../../assets/galactic-background.png';
 
 const Layout = ({ children }) => {
     return (
-        <div className="antialiased min-h-screen flex flex-col font-sans text-white relative bg-[#151921]">
-            {/* Minimal Background Plate */}
-            <div className="fixed inset-0 z-[-1] opacity-[0.02] bg-center bg-no-repeat bg-[length:600px] pointer-events-none grayscale"
-                style={{ backgroundImage: `url(${ramuxSello})` }}
+        <div className="antialiased min-h-screen flex flex-col font-sans text-white relative bg-[#02040a]">
+            {/* Galactic Background Layer */}
+            <div className="fixed inset-0 z-[-2] bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+                style={{ backgroundImage: `url(${galacticBackground})` }}
             ></div>
+            
+            {/* Cosmic Overlay for Legibility */}
+            <div className="fixed inset-0 z-[-1] bg-gradient-to-b from-[#02040a]/40 via-transparent to-[#02040a]/80 pointer-events-none"></div>
 
             <Header />
 
