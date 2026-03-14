@@ -2,23 +2,20 @@ import React from 'react';
 
 /**
  * NeumorphicPanel Component
- * Implements a Soft UI (Neumorphism) surface using dual shadows and 
- * linear-gradient backgrounds for an extruded look.
+ * Implements a Soft UI (Neumorphism) surface refined for a Galactic aesthetic.
+ * uses deep gradients and cosmic-toned shadows.
  */
 const NeumorphicPanel = ({ 
     children, 
     className = "", 
     inset = false,
     onClick,
-    accent = false
+    accent = false,
+    radiance = false // 'amber', 'blue', 'green', 'purple', 'ramux', or false
 }) => {
-    // Base Styles according to specifications:
-    // Background Gradient: 145deg, #1c2230 to #181d27
-    // Shadows: Light top-left (-6px), Dark bottom-right (6px)
-    // Radius: 24px
-    
-    const baseClasses = inset ? "soft-panel-inset" : "soft-panel";
-    const accentClass = accent ? "border-[#F76B1C]/30 shadow-[0_0_15px_rgba(247,107,28,0.1)]" : "border-white/5";
+    // Base Styles
+    const baseClasses = radiance ? "card-radiance radiance-container" : (inset ? "soft-panel-inset" : "soft-panel");
+    const accentClass = accent ? "border-[#F76B1C]/40 shadow-[0_0_20px_rgba(247,107,28,0.15)]" : "border-white/5";
     
     return (
         <div 
@@ -27,11 +24,23 @@ const NeumorphicPanel = ({
                 ${baseClasses} 
                 ${accentClass}
                 ${className} 
-                relative overflow-hidden transition-all duration-300
-                ${onClick ? 'cursor-pointer active:scale-[0.98]' : ''}
+                relative overflow-hidden transition-all duration-500
+                ${onClick ? 'cursor-pointer active:scale-[0.98] hover:brightness-110' : ''}
             `}
         >
-            {children}
+            {/* Radiance Overlay Effect */}
+            {radiance && (
+                <div className={`radiance-overlay radiance-${radiance}`} />
+            )}
+
+            {/* Gloss Effect Layer (Only for non-radiance, as radiance has its own look) */}
+            {!inset && !radiance && (
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+            )}
+            
+            <div className="relative z-10 w-full h-full">
+                {children}
+            </div>
         </div>
     );
 };
