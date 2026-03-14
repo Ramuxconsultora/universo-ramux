@@ -9,7 +9,7 @@ const Header = () => {
     const { user } = useAuth();
 
     return (
-        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center bg-[#080c17] border-b border-white/5">
+        <header className="fixed top-0 left-0 w-full z-50 h-20 flex items-center glass-panel border-b border-white/5">
             <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
 
                 {/* 1. User Profile / Access (Left) */}
