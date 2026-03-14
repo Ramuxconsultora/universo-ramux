@@ -17,7 +17,7 @@ const SidebarLink = ({
     return (
         <NeumorphicPanel
             radiance={radiance || 'silver'}
-            className={`group p-4 relative overflow-hidden transition-all duration-300 ${currentActive ? 'ring-2 ring-white/20' : 'opacity-70 hover:opacity-100 hover:bg-white/5'}`}
+            className={`group p-4 relative overflow-hidden ${currentActive ? 'ring-2 ring-white/20' : 'opacity-70 hover:opacity-100'}`}
             onClick={() => navigate(path)}
         >
             <div className="flex gap-4 items-center relative z-10">
