@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import GlassPanel from '../ui/GlassPanel';
-import { Scale, Calculator, AlertCircle, Info, Building2, Calendar, DollarSign, ArrowRight, ShieldCheck, Copy, Check } from 'lucide-react';
+import NeumorphicPanel from '../ui/NeumorphicPanel';
+import { Scale, Calculator, AlertCircle, Info, Building2, Calendar, DollarSign, ArrowRight, ShieldCheck, Copy, Check, TrendingDown } from 'lucide-react';
 
 export default function LaborLawCalculator() {
     const [inputs, setInputs] = useState({
@@ -322,25 +322,24 @@ export default function LaborLawCalculator() {
     };
 
     return (
-        <GlassPanel className="p-0 border border-indigo-500/20 shadow-2xl overflow-hidden mt-12 bg-slate-900/60 transition-all duration-500 hover:shadow-indigo-500/10">
+        <NeumorphicPanel className="p-0 overflow-hidden mt-12 transition-all duration-500 shadow-2xl">
             {/* Cabecera */}
-            <div className="bg-gradient-to-r from-indigo-900/40 to-slate-900/80 p-6 md:p-8 border-b border-indigo-500/20 relative">
-                {/* Background glows removed for performance */}
+            <div className="bg-gradient-to-r from-[#1c2230] to-[#151921] p-6 md:p-8 border-b border-black/20 relative">
                 <div className="flex items-center gap-4 mb-2 relative z-10">
-                    <div className="p-3 bg-indigo-500/20 rounded-xl shadow-inner border border-indigo-400/30">
-                        <Scale className="text-indigo-400" size={28} />
+                    <div className="p-3 bg-[#12161f] rounded-xl shadow-inner border border-white/5">
+                        <Scale className="text-sky-400" size={28} />
                     </div>
                     <div>
                         <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Cálculo Indemnizatorio Comparativo</h2>
                         <div className="flex items-center gap-2 mt-1">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-slate-800 text-slate-400 border border-slate-700">LCT 20.744</span>
-                            <span className="text-slate-500 text-xs text-center w-4 text-center">vs</span>
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Ley 27.802</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-[#1a1f2b] text-slate-500 border border-black/20">LCT 20.744</span>
+                            <span className="text-slate-600 text-[10px] uppercase font-bold tracking-widest">vs</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-sky-500/10 text-sky-400 border border-sky-500/20">Ley 27.802</span>
                         </div>
                     </div>
                 </div>
                 <p className="text-slate-400 text-sm mt-4 lg:w-3/4 relative z-10">
-                    Simula la indemnización por despido sin justa causa, comparando el Régimen Anterior y el Nuevo Régimen de Modernización Laboral. Completa los datos para ver el impacto económico de la reforma.
+                    Simula la indemnización por despido sin justa causa, comparando el Régimen Anterior y el Nuevo Régimen de Modernización Laboral.
                 </p>
             </div>
 
@@ -435,7 +434,7 @@ export default function LaborLawCalculator() {
                 <div className="flex justify-center pt-2">
                     <button
                         onClick={calculate}
-                        className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-full font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/30 hover:scale-105"
+                        className="bg-sky-500 hover:bg-sky-400 text-white px-8 py-3 rounded-2xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-sky-500/20 active:scale-95"
                     >
                         <Calculator size={20} /> Calcular Indemnización
                     </button>
@@ -599,6 +598,6 @@ export default function LaborLawCalculator() {
                     </div>
                 )}
             </div>
-        </GlassPanel>
+        </NeumorphicPanel>
     );
 }
