@@ -17,55 +17,28 @@
     --animate-marquee: marquee 30s linear infinite;
 
     @keyframes fadeIn {
-    @keyframes fadeIn {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
+        0% { opacity: 0; }
+        100% { opacity: 1; }
     }
 
     @keyframes trackingIn {
-        0% {
-            letter-spacing: -0.5em;
-            opacity: 0;
-        }
-
-        40% {
-            opacity: 0.6;
-        }
-
-        100% {
-            letter-spacing: normal;
-            opacity: 1;
-        }
+        0% { letter-spacing: -0.5em; opacity: 0; }
+        40% { opacity: 0.6; }
+        100% { letter-spacing: normal; opacity: 1; }
     }
 
     @keyframes shimmer {
-        0% {
-            text-shadow: 0 0 0px rgba(255, 255, 255, 0);
-        }
-
-        100% {
-            text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
-        }
+        0% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+        100% { text-shadow: 0 0 10px rgba(14, 165, 233, 0.5); }
     }
 
     @keyframes marquee {
-        0% {
-            transform: translateX(0);
-        }
-
-        100% {
-            transform: translateX(-50%);
-        }
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
     }
 }
 
-/* === FONDO FIJO === */
+/* === FONDO FIJO (CORREGIDO) === */
 .fixed-background {
     position: fixed;
     top: 0;
@@ -74,38 +47,41 @@
     height: 100%;
     z-index: -1;
     background: radial-gradient(circle at top center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+    /* Evita que el fondo intercepte clicks o scroll */
+    pointer-events: none; 
 }
 
-html,
+/* === RESET DE SCROLL Y ESTRUCTURA === */
+html {
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
 body {
-    min-height: 100vh;
+    min-height: 100%;
     margin: 0;
     padding: 0;
     color: var(--color-text-main, #FAFAFA);
-    overflow-x: hidden;
     background-color: var(--color-bg-deep, #050505);
     font-family: 'Rajdhani', sans-serif;
-    /* Restore native Mac/iOS bounce and fluidity */
-    overscroll-behavior-y: auto;
-    scroll-behavior: smooth;
+    
+    /* Manejo de Scroll */
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    
+    /* Renderizado de Texto */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeSpeed;
+    text-rendering: optimizeLegibility;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.font-orbitron {
+/* Tipografías */
+h1, h2, h3, h4, h5, h6, .font-orbitron {
     font-family: 'Orbitron', 'Arial Rounded MT Bold', sans-serif;
 }
 
-/* === SCANLINE EFFECT REMOVED === */
-
-/* === GLOW BUTTON EFFCT === */
+/* === INTERACCIONES === */
 .glow-button {
     box-shadow: 0 0 15px var(--color-accent-glow, #7B39FC);
     transition: all 0.3s ease;
@@ -123,7 +99,6 @@ h6,
     border: 1px solid rgba(139, 92, 246, 0.15);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     transition: all 0.3s ease;
-    will-change: transform;
 }
 
 .glass-card:hover {
@@ -132,7 +107,6 @@ h6,
     border-color: rgba(14, 165, 233, 0.4);
 }
 
-/* Navbar Glass */
 .glass-nav {
     background: rgba(2, 6, 23, 0.8);
     backdrop-filter: blur(10px);
@@ -177,41 +151,27 @@ h6,
     background: rgba(15, 23, 42, 0.9);
 }
 
-/* === BCRA WIDGETS PERFORMANCE CSS === */
+/* === BCRA WIDGETS PERFORMANCE === */
 @keyframes pulse-opacity {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 .skeleton-fast {
     animation: pulse-opacity 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     background-color: #1e293b;
-    /* slate-800 */
 }
 
-/* 
- * LA CLASE CLAVE DEL RENDIMIENTO 
- * Sin backdrop-filter, sin opacitys compuestos
- */
 .widget-card-performance {
     background-color: #0f172a;
     border: 1px solid #1e293b;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
-        0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform;
 }
 
 .widget-card-performance:hover {
+    will-change: transform;
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
-        0 4px 6px -4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
