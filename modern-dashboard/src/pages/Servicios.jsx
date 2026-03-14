@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import NeumorphicPanel from '../components/ui/NeumorphicPanel';
@@ -121,6 +121,11 @@ const Servicios = () => {
             isActive: false
         }
     ];
+
+    // Force scroll to top on mount
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <Layout>
