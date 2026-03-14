@@ -1,15 +1,20 @@
 import React from 'react';
 
 const GlassPanel = ({ children, className = '', hoverEffect = true, ...props }) => {
-    // Optimized Glassmorphism for macOS Safari/Chrome
-    // Optimized Glassmorphism: lower blur for better scroll performance
-    const baseClasses = "bg-white/5 backdrop-blur-[4px] border border-violet-500/10 shadow-xl transition-all duration-300 rounded-2xl will-change-transform";
-    const hoverClasses = hoverEffect ? "hover:border-violet-500/40 hover:scale-[1.005] hover:shadow-violet-500/20 hover:bg-white/10" : "";
+    // 1. Cambiamos 'transition-all' por 'transition' (Tailwind lo optimiza por debajo)
+    // 2. Mantenemos el backdrop-blur bajo (4px) que es excelente para rendimiento
+    const baseClasses = "bg-white/5 backdrop-blur-[4px] border border-violet-500/10 shadow-xl transition duration-300 rounded-2xl";
+    
+    // 3. Añadimos 'transform-gpu' para que la escala sea manejada eficientemente por hardware
+    // solo cuando ocurre el hover, sin bloquear la memoria constantemente.
+    const hoverClasses = hoverEffect 
+        ? "hover:border-violet-500/40 hover:scale-[1.005] hover:shadow-violet-500/20 hover:bg-white/10 transform-gpu" 
+        : "";
 
     return (
         <div
             className={`${baseClasses} ${hoverClasses} ${className}`}
-            style={{ willChange: hoverEffect ? 'transform, border-color' : 'auto' }}
+            // Eliminamos el style en línea con willChange
             {...props}
         >
             {children}
