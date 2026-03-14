@@ -24,8 +24,8 @@ const NeumorphicPanel = ({
                 ${baseClasses} 
                 ${accentClass}
                 ${className} 
-                relative overflow-hidden transition-all duration-500
-                ${onClick ? 'cursor-pointer active:scale-[0.98] hover:brightness-110' : ''}
+                relative overflow-hidden
+                ${onClick ? 'cursor-pointer' : ''}
             `}
         >
             {/* Radiance Overlay Effect */}
