@@ -4,7 +4,8 @@ import SidebarLink from './SidebarLink';
 import {
     Building2, Newspaper, Briefcase, GraduationCap,
     Coins, TrendingUp, Instagram, Linkedin, Youtube,
-    ChevronDown, ChevronUp, Menu, BookOpen, Scale, Globe
+    ChevronDown, ChevronUp, Menu, BookOpen, Scale, Globe, Sprout,
+    Telescope, ShieldCheck, Compass, Heart, Layers, Fingerprint
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -58,7 +59,7 @@ const Sidebar = () => {
             `}>
 
                 {/* Sección 1: Founder's Vision */}
-                <SidebarSection title="Founder's Vision" icon={Newspaper} colorClass="text-slate-400">
+                <SidebarSection title="Founder's Vision" icon={Telescope} colorClass="text-slate-400">
                     <SidebarLink
                         title="Opinión y coyuntura"
                         subtitle="La realidad entre líneas."
@@ -69,7 +70,7 @@ const Sidebar = () => {
                 </SidebarSection>
 
                 {/* Sección 2: Legal & Compliance */}
-                <SidebarSection title="Legal & Compliance" icon={Scale} colorClass="text-amber-500">
+                <SidebarSection title="Legal & Compliance" icon={ShieldCheck} colorClass="text-amber-500">
                     <SidebarLink
                         title="Radar Laboral"
                         subtitle="Nueva Ley Laboral"
@@ -81,7 +82,7 @@ const Sidebar = () => {
                 </SidebarSection>
 
                 {/* Sección 3: Global Trade */}
-                <SidebarSection title="Global Trade" icon={Globe} colorClass="text-emerald-500">
+                <SidebarSection title="Global Trade" icon={Compass} colorClass="text-emerald-500">
                     <SidebarLink
                         title="Expansión Global"
                         subtitle="Estrategia Internacional"
@@ -116,19 +117,30 @@ const Sidebar = () => {
                     />
                 </SidebarSection>
 
+                {/* Sección EXTRA: Compromiso Ramux */}
+                <SidebarSection title="Compromiso Ramux" icon={Heart} colorClass="text-cyan-400">
+                    <SidebarLink
+                        title="Construyendo el Futuro Civil"
+                        subtitle="Desarrollo social más justo y transparente."
+                        path="/dashboard"
+                        icon={Sprout}
+                        radiance="cyan"
+                    />
+                </SidebarSection>
+
                 {/* Sección 6: Servicios Profesionales */}
-                <SidebarSection title="Servicios" icon={Briefcase} colorClass="text-sky-500">
+                <SidebarSection title="Servicios" icon={Layers} colorClass="text-rose-400">
                     <SidebarLink
                         title="Catálogo"
                         subtitle="Consultoría y Soluciones."
                         path="/servicios"
                         icon={Briefcase}
-                        radiance="blue"
+                        radiance="peach"
                     />
                 </SidebarSection>
 
                 {/* Sección 7: Institucional */}
-                <SidebarSection title="Institucional" icon={Building2} colorClass="text-slate-400">
+                <SidebarSection title="Institucional" icon={Fingerprint} colorClass="text-slate-400">
                     <SidebarLink
                         title="Quiénes Somos"
                         subtitle="Nuestra visión y equipo."
