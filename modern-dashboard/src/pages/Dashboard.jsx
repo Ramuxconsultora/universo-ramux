@@ -66,12 +66,13 @@ function Dashboard() {
 
     const featured = news && news.length > 0 ? news[0] : null;
     const listItems = news && news.length > 1 ? news.slice(1) : [];
+    
     // Handle loading state
     if (loading) {
         return (
             <Layout>
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-300"></div>
+                <div className="flex justify-center items-center min-h-[50vh]">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500"></div>
                 </div>
             </Layout>
         );
@@ -113,7 +114,6 @@ function Dashboard() {
                         </div>
                     </div>
 
-
                     {/* Content Area */}
                     <div className="space-y-8">
                         {activeTab === 'news' && (
@@ -150,7 +150,7 @@ function Dashboard() {
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
                                         {/* Economy Column */}
-                                        <div className="bg-slate-900/40 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+                                        <div className="bg-slate-900/40 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl overflow-hidden h-full">
                                             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
                                                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
                                                 <h2 className="text-sm font-mono tracking-widest text-slate-300 uppercase">{t('Economía, Mercado y Finanzas')}</h2>
@@ -166,7 +166,7 @@ function Dashboard() {
                                         </div>
 
                                         {/* Technology Column */}
-                                        <div className="bg-slate-900/40 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+                                        <div className="bg-slate-900/40 p-6 md:p-8 rounded-2xl border border-slate-800 shadow-xl overflow-hidden h-full">
                                             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
                                                 <div className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"></div>
                                                 <h2 className="text-sm font-mono tracking-widest text-slate-300 uppercase">{t('Tecnología e Innovación')}</h2>
@@ -196,8 +196,8 @@ function Dashboard() {
                     </div>
                 </div>
 
-                {/* RIGHT COLUMN: Sidebar (4 cols) */}
-                <div className="order-1 lg:order-2 lg:col-span-4">
+                {/* RIGHT COLUMN: Sidebar (4 cols) - Añadido sticky para mejor experiencia de scroll */}
+                <div className="order-1 lg:order-2 lg:col-span-4 sticky top-32">
                     <Sidebar />
                 </div>
 
