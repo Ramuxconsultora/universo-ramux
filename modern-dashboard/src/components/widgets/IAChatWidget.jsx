@@ -27,7 +27,7 @@ const IAChatWidget = () => {
     };
 
     return (
-        <NeumorphicPanel className="flex flex-col h-[450px]">
+        <NeumorphicPanel radiance="purple" className="flex flex-col h-[480px]">
             {/* Header */}
             <div className="flex justify-between items-center p-5 border-b border-black/10 bg-[#1a1f2b]">
                 <div className="flex items-center gap-3">
