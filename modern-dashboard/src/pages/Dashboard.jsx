@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import NeumorphicPanel from '../ui/NeumorphicPanel';
+import NeumorphicPanel from '../ui/NeumorphicPanel.jsx';
 import { MessageCircle, Briefcase, Terminal as TerminalIcon, Sparkles } from 'lucide-react';
 
 const WelcomeHero = () => {
