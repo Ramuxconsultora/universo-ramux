@@ -38,7 +38,12 @@ const Header = () => {
                 {/* 2. Logo/Title (Center) */}
                 <Link to="/dashboard" className="flex-none flex justify-center items-center no-underline group">
                     <div className="flex items-baseline">
-                        <span className="font-black text-[34px] text-white leading-none tracking-tight group-hover:text-[#F76B1C] transition-colors">RAMUX</span>
+                        <span 
+                            className="font-black text-[34px] text-white leading-none tracking-tight group-hover:text-[#F76B1C] transition-colors"
+                            style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                            RAMUX
+                        </span>
                         <div className="w-2.5 h-2.5 bg-[#F76B1C] rounded-full animate-pulse shadow-[0_0_12px_#F76B1C] ml-2 translate-y-[2px]" />
                     </div>
                 </Link>
