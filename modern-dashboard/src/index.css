@@ -25,10 +25,12 @@ html, body {
     margin: 0;
     padding: 0;
     color: #ffffff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     overflow-x: hidden;
     overflow-y: auto;
     scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Data & Technical Labels */
@@ -37,10 +39,11 @@ html, body {
     font-family: 'Fira Code', monospace;
 }
 
-h1, h2, h3 {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
 }
 
 /* === NEUMORPHIC UTILITIES === */
