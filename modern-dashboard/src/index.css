@@ -17,10 +17,22 @@
 
     --animate-fade-in: fadeIn 0.5s ease-out forwards;
     --animate-heart-beat: heartBeat 2s ease-in-out infinite;
+    --animate-spin-slow: spin 8s linear infinite;
+    --animate-spin-slow-reverse: spin-reverse 8s linear infinite;
 
     @keyframes heartBeat {
         0%, 100% { transform: scale(1); opacity: 0.8; }
         50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px #fb7185); }
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-reverse {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(-360deg); }
     }
 }
 
