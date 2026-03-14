@@ -5,6 +5,17 @@ import { es } from 'date-fns/locale';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
 
 const NewsCard = ({ item }) => {
+    // Determine radiance color based on category
+    const getRadianceColor = (category) => {
+        const cat = category?.toLowerCase() || '';
+        if (cat.includes('econ') || cat.includes('finan')) return 'blue';
+        if (cat.includes('tech') || cat.includes('ia') || cat.includes('tecno')) return 'purple';
+        if (cat.includes('legal') || cat.includes('norm')) return 'amber';
+        return 'blue';
+    };
+
+    const radiance = getRadianceColor(item.category);
+
     // Time format
     let timeAgo = '';
     try {
@@ -20,32 +31,42 @@ const NewsCard = ({ item }) => {
             rel="noopener noreferrer" 
             className="block group no-underline mb-4"
         >
-            <NeumorphicPanel className="p-5 hover:bg-[#1d2331] transition-all transform hover:-translate-y-1 active:translate-y-0">
-                <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-2 text-[9px] font-bold text-[#F76B1C] uppercase tracking-widest">
-                        <div className="p-1 px-2 bg-[#12161f] rounded-lg shadow-inner border border-black/10">
-                            {item.category || 'NOTICIA'}
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-[9px] font-medium text-slate-500">
-                        <Clock size={10} />
-                        {timeAgo}
-                    </div>
+            <NeumorphicPanel 
+                radiance={radiance} 
+                className="p-8 h-full flex flex-col items-start text-left"
+            >
+                {/* Reference Icon (Top Left) */}
+                <div className="w-12 h-12 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center mb-6 shadow-xl group-hover:border-white/20 transition-all">
+                    <Tag size={20} className="text-white/60" />
                 </div>
 
-                <h3 className="text-base font-bold text-white mb-2 group-hover:text-[#F76B1C] transition-colors leading-tight">
-                    {item.title}
-                </h3>
+                <div className="flex-grow">
+                    <div className="flex items-center gap-3 mb-3">
+                        <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+                            {item.category || 'NOTICIA'}
+                        </span>
+                        <div className="w-1 h-1 bg-white/20 rounded-full" />
+                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-1">
+                            <Clock size={10} /> {timeAgo}
+                        </span>
+                    </div>
 
-                <p className="text-[11px] text-slate-400 mb-4 line-clamp-2 leading-relaxed">
-                    {item.summary || item.content}
-                </p>
+                    <h3 className="text-xl font-black text-white mb-3 group-hover:text-white/80 transition-colors leading-[1.3] tracking-tight">
+                        {item.title}
+                    </h3>
 
-                <div className="flex justify-between items-center pt-3 border-t border-white/5 mt-auto">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">
+                    <p className="text-xs text-slate-400 mb-6 line-clamp-3 leading-relaxed font-medium">
+                        {item.summary || item.content}
+                    </p>
+                </div>
+
+                <div className="mt-auto pt-6 w-full flex justify-between items-center border-t border-white/5">
+                    <span className="text-[11px] font-black text-white group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
+                        LEER ARTÍCULO <ExternalLink size={12} />
+                    </span>
+                    <span className="text-[9px] font-bold text-white/20 uppercase tracking-tighter">
                         {item.source_name || item.source || 'RAMUX_INTEL'}
                     </span>
-                    <ExternalLink size={12} className="text-slate-600 group-hover:text-[#F76B1C]" />
                 </div>
             </NeumorphicPanel>
         </a>
