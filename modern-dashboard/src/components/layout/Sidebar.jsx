@@ -11,37 +11,21 @@ const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="space-y-4 lg:space-y-8">
-            {/* Mobile Toggle Button */}
+        <div className="space-y-4 lg:space-y-8 lg:sticky lg:top-28">
+            {/* Mobile Toggle Button (Neumorphic) */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden w-full flex items-center justify-between p-4 bg-slate-900/40 backdrop-blur-md rounded-2xl border border-white/5 shadow-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="lg:hidden w-full flex items-center justify-between p-4 bg-[#1a1f2b] rounded-2xl border border-white/5 shadow-lg text-slate-300 hover:text-white transition-all font-bold text-xs uppercase tracking-widest"
             >
-                <div className="flex items-center gap-3 font-bold">
-                    <Menu size={20} className="text-sky-400" />
-                    Explorar Menú
+                <div className="flex items-center gap-3">
+                    <Menu size={18} className="text-sky-400" />
+                    Menu_Principal
                 </div>
-                {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
 
-            {/* Sidebar Content (hidden on mobile when closed) */}
-            <div className={`${isOpen ? 'block' : 'hidden'} lg:block space-y-8 bg-slate-900/40 backdrop-blur-md p-6 rounded-3xl border border-white/5 shadow-2xl transition-all duration-300`}>
-
-                {/* Social Media Links Card */}
-                <div className="flex justify-center gap-4 pb-2 border-b border-white/5">
-                    <a href="https://www.instagram.com/ramuxconsultora/?hl=es-la" target="_blank" rel="noreferrer" className="p-2 bg-slate-800/50 text-slate-400 hover:text-pink-500 hover:bg-slate-800 rounded-lg transition-all hover:scale-110 border border-transparent hover:border-pink-500/30">
-                        <Instagram size={20} />
-                    </a>
-                    <a href="https://www.linkedin.com/company/ramuxconsultora" target="_blank" rel="noreferrer" className="p-2 bg-slate-800/50 text-slate-400 hover:text-blue-500 hover:bg-slate-800 rounded-lg transition-all hover:scale-110 border border-transparent hover:border-blue-500/30">
-                        <Linkedin size={20} />
-                    </a>
-                    <a href="#" target="_blank" rel="noreferrer" className="p-2 bg-slate-800/50 text-slate-400 hover:text-red-500 hover:bg-slate-800 rounded-lg transition-all hover:scale-110 border border-transparent hover:border-red-500/30">
-                        <Youtube size={20} />
-                    </a>
-                    <a href="#" target="_blank" rel="noreferrer" className="p-2 bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all hover:scale-110 border border-transparent hover:border-white/30">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" /></svg>
-                    </a>
-                </div>
+            {/* Sidebar Content (hidden on mobile when closed) - Soft UI Container */}
+            <div className={`${isOpen ? 'block' : 'hidden'} lg:block space-y-6 bg-[#1a1f2b] p-6 rounded-[32px] border border-white/5 shadow-2xl transition-all duration-300 ring-1 ring-black/20`}>
 
                 {/* Sección 1: Founder's Vision */}
                 <SidebarSection title="Founder's Vision" icon={Newspaper} colorClass="text-slate-200">
@@ -87,7 +71,7 @@ const Sidebar = () => {
                         subtitle="Gestión patrimonial experta."
                         path="/dashboard"
                         icon={TrendingUp}
-                        badge="PROXIMAMENTE"
+                        badge="COMING SOON"
                         badgeColor="sky"
                         colorClass="sky"
                     />
