@@ -27,19 +27,27 @@ const IAChatWidget = () => {
     };
 
     return (
-        <NeumorphicPanel radiance="purple" className="flex flex-col h-[480px]">
+        <NeumorphicPanel radiance="purple" className="flex flex-col h-[480px] group">
             {/* Header */}
-            <div className="flex justify-between items-center p-5 border-b border-black/10 bg-[#1a1f2b]">
+            <div className="flex justify-between items-center p-5 border-b border-black/10 bg-[#1a1f2b] relative">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-500/10 rounded-lg">
                         <Zap className="text-orange-500" size={18} />
                     </div>
                     <div>
-                        <h3 className="font-bold text-white text-sm tracking-tight text-white">Ramux_Intelligence</h3>
-                        <p className="text-[10px] text-slate-500 font-medium lowercase">v3.0_experimental</p>
+                        <h3 className="font-extrabold text-white text-sm tracking-tight uppercase">Ramux Financial & Legal IA</h3>
+                        <p className="text-[10px] text-slate-500 font-medium lowercase">v3.0_premium</p>
                     </div>
                 </div>
-                <button className="text-slate-500 hover:text-white transition-all">
+                
+                {/* Premium Access Label (Shown on Hover) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                    <span className="px-3 py-1 bg-[#F76B1C] text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg shadow-[#F76B1C]/20 ring-1 ring-white/20">
+                        PREMIUM_ACCESS_GRANTED
+                    </span>
+                </div>
+
+                <button className="text-slate-500 hover:text-white transition-all z-10">
                     <Maximize2 size={16} />
                 </button>
             </div>
