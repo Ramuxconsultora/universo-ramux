@@ -9,17 +9,13 @@ const WelcomeHero = () => {
     return (
         <NeumorphicPanel 
             radiance="ramux" 
-            className="relative p-10 md:p-14 overflow-hidden mb-8 group"
+            className="relative p-10 md:p-14 overflow-hidden mb-8 group transition-all duration-500 opacity-80 hover:opacity-100"
         >
             <div className="relative z-10 max-w-3xl">
-                {/* Reference Icon (Top Left) */}
-                <div className="w-14 h-14 bg-black/40 rounded-2xl border border-white/10 flex items-center justify-center mb-8 shadow-2xl">
-                    <Sparkles size={28} className="text-[#F76B1C]" />
-                </div>
-
-                <h1 className="text-[28px] md:text-[52px] font-black text-white mb-6 leading-[1] tracking-tighter uppercase">
+                <h1 className="text-[28px] md:text-[56px] font-black text-white mb-6 leading-[0.85] tracking-tight uppercase whitespace-nowrap">
                     VAMOS A POTENCIAR <br /> 
-                    <span className="text-white/40 group-hover:text-white transition-colors duration-700">TU MUNDO</span>.
+                    <span className="text-white/40 group-hover:text-[#F76B1C] transition-colors duration-700">TU MUNDO</span>
+                    <span className="text-white/40 group-hover:text-sky-400 group-hover:animate-pulse transition-colors duration-700">.</span>
                 </h1>
 
                 {/* Styled Description */}
@@ -27,7 +23,7 @@ const WelcomeHero = () => {
                     <p 
                         className="text-sm md:text-lg leading-relaxed text-left text-slate-300 font-medium"
                     >
-                        Ramux es un ecosistema de consultoría estratégica y formación avanzada diseñado para liderar la transformación del conocimiento en la era digital.
+                        <span className="group-hover:text-[#F76B1C] transition-colors duration-500">Ramux</span> es el motor de cambio para organizaciones que buscan rediseñar su operatividad. A través de un modelo híbrido de consultoría y formación, impactamos directamente en la productividad y la cultura organizacional, estableciendo nuevas formas de hacer las cosas donde el conocimiento se convierte en resultados tangibles y sostenibles.
                     </p>
                 </div>
 
