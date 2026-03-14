@@ -1,8 +1,6 @@
-import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import GlassPanel from '../ui/GlassPanel';
+import NeumorphicPanel from '../ui/NeumorphicPanel';
 
-// Stateless Component for Sidebar Navigation Item
 const SidebarLink = ({
     title,
     subtitle,
@@ -14,84 +12,48 @@ const SidebarLink = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-
-    // Simple active state check
     const isActive = location.pathname === path;
 
-    // Mapping colors dynamically is tricky in Tailwind if constructed dynamically, 
-    // so we use predefined Safe sets, or handle the specific ones passed.
-    // Assuming colorClass is something like 'sky', 'emerald', 'violet'
-    const getThemeClasses = () => {
+    const getIconColor = () => {
+        if (isActive) return 'text-[#F76B1C]';
         switch (colorClass) {
-            case 'emerald':
-                return {
-                    text: 'text-emerald-400',
-                    borderHover: 'hover:border-emerald-400',
-                    borderActive: 'border-emerald-500/50',
-                    bgActive: 'bg-emerald-500/10'
-                };
-            case 'violet':
-                return {
-                    text: 'text-violet-400',
-                    borderHover: 'hover:border-violet-400',
-                    borderActive: 'border-violet-500/50',
-                    bgActive: 'bg-violet-500/10'
-                };
-            case 'fuchsia':
-                return {
-                    text: 'text-fuchsia-400',
-                    borderHover: 'hover:border-fuchsia-400',
-                    borderActive: 'border-fuchsia-500/50',
-                    bgActive: 'bg-fuchsia-500/10'
-                };
-            case 'sky':
-            default:
-                return {
-                    text: 'text-sky-400',
-                    borderHover: 'hover:border-sky-400',
-                    borderActive: 'border-sky-500/50',
-                    bgActive: 'bg-sky-500/10'
-                };
+            case 'emerald': return 'text-emerald-500/40';
+            case 'amber': return 'text-amber-500/40';
+            default: return 'text-slate-600';
         }
     };
-
-    const getBadgeClasses = () => {
-        switch (badgeColor) {
-            case 'emerald': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-            case 'violet': return 'bg-violet-500/20 text-violet-400 border-violet-500/30';
-            case 'sky': return 'bg-sky-500/20 text-sky-400 border-sky-500/30';
-            case 'amber':
-            default: return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-        }
-    };
-
-    const theme = getThemeClasses();
-    const badgeStyle = getBadgeClasses();
 
     return (
-        <GlassPanel
-            className={`group relative overflow-hidden cursor-pointer transition-all duration-300 ${theme.borderHover} border-white/5 p-6 ${isActive ? `${theme.borderActive} ${theme.bgActive}` : ''}`}
-            hoverEffect={true}
+        <NeumorphicPanel
+            className={`group p-5 relative overflow-hidden ${isActive ? 'ring-1 ring-[#F76B1C]/20' : ''}`}
+            accent={isActive}
             onClick={() => navigate(path)}
         >
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                {Icon && <Icon size={48} className={theme.text} />}
-            </div>
-            <div className="relative z-10">
+            <div className="flex gap-4 items-center relative z-10">
+                <div className={`p-3 rounded-2xl ${isActive ? 'bg-[#F76B1C]/10 text-[#F76B1C]' : 'bg-[#12161f] text-slate-500'} transition-all shadow-inner`}>
+                    {Icon && <Icon size={20} />}
+                </div>
+                <div className="flex-grow">
+                    <h3 className={`text-sm font-black uppercase tracking-wider transition-colors ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                        {title}
+                    </h3>
+                    {subtitle && <p className="text-xs text-slate-500 mt-1 font-medium leading-tight">{subtitle}</p>}
+                    
+                </div>
+
+                {/* Left Side Flap Badge (Hover Revealed) */}
                 {badge && (
-                    <div className="flex justify-between items-start mb-2">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${badgeStyle}`}>
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none z-20 overflow-hidden">
+                        <div className="transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out bg-[#F76B1C] text-white text-[7px] font-black px-2 py-1.5 rounded-r-lg shadow-lg uppercase tracking-[0.15em] whitespace-nowrap ring-1 ring-black/10">
                             {badge}
-                        </span>
+                        </div>
                     </div>
                 )}
-                {!badge && <div className="mt-1"></div>}
-
-                <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
-                {subtitle && <p className="text-xs text-slate-300 mb-1 leading-relaxed">{subtitle}</p>}
-
             </div>
-        </GlassPanel>
+            
+            {/* Subtle glow for active state */}
+            {isActive && <div className="absolute inset-0 bg-[#F76B1C]/5 pointer-events-none" />}
+        </NeumorphicPanel>
     );
 };
 
