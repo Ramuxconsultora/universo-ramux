@@ -12,9 +12,9 @@ const WelcomeHero = () => {
             className="w-full p-8 md:p-12 md:pb-5 group/card"
         >
             <div className="relative z-10 flex flex-col h-full">
-                <h1 className="text-[30px] md:text-[58px] font-black text-white mb-6 leading-[0.82] tracking-tight uppercase max-w-2xl flex flex-col">
-                    <span>VAMOS A POTENCIAR</span>
-                    <span className="text-white/40 group-hover/card:text-[#F76B1C] cursor-default">TU MUNDO</span>
+                <h1 className="text-[26px] md:text-[52px] font-black text-white mb-6 leading-tight tracking-tighter uppercase max-w-3xl">
+                    <span className="block whitespace-nowrap">VAMOS A POTENCIAR</span>
+                    <span className="block text-white/40 group-hover/card:text-[#F76B1C] cursor-default whitespace-nowrap">TU MUNDO</span>
                 </h1>
 
                 {/* Styled Description */}
