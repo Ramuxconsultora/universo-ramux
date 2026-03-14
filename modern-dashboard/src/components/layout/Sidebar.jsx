@@ -25,90 +25,86 @@ const Sidebar = () => {
             </button>
 
             {/* Sidebar Content (hidden on mobile when closed) - Soft UI Container */}
-            <div className={`${isOpen ? 'block' : 'hidden'} lg:block space-y-6 bg-[#1a1f2b] p-6 rounded-[32px] border border-white/5 shadow-2xl transition-all duration-300 ring-1 ring-black/20`}>
+            <div className={`${isOpen ? 'block' : 'hidden'} lg:block space-y-6 bg-[#0a0e1a]/80 backdrop-blur-md p-6 rounded-[32px] border border-white/5 shadow-soft-dark transition-all duration-300 ring-1 ring-white/5`}>
 
                 {/* Sección 1: Founder's Vision */}
-                <SidebarSection title="Founder's Vision" icon={Newspaper} colorClass="text-slate-200">
+                <SidebarSection title="Founder's Vision" icon={Newspaper} colorClass="text-slate-400">
                     <SidebarLink
                         title="Opinión y coyuntura"
                         subtitle="La realidad entre líneas."
                         path="/noticias"
                         icon={Newspaper}
-                        colorClass="sky"
+                        radiance="silver"
                     />
                 </SidebarSection>
 
                 {/* Sección 2: Legal & Compliance */}
-                <SidebarSection title="Legal & Compliance" icon={Scale} colorClass="text-amber-400">
+                <SidebarSection title="Legal & Compliance" icon={Scale} colorClass="text-amber-500">
                     <SidebarLink
                         title="Radar Laboral"
                         subtitle="Nueva Ley Laboral"
                         path="/radar-laboral"
                         icon={Scale}
                         badge="HOT"
-                        badgeColor="amber"
-                        colorClass="amber"
+                        radiance="amber"
                     />
                 </SidebarSection>
 
                 {/* Sección 3: Global Trade */}
-                <SidebarSection title="Global Trade" icon={Globe} colorClass="text-emerald-400">
+                <SidebarSection title="Global Trade" icon={Globe} colorClass="text-emerald-500">
                     <SidebarLink
                         title="Expansión Global"
                         subtitle="Estrategia Internacional"
                         path="/expansion-global"
                         icon={Globe}
                         badge="NEW"
-                        badgeColor="emerald"
-                        colorClass="emerald"
+                        radiance="green"
                     />
                 </SidebarSection>
 
                 {/* Sección 4: Capital & Wealth Management */}
-                <SidebarSection title="Capital & Wealth" icon={Coins} colorClass="text-sky-400">
+                <SidebarSection title="Capital & Wealth" icon={Coins} colorClass="text-yellow-500">
                     <SidebarLink
                         title="Asesoramiento Financiero"
                         subtitle="Gestión patrimonial experta."
                         path="/dashboard"
                         icon={TrendingUp}
                         badge="COMING SOON"
-                        badgeColor="sky"
-                        colorClass="sky"
+                        radiance="golden"
                     />
                 </SidebarSection>
 
                 {/* Sección 5: Ramux Academy */}
-                <SidebarSection title="Educación" icon={BookOpen} colorClass="text-sky-400">
+                <SidebarSection title="Educación" icon={BookOpen} colorClass="text-violet-500">
                     <SidebarLink
                         title="Ramux Academy"
                         subtitle="Acceso a formación y cursos."
                         path="/academy"
                         icon={GraduationCap}
                         badge="NUEVO"
-                        badgeColor="sky"
-                        colorClass="sky"
+                        radiance="violet"
                     />
                 </SidebarSection>
 
                 {/* Sección 6: Servicios Profesionales */}
-                <SidebarSection title="Servicios" icon={Briefcase} colorClass="text-slate-200">
+                <SidebarSection title="Servicios" icon={Briefcase} colorClass="text-sky-500">
                     <SidebarLink
                         title="Catálogo"
                         subtitle="Consultoría y Soluciones."
                         path="/servicios"
                         icon={Briefcase}
-                        colorClass="emerald"
+                        radiance="blue"
                     />
                 </SidebarSection>
 
                 {/* Sección 7: Institucional */}
-                <SidebarSection title="Institucional" icon={Building2} colorClass="text-slate-200">
+                <SidebarSection title="Institucional" icon={Building2} colorClass="text-slate-400">
                     <SidebarLink
                         title="Quiénes Somos"
                         subtitle="Nuestra visión y equipo."
                         path="/quienes-somos"
                         icon={Building2}
-                        colorClass="sky"
+                        radiance="silver"
                     />
                 </SidebarSection>
             </div>
