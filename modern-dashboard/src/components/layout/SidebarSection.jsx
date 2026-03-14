@@ -1,10 +1,10 @@
 import React from 'react';
 
-const SidebarSection = ({ title, icon: Icon, children, colorClass = "text-white" }) => {
+const SidebarSection = ({ title, icon: Icon, children, colorClass = "text-slate-200" }) => {
     return (
         <div className="mb-8">
-            <h2 className={`text-xl font-bold mb-4 flex items-center gap-2 ${colorClass}`}>
-                {Icon && <Icon />} {title}
+            <h2 className={`text-[22px] font-black mb-4 flex items-center justify-center gap-3 ${colorClass} uppercase tracking-tight`}>
+                {Icon && <Icon size={20} />} {title}
             </h2>
             <div className="space-y-3">
                 {children}
