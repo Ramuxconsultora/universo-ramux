@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import Footer from './Footer';
 import galacticBackground from '../../assets/galactic-background.png';
 
 const Layout = ({ children }) => {
@@ -18,6 +19,8 @@ const Layout = ({ children }) => {
             <main className="flex-grow pt-28 pb-12 px-4 max-w-7xl mx-auto w-full relative z-10">
                 {children}
             </main>
+
+            <Footer />
         </div>
     );
 };
