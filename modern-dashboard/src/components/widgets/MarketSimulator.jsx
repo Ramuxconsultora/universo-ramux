@@ -4,7 +4,7 @@ import { Activity, TrendingUp, BarChart2 } from 'lucide-react';
 
 const MarketSimulator = () => {
     return (
-        <NeumorphicPanel className="h-full min-h-[400px] flex flex-col p-8">
+        <NeumorphicPanel radiance="blue" className="h-full min-h-[400px] flex flex-col p-8">
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center gap-4">
