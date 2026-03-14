@@ -7,38 +7,28 @@ const SidebarLink = ({
     path,
     icon: Icon,
     badge,
-    badgeColor = "amber",
-    colorClass = "sky"
+    radiance = false, // 'amber', 'blue', 'green', 'purple', 'violet', 'golden', 'silver', 'ramux'
+    isActive = false
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const isActive = location.pathname === path;
-
-    const getIconColor = () => {
-        if (isActive) return 'text-[#F76B1C]';
-        switch (colorClass) {
-            case 'emerald': return 'text-emerald-500/40';
-            case 'amber': return 'text-amber-500/40';
-            default: return 'text-slate-600';
-        }
-    };
+    const currentActive = location.pathname === path || isActive;
 
     return (
         <NeumorphicPanel
-            className={`group p-5 relative overflow-hidden ${isActive ? 'ring-1 ring-[#F76B1C]/20' : ''}`}
-            accent={isActive}
+            radiance={radiance || 'silver'}
+            className={`group p-4 relative overflow-hidden transition-all duration-300 ${currentActive ? 'ring-2 ring-white/20' : 'opacity-70 hover:opacity-100 hover:bg-white/5'}`}
             onClick={() => navigate(path)}
         >
             <div className="flex gap-4 items-center relative z-10">
-                <div className={`p-3 rounded-2xl ${isActive ? 'bg-[#F76B1C]/10 text-[#F76B1C]' : 'bg-[#12161f] text-slate-500'} transition-all shadow-inner`}>
-                    {Icon && <Icon size={20} />}
+                <div className={`p-2.5 rounded-xl transition-all duration-500 ${currentActive ? 'bg-white/10 text-white' : 'bg-[#12161f] text-slate-500 group-hover:text-white group-hover:bg-white/5'}`}>
+                    {Icon && <Icon size={18} />}
                 </div>
                 <div className="flex-grow">
-                    <h3 className={`text-sm font-black uppercase tracking-wider transition-colors ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                    <h3 className={`text-[11px] font-black uppercase tracking-[0.15em] transition-colors ${currentActive ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
                         {title}
                     </h3>
-                    {subtitle && <p className="text-xs text-slate-500 mt-1 font-medium leading-tight">{subtitle}</p>}
-                    
+                    {subtitle && <p className="text-[10px] text-slate-500 mt-1 font-bold leading-tight uppercase tracking-tighter opacity-60 group-hover:opacity-100 transition-opacity">{subtitle}</p>}
                 </div>
 
                 {/* Left Side Flap Badge (Hover Revealed) */}
@@ -50,9 +40,6 @@ const SidebarLink = ({
                     </div>
                 )}
             </div>
-            
-            {/* Subtle glow for active state */}
-            {isActive && <div className="absolute inset-0 bg-[#F76B1C]/5 pointer-events-none" />}
         </NeumorphicPanel>
     );
 };
