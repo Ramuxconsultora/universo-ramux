@@ -96,11 +96,10 @@ const Sidebar = () => {
                 {/* Sección 4: Capital & Wealth Management */}
                 <SidebarSection title="Capital & Wealth" icon={Coins} colorClass="text-yellow-500">
                     <SidebarLink
-                        title="Asesoramiento Financiero"
-                        subtitle="Gestión patrimonial experta."
+                        title="Capital & Wealth"
+                        subtitle="Estrategia y Gestión de Activos"
                         path="/capital-wealth"
                         icon={TrendingUp}
-                        badge="COMING SOON"
                         radiance="golden"
                     />
                 </SidebarSection>
