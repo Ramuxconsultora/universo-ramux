@@ -23,7 +23,7 @@ const ServiceWidget = ({ title, description, icon: Icon, radiance, ctaPath, isAc
     return (
         <NeumorphicPanel 
             radiance={radiance}
-            className="p-8 h-full group hover:scale-[1.02] transition-all duration-500 bg-gradient-to-br from-[#1c2230] to-[#181d27]"
+            className="p-8 h-full group hover:translate-y-[-4px] transition-all duration-500 bg-[#1c2230]"
         >
             <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between mb-6">
@@ -149,12 +149,11 @@ const Servicios = () => {
                     </button>
                 </div>
 
-                {/* Header Section - CENTERED */}
                 <div className="relative group/header flex flex-col items-center text-center">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-500/5 rounded-full blur-[120px] pointer-events-none group-hover/header:bg-sky-500/10 transition-colors duration-1000" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-sky-500/5 rounded-full blur-[60px] pointer-events-none transition-colors duration-1000" />
                     
                     <div className="flex flex-col items-center space-y-6 relative z-10 w-full">
-                        <div className="flex items-center gap-3 px-5 py-2 bg-sky-500/10 rounded-full border border-sky-500/20 w-fit backdrop-blur-md">
+                        <div className="flex items-center gap-3 px-5 py-2 bg-sky-500/10 rounded-full border border-sky-500/20 w-fit">
                             <Briefcase size={16} className="text-sky-400" />
                             <span className="text-[11px] font-black text-sky-400 uppercase tracking-[0.3em]">Portafolio de Excelencia</span>
                         </div>
@@ -184,7 +183,7 @@ const Servicios = () => {
                     radiance="ramux"
                     className="p-10 md:p-16 mt-20 relative overflow-hidden group/diff border-t border-sky-500/10"
                 >
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-[#F76B1C]/5 rounded-full blur-[120px] pointer-events-none group-hover/diff:bg-[#F76B1C]/10 transition-colors duration-1000" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#F76B1C]/5 rounded-full blur-[60px] pointer-events-none group-hover/diff:bg-[#F76B1C]/10 transition-colors duration-1000" />
                     
                     <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
                         <div className="w-20 h-20 bg-[#12161f] rounded-[2.5rem] shadow-inner border border-[#F76B1C]/20 flex items-center justify-center text-4xl group-hover/diff:scale-110 group-hover/diff:rotate-12 transition-all duration-700">
