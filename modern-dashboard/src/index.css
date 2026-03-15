@@ -81,8 +81,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Glassmorphism Utility - Refined for Radiance */
 .glass-panel {
     background: rgba(8, 10, 15, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 }
@@ -99,7 +99,7 @@ h1, h2, h3, h4, h5, h6 {
     left: 10%;
     right: 10%;
     height: 80%;
-    filter: blur(40px);
+    filter: blur(20px);
     opacity: 0.45;
     z-index: 0;
     pointer-events: none;
