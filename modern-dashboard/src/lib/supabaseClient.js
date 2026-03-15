@@ -1,12 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Supabase URL or Anon Key is missing! Check .env file.');
-} else {
-    console.log('Supabase Client Initialized with URL:', supabaseUrl);
-}
+// Usando la llave pública (anon) correcta para el navegador para evitar el error de "Forbidden use of secret API key"
+const supabaseUrl = "https://gwqjgddgadljotrwcmde.supabase.co"
+const supabaseAnonKey = "sb_publishable_ssk19Kx5DDUgVOd-Y7tmYQ_6-_S_VvY"
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
