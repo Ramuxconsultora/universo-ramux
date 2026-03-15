@@ -118,7 +118,7 @@ const Opinion = () => {
                         <ArticleWidget 
                             title="La Nueva Era del Trabajo en Argentina"
                             subtitle="Análisis técnico de la Ley de Modernización Laboral. Pros, contras e impacto estructural en el mercado."
-                            date="14 MAR 2026"
+                            date="15 MAR 2026"
                             category="Radar Laboral"
                             path="/opinion/laboral"
                             icon={Scale}
