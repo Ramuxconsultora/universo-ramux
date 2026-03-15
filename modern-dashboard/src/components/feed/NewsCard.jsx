@@ -56,7 +56,7 @@ const NewsCard = ({ item }) => {
                     </h3>
 
                     <p className="text-[11px] text-slate-400 mb-4 line-clamp-3 leading-relaxed font-medium">
-                        {item.summary || item.content}
+                        {(item.summary || item.content || '').replace(/<[^>]*>?/gm, '').trim()}
                     </p>
                 </div>
 
