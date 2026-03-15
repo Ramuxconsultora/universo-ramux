@@ -182,8 +182,8 @@ function Dashboard() {
                                 ) : (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
 
-                                        {/* Economy Bento Box */}
-                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-gradient-to-br from-[#1c2230] to-[#181d27]">
+                                        {/* Economy Bento Box - Optimized */}
+                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-[#1c2230]">
                                             <div className="flex items-center gap-3 mb-8">
                                                 <div className="p-2.5 bg-sky-500/10 rounded-xl">
                                                     <Activity className="text-sky-400" size={18} />
@@ -200,8 +200,8 @@ function Dashboard() {
                                             </div>
                                         </NeumorphicPanel>
 
-                                        {/* Technology Bento Box */}
-                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-gradient-to-br from-[#1c2230] to-[#181d27]">
+                                        {/* Technology Bento Box - Optimized */}
+                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-[#1c2230]">
                                             <div className="flex items-center gap-3 mb-8">
                                                 <div className="p-2.5 bg-orange-500/10 rounded-xl">
                                                     <Cpu className="text-orange-400" size={18} />
