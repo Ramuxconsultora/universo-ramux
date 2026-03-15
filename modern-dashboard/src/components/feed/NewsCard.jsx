@@ -39,20 +39,20 @@ const NewsCard = React.memo(({ item }) => {
     const ScopeIcon = item.scope === 'Nacional' ? MapPin : Globe;
 
     return (
-        <a 
-            href={item.url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+        <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
             className="block group no-underline mb-4"
             style={{ transform: 'translate3d(0,0,0)' }}
         >
-            <NeumorphicPanel 
-                radiance={radiance} 
-                className="p-5 h-full flex flex-col items-start text-left border-white/5 relative overflow-hidden"
+            <NeumorphicPanel
+                radiance={radiance}
+                className="p-4 h-full flex flex-col items-start text-left border-white/5 relative overflow-hidden"
             >
                 {/* Opcional: Si el scraper trae imagen, se puede usar como un fondo muy sutil estilo Bento Cyber */}
                 {item.image_url && (
-                    <div 
+                    <div
                         className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none bg-cover bg-center"
                         style={{ backgroundImage: `url(${item.image_url})` }}
                     />
@@ -60,10 +60,10 @@ const NewsCard = React.memo(({ item }) => {
 
                 {/* Header: Icono y Scope */}
                 <div className="flex justify-between w-full items-start mb-4 relative z-10">
-                    <div className="w-10 h-10 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center shadow-xl group-hover:border-white/20 transition-all">
-                        <Tag size={16} className="text-white/60" />
+                    <div className="w-8 h-8 md:w-10 md:h-10 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center shadow-xl group-hover:border-white/20 transition-all">
+                        <Tag size={14} className="text-white/60" />
                     </div>
-                    
+
                     {/* Badge de Scope (Nacional/Internacional) provisto por el scraper */}
                     {item.scope && (
                         <div className="flex items-center gap-1.5 px-2 py-1 bg-black/30 rounded-md border border-white/5">
@@ -88,12 +88,12 @@ const NewsCard = React.memo(({ item }) => {
                     </div>
 
                     {/* Título */}
-                    <h3 className="text-sm font-bold text-white mb-2 group-hover:text-white/80 transition-colors leading-snug tracking-tight">
+                    <h3 className="text-xs md:text-sm font-bold text-white mb-2 group-hover:text-white/80 transition-colors leading-snug tracking-tight">
                         {item.title}
                     </h3>
 
                     {/* Resumen limpio */}
-                    <p className="text-[11px] text-slate-400 mb-4 line-clamp-3 leading-relaxed font-medium">
+                    <p className="text-[10px] md:text-[11px] text-slate-400 mb-4 line-clamp-3 leading-relaxed font-medium">
                         {cleanSummary(item.summary)}
                     </p>
                 </div>
