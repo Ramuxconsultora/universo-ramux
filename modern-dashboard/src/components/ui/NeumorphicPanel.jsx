@@ -30,7 +30,10 @@ const NeumorphicPanel = ({
         >
             {/* Radiance Overlay Effect */}
             {radiance && (
-                <div className={`radiance-overlay radiance-${radiance}`} />
+                <div 
+                    className={`radiance-overlay radiance-${radiance}`} 
+                    style={{ transform: 'translateZ(0)' }} 
+                />
             )}
 
             {/* Gloss Effect Layer (Only for non-radiance, as radiance has its own look) */}
