@@ -13,6 +13,7 @@ SUPABASE_KEY = "sb_secret_fSvdNQzHXveRnv2iXSfsfw_GJ7-hNxE"
 # RSS FEEDS CONFIGURATION
 RSS_FEEDS = {
     "IA y Tecnología": "https://news.google.com/rss/search?q=Inteligencia+Artificial+OpenAI+NVIDIA+Tech+Empresas&hl=es-419&gl=AR&ceid=AR:es-419",
+    "Tecnología Nacional": "https://news.google.com/rss/search?q=Tecnologia+Argentina+Startups+Hub+IT+MercadoLibre+Globant&hl=es-419&gl=AR&ceid=AR:es-419",
     "Economía Global": "https://news.google.com/rss/search?q=Wall+Street+Fed+Economia+Mundial+Mercados+Globales&hl=es-419&gl=AR&ceid=AR:es-419",
     "Economía Argentina": "https://news.google.com/rss/search?q=Merval+Banco+Central+Argentina+Economia+Dolar+Bonaerense&hl=es-419&gl=AR&ceid=AR:es-419"
 }
@@ -26,9 +27,18 @@ def fetch_and_insert_news():
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
     }
 
-    for category, feed_url in RSS_FEEDS.items():
-        print(f"Fetching {category} from Google News...")
+    for feed_name, feed_url in RSS_FEEDS.items():
+        print(f"Fetching {feed_name} from Google News...")
         
+        # Determine UI Category and Scope
+        # Categories expected by UI: 'Tecnología', 'IA y Tecnología', 'Economía', 'Economía Global', etc.
+        if "Tecnología" in feed_name or "IA" in feed_name:
+            category = "Tecnología"
+            scope = "Nacional" if "Nacional" in feed_name else "Internacional"
+        else:
+            category = "Economía"
+            scope = "Nacional" if "Argentina" in feed_name else "Internacional"
+
         try:
             response = requests.get(feed_url, headers=headers, timeout=10)
             if response.status_code != 200:
@@ -37,8 +47,8 @@ def fetch_and_insert_news():
                 
             feed = feedparser.parse(response.content)
             
-            # Take top 5 items from each feed to avoid spamming
-            entries = feed.entries[:5]
+            # Take top 20 items from each feed
+            entries = feed.entries[:20]
             
             for entry in entries:
                 title = entry.title
@@ -59,26 +69,29 @@ def fetch_and_insert_news():
                     print(f"Skipping duplicate: {title[:30]}...")
                     continue
 
-                # 2. INSERT
+                # 2. ASSIGN SCOPE
+                # scope = "Nacional" if "Argentina" in category else "Internacional" # Old logic
+
+                # 3. INSERT
                 new_item = {
                     "title": title,
                     "category": category,
                     "summary": summary, 
                     "source_name": source,
                     "image_url": "https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop", # Default image
-                    "url": link # Store the original link
-                    # "created_at": published # Let Supabase handle created_at
+                    "url": link,
+                    "scope": scope
                 }
                 
                 try:
                     res = supabase.table('noticias').insert(new_item).execute()
-                    print(f"Inserted: {title[:30]}...")
+                    print(f"Inserted [{scope}]: {title[:30]}...")
                     total_inserted += 1
                 except Exception as e:
                     print(f"Error inserting: {e}")
                     
         except Exception as e:
-            print(f"Error fetching feed {category}: {e}")
+            print(f"Error fetching feed {feed_name}: {e}")
             
     print(f"Done! Inserted {total_inserted} new items.")
 
