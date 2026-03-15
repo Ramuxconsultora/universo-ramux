@@ -33,7 +33,10 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            clearTimeout(timer);
+            subscription.unsubscribe();
+        };
     }, []);
 
     const value = {
