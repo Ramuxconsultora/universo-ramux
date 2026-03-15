@@ -32,7 +32,7 @@ const NeumorphicPanel = ({
             {radiance && (
                 <div 
                     className={`radiance-overlay radiance-${radiance}`} 
-                    style={{ transform: 'translateZ(0)' }} 
+                    style={{ transform: 'translate3d(0,0,0)' }} 
                 />
             )}
 
