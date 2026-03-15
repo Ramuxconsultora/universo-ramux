@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
@@ -12,6 +13,8 @@ import Institucional from './pages/Institucional';
 import Servicios from './pages/Servicios';
 import RadarLaboral from './pages/RadarLaboral';
 import ExpansionGlobal from './pages/ExpansionGlobal';
+import Opinion from './pages/Opinion';
+import ArticleLaboral from './pages/ArticleLaboral';
 
 // Protected Route Wrapper using Supabase Auth
 const ProtectedRoute = ({ children }) => {
@@ -32,18 +35,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/quienes-somos" element={<Institucional />} />
         <Route path="/servicios" element={<Servicios />} />
-        
-        {/* Dashboard principal */}
+        {/* We keep Dashboard for the main view which will include widgets and news */}
         <Route
           path="/dashboard"
           element={<Dashboard />}
         />
-        
         <Route
           path="/noticias"
-          element={<Dashboard />} 
+          element={<Dashboard />} // Reusing Dashboard for now, we can create a dedicated Noticias page or just keep Dashboard as the main feed
         />
-        
         <Route
           path="/news/:id"
           element={
@@ -52,42 +52,35 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
         <Route
           path="/academy"
           element={<RamuxAcademy />}
         />
-        
         <Route
           path="/library"
           element={<Library />}
         />
-        
         <Route
           path="/radar-laboral"
           element={<RadarLaboral />}
         />
-        
         <Route
           path="/expansion-global"
           element={<ExpansionGlobal />}
         />
-        
+        <Route
+          path="/opinion"
+          element={<Opinion />}
+        />
+        <Route
+          path="/opinion/laboral"
+          element={<ArticleLaboral />}
+        />
         <Route
           path="/ranking"
           element={
             <ProtectedRoute>
               <Ranking />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Ruta para el perfil de usuario */}
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
             </ProtectedRoute>
           }
         />
