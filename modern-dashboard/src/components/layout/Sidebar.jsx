@@ -8,7 +8,7 @@ import {
     Telescope, ShieldCheck, Compass, Heart, Layers, Fingerprint, X
 } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isDrawerOnly = false }) => {
     const { isMenuOpen, closeMenu } = useNavigation();
 
     // Body scroll lock effect
@@ -35,15 +35,17 @@ const Sidebar = () => {
             {/* Backdrop Overlay for Mobile */}
             {isMenuOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/80 backdrop-blur-md z-[90] lg:hidden transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-md z-[48] lg:hidden transition-opacity duration-300"
                     onClick={closeMenu}
                 />
             )}
 
             {/* Sidebar Content - Refined for Global Use */}
             <div className={`
-                ${isMenuOpen ? 'translate-x-0 opacity-100 visible' : 'translate-x-full opacity-0 invisible lg:translate-x-0 lg:opacity-100 lg:visible'} 
-                fixed inset-y-0 right-0 w-[85%] max-w-sm z-[100] lg:relative lg:inset-auto lg:w-[400px] lg:block space-y-6 bg-[#0a0e1a] lg:bg-[#0a0e1a]/40 backdrop-blur-xl p-8 pt-28 lg:pt-8 border-l lg:border-l-0 lg:border border-white/10 lg:border-white/5 shadow-2xl lg:shadow-none transition-all duration-500 ease-out overflow-y-auto overflow-x-hidden
+                ${isMenuOpen ? 'translate-x-0 opacity-100 visible' : 'translate-x-full opacity-0 invisible ' + (!isDrawerOnly ? 'lg:translate-x-0 lg:opacity-100 lg:visible' : '')} 
+                fixed right-0 w-[85%] max-w-sm z-[49] ${isDrawerOnly ? 'top-48 h-[calc(100vh-192px)]' : 'top-20 h-[calc(100vh-80px)]'}
+                ${!isDrawerOnly ? 'lg:relative lg:top-0 lg:h-screen lg:inset-auto lg:w-[400px] lg:block' : ''} 
+                space-y-6 bg-[#0a0e1a] lg:bg-[#0a0e1a]/40 backdrop-blur-xl p-8 ${isDrawerOnly ? 'pt-8' : 'pt-28 lg:pt-8'} border-l lg:border-l-0 lg:border border-white/10 lg:border-white/5 shadow-2xl lg:shadow-none transition-all duration-500 ease-out overflow-y-auto overflow-x-hidden
             `}>
                 
                 {/* Mobile Close Button (Inside Sidebar) */}
