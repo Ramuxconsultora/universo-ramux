@@ -65,7 +65,7 @@ const NewsCard = React.memo(({ item }) => {
                     <span className="text-[10px] font-black text-white group-hover:translate-x-1 transition-transform inline-flex items-center gap-2 opacity-80 group-hover:opacity-100">
                         LEER <ExternalLink size={10} />
                     </span>
-                    <span className="text-[8px] font-bold text-white/20 uppercase tracking-tighter">
+                    <span className="text-[8px] font-black text-white/40 group-hover:text-[#F76B1C] transition-colors uppercase tracking-[0.2em]">
                         {item.source_name || item.source || 'RAMUX'}
                     </span>
                 </div>
