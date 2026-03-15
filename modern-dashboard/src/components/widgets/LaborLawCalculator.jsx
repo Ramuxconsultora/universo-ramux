@@ -292,7 +292,7 @@ export default function LaborLawCalculator() {
 
         return (
             <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                <td className="py-3 px-4 text-slate-300 font-medium flex items-center gap-2">
+                <td className="py-3 px-4 text-slate-100 font-bold flex items-center gap-2 text-base">
                     {label}
                     {tooltip && (
                         <div className="group relative">
@@ -303,15 +303,15 @@ export default function LaborLawCalculator() {
                         </div>
                     )}
                 </td>
-                <td className="py-3 px-4 text-slate-300 text-right">{formatCurrency(ant)}</td>
-                <td className="py-3 px-4 text-white text-right font-semibold relative overflow-hidden">
+                <td className="py-3 px-4 text-slate-200 text-right text-base">{formatCurrency(ant)}</td>
+                <td className="py-3 px-4 text-white text-right font-extrabold relative overflow-hidden text-base">
                     <span className="relative z-10">{formatCurrency(nue)}</span>
                 </td>
                 <td className={`py-3 px-4 text-right font-mono text-sm ${isNegative ? 'text-red-400' : diff > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>
                     {diff !== 0 ? (
                         <div className="flex flex-col items-end">
-                            <span>{formatCurrency(diff)}</span>
-                            <span className="text-[10px] opacity-80 uppercase tracking-wider">{pct > 0 ? '+' : ''}{pct.toFixed(1)}%</span>
+                            <span className="text-base">{formatCurrency(diff)}</span>
+                            <span className="text-xs opacity-90 uppercase tracking-wider">{pct > 0 ? '+' : ''}{pct.toFixed(1)}%</span>
                         </div>
                     ) : (
                         <span>-</span>
@@ -338,7 +338,7 @@ export default function LaborLawCalculator() {
                         </div>
                     </div>
                 </div>
-                <p className="text-slate-400 text-sm mt-4 lg:w-3/4 relative z-10">
+                <p className="text-slate-300 text-base mt-4 lg:w-3/4 relative z-10 font-medium">
                     Simula la indemnización por despido sin justa causa, comparando el Régimen Anterior y el Nuevo Régimen de Modernización Laboral.
                 </p>
             </div>
