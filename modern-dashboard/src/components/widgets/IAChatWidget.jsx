@@ -53,7 +53,7 @@ const IAChatWidget = () => {
             </div>
 
             {/* Chat Area */}
-            <div className="flex-grow p-6 overflow-y-auto space-y-4 bg-gradient-to-b from-transparent to-black/5">
+            <div className="flex-grow p-6 overflow-y-auto space-y-4 bg-black/5">
                 {messages.map((msg) => (
                     <ChatMessage key={msg.id} message={msg.text} isUser={msg.isUser} />
                 ))}
