@@ -63,7 +63,7 @@ const Sidebar = () => {
                     <SidebarLink
                         title="Opinión y coyuntura"
                         subtitle="La realidad entre líneas."
-                        path="/noticias"
+                        path="/opinion"
                         icon={Newspaper}
                         radiance="silver"
                     />
