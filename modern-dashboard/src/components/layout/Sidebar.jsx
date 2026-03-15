@@ -120,8 +120,8 @@ const Sidebar = () => {
                 {/* Sección EXTRA: Compromiso Ramux */}
                 <SidebarSection title="Compromiso Ramux" icon={Heart} colorClass="text-cyan-400">
                     <SidebarLink
-                        title="Construyendo el Futuro Civil"
-                        subtitle="Desarrollo social más justo y transparente."
+                        title="COnstuyendo el futuro civil"
+                        subtitle="desarrollo social mas justo y trasnparente"
                         path="/compromiso-social"
                         icon={Sprout}
                         radiance="cyan"
