@@ -4,7 +4,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
 
-const NewsCard = ({ item }) => {
+const NewsCard = React.memo(({ item }) => {
     // Determine radiance color based on category
     const getRadianceColor = (category) => {
         const cat = category?.toLowerCase() || '';
@@ -30,6 +30,7 @@ const NewsCard = ({ item }) => {
             target="_blank" 
             rel="noopener noreferrer" 
             className="block group no-underline mb-4"
+            style={{ transform: 'translate3d(0,0,0)' }}
         >
             <NeumorphicPanel 
                 radiance={radiance} 
@@ -71,6 +72,6 @@ const NewsCard = ({ item }) => {
             </NeumorphicPanel>
         </a>
     );
-};
+});
 
 export default NewsCard;
