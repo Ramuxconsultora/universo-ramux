@@ -13,6 +13,12 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Safety timeout: if auth doesn't respond in 3 seconds, stop loading
+        const timer = setTimeout(() => {
+            console.warn("Auth check timed out. Proceeding to render.");
+            setLoading(false);
+        }, 3000);
+
         // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
             setSession(session);
@@ -38,7 +44,14 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {loading ? (
+                <div className="min-h-screen bg-[#02040a] flex items-center justify-center text-white font-sans">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F76B1C]"></div>
+                        <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Iniciando Universo Ramux...</p>
+                    </div>
+                </div>
+            ) : children}
         </AuthContext.Provider>
     );
 };
