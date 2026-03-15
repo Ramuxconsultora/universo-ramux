@@ -12,7 +12,7 @@ const PilarCard = ({ title, description, icon: Icon, colorClass }) => (
     <NeumorphicPanel 
         className="p-8 bg-slate-900/40 hover:bg-slate-800/60 transition-all duration-500 group flex flex-col h-full"
     >
-        <div className={`p-4 rounded-[1.25rem] bg-white/5 ${colorClass} w-fit mb-6 group-hover:scale-110 group-hover:bg-white/10 transition-all duration-500 shadow-inner`}>
+        <div className={`p-4 rounded-[1.25rem] bg-white/5 ${colorClass} w-fit mb-6 group-hover:translate-y-[-4px] group-hover:bg-white/10 transition-all duration-500 shadow-inner`}>
             <Icon size={28} />
         </div>
         <h3 className="text-xl font-black text-white mb-4 tracking-tight uppercase">{title}</h3>
@@ -30,7 +30,7 @@ const ExpansionGlobal = () => {
             <div className="max-w-7xl mx-auto space-y-8 animate-fade-in py-6">
                 
                 {/* Simplified Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/40 p-3 rounded-2xl border border-white/5 backdrop-blur-sm shadow-xl">
+                <div className="flex justify-between items-center bg-[#12161f]/40 p-3 rounded-2xl border border-white/5 shadow-xl">
                     <button
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 px-5 py-2 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-[10px] font-black uppercase tracking-widest group"
@@ -52,7 +52,7 @@ const ExpansionGlobal = () => {
                     radiance="emerald"
                     className="p-8 md:p-12 relative overflow-hidden group/hero"
                 >
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[64px] pointer-events-none group-hover/hero:bg-emerald-500/15 transition-all duration-1000" />
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[40px] pointer-events-none group-hover/hero:bg-emerald-500/15 transition-all duration-1000" />
                     
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left w-full">
                         <div className="flex flex-col md:flex-row items-center gap-8 w-full">
@@ -78,7 +78,7 @@ const ExpansionGlobal = () => {
                 {/* Value Proposition */}
                 <NeumorphicPanel 
                     accent={true}
-                    className="p-10 bg-gradient-to-br from-[#1a1c24] to-[#12141a] border-l-4 border-emerald-500/50 relative overflow-hidden"
+                    className="p-10 bg-[#1a1c24] border-l-4 border-emerald-500/50 relative overflow-hidden"
                 >
                     <div className="relative z-10 max-w-4xl">
                         <h2 className="text-3xl font-black text-white mb-6 uppercase tracking-tight">Rompe fronteras con seguridad estratégica</h2>
@@ -91,7 +91,7 @@ const ExpansionGlobal = () => {
 
                 {/* Pilares de Servicio Grid */}
                 <div className="space-y-8">
-                    <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm w-fit">
+                    <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 w-fit">
                         <div className="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 shadow-inner">
                             <TrendingUp className="text-emerald-400" size={24} />
                         </div>
@@ -141,7 +141,7 @@ const ExpansionGlobal = () => {
                 {/* Differential Section */}
                 <div className="pt-8">
                     <NeumorphicPanel className="p-10 bg-[#0d111a]/80 border-t border-white/5 relative overflow-hidden group/diff">
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[64px] pointer-events-none group-hover/diff:bg-emerald-500/10 transition-all duration-1000" />
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[40px] pointer-events-none group-hover/diff:bg-emerald-500/10 transition-all duration-1000" />
                         
                         <h3 className="text-2xl font-black text-white mb-8 flex items-center gap-3 relative z-10 uppercase tracking-tighter">
                             <div className="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
@@ -190,7 +190,7 @@ const ExpansionGlobal = () => {
                         radiance="emerald"
                         className="p-10 md:p-14 relative overflow-hidden group/cta border-t border-emerald-500/10"
                     >
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[64px] pointer-events-none group-hover/cta:bg-emerald-500/5 transition-all duration-1000" />
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[40px] pointer-events-none group-hover/cta:bg-emerald-500/5 transition-all duration-1000" />
                         
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
                             <div className="lg:col-span-7">
@@ -209,7 +209,7 @@ const ExpansionGlobal = () => {
                                         "Soporte en Negociación"
                                     ].map((service, idx) => (
                                         <div key={idx} className="flex items-center gap-3 group/item">
-                                            <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center transition-transform group-hover/item:scale-110">
+                                            <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center transition-transform group-hover/item:translate-y-[-2px]">
                                                 <CheckCircle2 size={12} className="text-emerald-500" />
                                             </div>
                                             <span className="text-base font-bold text-slate-100 uppercase tracking-tight">{service}</span>
