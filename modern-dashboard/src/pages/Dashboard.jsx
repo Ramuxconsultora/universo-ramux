@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Layout from '../components/layout/Layout';
 import Sidebar from '../components/layout/Sidebar';
@@ -21,29 +21,22 @@ function Dashboard() {
     const [news, setNews] = useState([]);
     const [errorMsg, setErrorMsg] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isSpinning, setIsSpinning] = useState(false);
 
     useEffect(() => {
-        // 1. Initial Fetch
         const fetchNews = async () => {
             try {
-                console.log("Fetching news from Supabase...");
                 const { data, error } = await supabase
                     .from('noticias')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .limit(40); // Limit results for performance
 
                 if (error) {
-                    console.error('Supabase Error:', error);
                     setErrorMsg(error.message);
                 } else if (data) {
-                    console.log("News fetched successfully:", data);
                     setNews(data);
-                } else {
-                    console.warn("No data returned from Supabase.");
                 }
             } catch (err) {
-                console.error("Unexpected error:", err);
                 setErrorMsg(err.message || "Unknown error");
             } finally {
                 setLoading(false);
@@ -52,12 +45,10 @@ function Dashboard() {
 
         fetchNews();
 
-        // 2. Real-time Subscription
         const channel = supabase
             .channel('public:noticias')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'noticias' }, (payload) => {
-                console.log('New news received:', payload.new);
-                setNews((prev) => [payload.new, ...prev]);
+                setNews((prev) => [payload.new, ...prev.slice(0, 39)]); // Keep limit consistent
             })
             .subscribe();
 
@@ -66,10 +57,17 @@ function Dashboard() {
         };
     }, []);
 
-    const featured = news && news.length > 0 ? news[0] : null;
-    const listItems = news && news.length > 1 ? news.slice(1) : [];
+    // Memoized category filtering to avoid heavy work on every render
+    const categories = useMemo(() => {
+        const filteredByScope = news.filter(item => item.scope === activeScope);
+        
+        return {
+            economy: filteredByScope.filter(item => item.category === 'Economía' || item.category.includes('Economía')),
+            tech: filteredByScope.filter(item => item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')),
+            legal: filteredByScope.filter(item => item.category === 'Legal/Laboral' || item.category.includes('Legal') || item.category.includes('Laboral'))
+        };
+    }, [news, activeScope]);
 
-    // Handle loading state
     if (loading) {
         return (
             <Layout>
@@ -83,13 +81,9 @@ function Dashboard() {
     return (
         <Layout>
             <div className="space-y-12">
-                {/* Welcome Hero */}
                 <WelcomeHero />
-
-                {/* Featured Opinion Analysis */}
                 <NeumorphicPanel 
                     className="group p-5 md:p-8 bg-gradient-to-br from-[#1c2230] to-[#12161f] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-2px] transition-all duration-500 overflow-hidden relative"
-                    style={{ transform: 'translate3d(0,0,0)' }}
                     onClick={() => navigate('/opinion/laboral')}
                 >
                     <div className="absolute top-0 right-0 w-80 h-80 bg-[#F76B1C]/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors duration-700" />
@@ -104,7 +98,7 @@ function Dashboard() {
                                 La Nueva Era del Trabajo <br/> en Argentina
                             </h2>
                             <p className="text-base text-slate-400 font-medium leading-relaxed max-w-3xl line-clamp-2">
-                                Análisis técnico sobre la Ley de Modernización Laboral. Desglosamos el cambio de paradigma estructural hacia un esquema de flexibilidad y reducción de barreras.
+                                Análisis técnico sobre la Ley de Modernización Laboral. Desglizamos el cambio de paradigma estructural hacia un esquema de flexibilidad y reducción de barreras.
                             </p>
                         </div>
                         <div className="shrink-0">
@@ -116,13 +110,10 @@ function Dashboard() {
                     </div>
                 </NeumorphicPanel>
 
-
-                {/* Top Widgets Grid */}
                 <div className="mb-10">
                     <IAChatWidget />
                 </div>
 
-                {/* Restyled Tabs & Filters Header */}
                 <div className="flex flex-col gap-8 border-b border-white/5 pb-10 mb-10">
                     <div className="space-y-4">
                         <div className="flex items-center gap-10">
@@ -145,7 +136,6 @@ function Dashboard() {
 
                     {activeTab === 'news' && (
                         <div className="space-y-6">
-                            {/* Row 1: Scope Filters */}
                             <div className="flex flex-wrap items-center gap-4">
                                 <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10">
                                     <button
@@ -161,11 +151,7 @@ function Dashboard() {
                                         Internacional
                                     </button>
                                 </div>
-                                <div className="h-4 w-[1px] bg-white/10 mx-2 hidden md:block" />
-                                <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest hidden md:block">Seleccionar Ámbito</span>
                             </div>
-
-                            {/* Row 2: Category Filter Selector */}
                             <div className="flex flex-wrap gap-3 items-center">
                                 <button
                                     onClick={() => setActiveCategory('all')}
@@ -196,11 +182,9 @@ function Dashboard() {
                     )}
                 </div>
 
-                {/* Content Area */}
                 <div className="space-y-12">
                     {activeTab === 'news' && (
                         <div className="space-y-16">
-                            {/* Error State */}
                             {errorMsg && (
                                 <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-8 rounded-[32px] font-black text-sm uppercase tracking-widest text-center">
                                     [!] Error de conexión: {errorMsg}
@@ -213,8 +197,7 @@ function Dashboard() {
                                 </NeumorphicPanel>
                             ) : (
                                 <div className="space-y-16">
-                                    {/* Economy Category Section */}
-                                    {(activeCategory === 'all' || activeCategory === 'economy') && (
+                                    {(activeCategory === 'all' || activeCategory === 'economy') && categories.economy.length > 0 && (
                                         <div className="space-y-6">
                                             <div className="flex items-center gap-4 mb-2">
                                                 <div className="h-[1px] flex-grow bg-white/5" />
@@ -224,19 +207,15 @@ function Dashboard() {
                                                 </div>
                                                 <div className="h-[1px] flex-grow bg-white/5" />
                                             </div>
-
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {news
-                                                    .filter(item => item.scope === activeScope && (item.category === 'Economía' || item.category.includes('Economía')))
-                                                    .map((item) => (
-                                                        <NewsCard key={item.id} item={item} />
-                                                    ))}
+                                                {categories.economy.map((item) => (
+                                                    <NewsCard key={item.id} item={item} />
+                                                ))}
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* Technology Category Section */}
-                                    {(activeCategory === 'all' || activeCategory === 'tech') && (
+                                    {(activeCategory === 'all' || activeCategory === 'tech') && categories.tech.length > 0 && (
                                         <div className="space-y-6">
                                             <div className="flex items-center gap-4 mb-2">
                                                 <div className="h-[1px] flex-grow bg-white/5" />
@@ -246,19 +225,15 @@ function Dashboard() {
                                                 </div>
                                                 <div className="h-[1px] flex-grow bg-white/5" />
                                             </div>
-
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {news
-                                                    .filter(item => item.scope === activeScope && (item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')))
-                                                    .map((item) => (
-                                                        <NewsCard key={item.id} item={item} />
-                                                    ))}
+                                                {categories.tech.map((item) => (
+                                                    <NewsCard key={item.id} item={item} />
+                                                ))}
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* Legal & Laboral Category Section */}
-                                    {(activeCategory === 'all' || activeCategory === 'legal') && (
+                                    {(activeCategory === 'all' || activeCategory === 'legal') && categories.legal.length > 0 && (
                                         <div className="space-y-6">
                                             <div className="flex items-center gap-4 mb-2">
                                                 <div className="h-[1px] flex-grow bg-white/5" />
@@ -268,13 +243,10 @@ function Dashboard() {
                                                 </div>
                                                 <div className="h-[1px] flex-grow bg-white/5" />
                                             </div>
-
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {news
-                                                    .filter(item => item.scope === activeScope && (item.category === 'Legal/Laboral' || item.category.includes('Legal') || item.category.includes('Laboral')))
-                                                    .map((item) => (
-                                                        <NewsCard key={item.id} item={item} />
-                                                    ))}
+                                                {categories.legal.map((item) => (
+                                                    <NewsCard key={item.id} item={item} />
+                                                ))}
                                             </div>
                                         </div>
                                     )}
