@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Home, Menu, X } from 'lucide-react';
-import { useNav } from '../../contexts/NavContext';
+import { useNavigation } from '../../contexts/NavigationContext';
 
 const NavigationBar = ({ showBack = true, showHome = true, showMenu = true }) => {
     const navigate = useNavigate();
-    const { isMenuOpen, toggleMenu } = useNav();
+    const { isMenuOpen, toggleMenu } = useNavigation();
 
     return (
         <div className="w-full flex justify-between items-center bg-[#12161f]/40 p-3 md:p-4 rounded-2xl md:rounded-3xl border border-white/5 backdrop-blur-md shadow-xl relative z-[60]">
