@@ -20,7 +20,7 @@ const AccordionItem = ({ title, children, isOpen, onToggle, icon: Icon, iconColo
             className="w-full flex items-center justify-between p-5 text-left hover:bg-white/5 transition-colors group"
         >
             <div className="flex items-center gap-4">
-                <div className={`p-2.5 rounded-xl bg-[#12161f] border border-white/5 shadow-inner transition-transform group-hover:scale-110`}>
+                <div className={`p-2.5 rounded-xl bg-[#12161f] border border-white/5 shadow-inner transition-transform group-hover:translate-y-[-2px]`}>
                     <Icon size={20} className={iconColor} />
                 </div>
                 <span className="font-black text-slate-200 uppercase tracking-tight text-sm">{title}</span>
@@ -38,7 +38,7 @@ const AccordionItem = ({ title, children, isOpen, onToggle, icon: Icon, iconColo
 const ChangeAnnotatorCard = () => (
     <NeumorphicPanel 
         accent={true}
-        className="p-8 bg-gradient-to-br from-[#1a1c24] to-[#12141a] border-l-4 border-amber-500/50"
+        className="p-8 bg-[#1a1c24] border-l-4 border-amber-500/50"
     >
         <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
@@ -126,12 +126,12 @@ const RadarLaboral = () => {
                     radiance="amber"
                     className="p-8 md:p-12 relative overflow-hidden group/hero"
                 >
-                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[64px] pointer-events-none group-hover/hero:bg-sky-500/15 transition-all duration-1000" />
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[40px] pointer-events-none group-hover/hero:bg-sky-500/15 transition-all duration-1000" />
                     
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left w-full">
                         <div className="flex flex-col md:flex-row items-center gap-8 w-full">
                             <div className="w-24 h-24 rounded-[2rem] bg-[#12161f] border border-white/10 flex items-center justify-center shadow-inner group/icon shrink-0">
-                                <Scale className="text-sky-400 group-hover/icon:scale-110 transition-transform duration-500" size={48} />
+                                <Scale className="text-sky-400 group-hover/icon:translate-y-[-2px] transition-transform duration-500" size={48} />
                             </div>
                             <div className="flex-grow">
                                 <div className="flex items-center justify-center md:justify-start gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 w-fit mb-4 mx-auto md:mx-0">
@@ -155,7 +155,7 @@ const RadarLaboral = () => {
 
                     {/* Perspective Selector Moved Here */}
                     <div className="flex justify-center">
-                        <div className="flex p-1.5 bg-[#0a0e1a]/60 rounded-2xl border border-white/5 shadow-2xl relative backdrop-blur-md w-full max-w-md">
+                        <div className="flex p-1.5 bg-[#0a0e1a]/60 rounded-2xl border border-white/5 shadow-2xl relative w-full max-w-md">
                             <button 
                                 onClick={() => setActivePerspective('employer')}
                                 className={`flex-1 flex items-center justify-center gap-3 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all duration-500 z-10 ${activePerspective === 'employer' ? 'bg-sky-600 text-white shadow-[0_0_20px_rgba(14,165,233,0.3)]' : 'text-slate-500 hover:text-slate-300'}`}
@@ -327,9 +327,8 @@ const RadarLaboral = () => {
                             </div>
                         )}
 
-                        {/* Labor Law Calculator Widget */}
                         <div className="pt-8">
-                            <NeumorphicPanel className="p-8 bg-gradient-to-br from-[#1c2230] to-[#12161f]">
+                            <NeumorphicPanel className="p-8 bg-[#1c2230]">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 pb-6 border-b border-white/5">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center shadow-inner">
@@ -357,7 +356,7 @@ const RadarLaboral = () => {
                     radiance="ramux"
                     className="p-10 md:p-14 mt-12 relative overflow-hidden group/services border-t border-sky-500/10"
                 >
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[64px] pointer-events-none group-hover/services:bg-[#F76B1C]/5 transition-all duration-1000" />
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-[40px] pointer-events-none group-hover/services:bg-[#F76B1C]/5 transition-all duration-1000" />
                     
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10">
                         <div className="md:col-span-12 lg:col-span-7">
@@ -383,7 +382,7 @@ const RadarLaboral = () => {
                                     "Auditoría LegalTech"
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center gap-3 group/item">
-                                        <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center transition-transform group-hover/item:scale-110">
+                                        <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center transition-transform group-hover/item:translate-y-[-2px]">
                                             <CheckCircle2 size={12} className="text-emerald-500" />
                                         </div>
                                         <span className="text-base font-bold text-slate-100 uppercase tracking-tight">{item}</span>
