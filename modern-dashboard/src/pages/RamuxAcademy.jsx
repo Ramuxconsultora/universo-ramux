@@ -45,7 +45,7 @@ const CourseInquiryForm = ({ courses }) => {
             radiance="ramux" 
             className="w-full xl:w-[450px] p-8 relative overflow-hidden group/form flex flex-col"
         >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F76B1C]/5 rounded-full blur-[32px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F76B1C]/5 rounded-full blur-[20px] pointer-events-none" />
             
             <div className="relative z-10 space-y-6">
                 <div className="flex items-center gap-3 mb-2">
@@ -215,7 +215,7 @@ const RamuxAcademy = () => {
                         onClick={() => navigate('/dashboard')}
                         className="flex items-center justify-center p-2.5 bg-sky-900/30 hover:bg-sky-500 text-sky-400 hover:text-white rounded-xl transition-all border border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] group"
                     >
-                        <Home size={16} className="group-hover:scale-110 transition-transform" />
+                        <Home size={16} className="group-hover:translate-y-[-2px] transition-transform" />
                     </button>
                 </div>
 
@@ -225,7 +225,7 @@ const RamuxAcademy = () => {
                         radiance="ramux"
                         className="flex-grow p-8 md:p-12 relative overflow-hidden group/hero min-h-[300px]"
                     >
-                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[64px] pointer-events-none group-hover/hero:bg-[#F76B1C]/15 transition-all duration-1000" />
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[40px] pointer-events-none group-hover/hero:bg-[#F76B1C]/15 transition-all duration-1000" />
                         
                         <div className="relative z-10 flex flex-col justify-center h-full space-y-6">
                             <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 w-fit">
@@ -234,7 +234,7 @@ const RamuxAcademy = () => {
                             </div>
                             
                             <h1 className="text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter uppercase max-w-4xl">
-                                Ramux <span className="bg-gradient-to-r from-violet-500 to-[#F76B1C] bg-clip-text text-transparent">Academy</span>
+                                Ramux <span className="text-[#F76B1C]">Academy</span>
                             </h1>
                             
                             <p className="text-lg text-slate-300 max-w-xl leading-relaxed font-medium">
