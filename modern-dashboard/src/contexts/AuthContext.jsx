@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 // Asegúrate de que este archivo '../firebase' exporte la instancia de 'auth' correctamente
-import { auth } from '../firebase'; 
+import { auth } from '../firebase.js'; 
 import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 
 const AuthContext = createContext({
