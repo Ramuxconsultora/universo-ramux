@@ -3,12 +3,12 @@ import Header from './Header';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
 import NavigationBar from './NavigationBar';
-import { NavProvider } from '../../contexts/NavContext';
+import { NavigationProvider } from '../../contexts/NavigationContext';
 import galacticBackground from '../../assets/galactic-background.png';
 
 const Layout = ({ children, showNav = true }) => {
     return (
-        <NavProvider>
+        <NavigationProvider>
             <div className="antialiased min-h-screen flex flex-col font-sans text-white relative bg-[#02040a]">
                 {/* Galactic Background Layer */}
                 <div className="fixed inset-0 z-[-2] bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
@@ -33,7 +33,7 @@ const Layout = ({ children, showNav = true }) => {
 
                 <Footer />
             </div>
-        </NavProvider>
+        </NavigationProvider>
     );
 };
 
