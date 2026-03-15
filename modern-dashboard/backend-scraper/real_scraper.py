@@ -13,7 +13,7 @@ SUPABASE_KEY = "sb_secret_fSvdNQzHXveRnv2iXSfsfw_GJ7-hNxE"
 # RSS FEEDS CONFIGURATION
 RSS_FEEDS = {
     "IA y Tecnología": "https://news.google.com/rss/search?q=Inteligencia+Artificial+OpenAI+NVIDIA+Tech+Empresas&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Tecnología Nacional": "https://news.google.com/rss/search?q=Tecnologia+Argentina+Startups+Hub+IT+MercadoLibre+Globant&hl=es-419&gl=AR&ceid=AR:es-419",
+    "Tecnología Nacional": "https://news.google.com/rss/search?q=Tecnologia+Argentina+OR+Fintech+Argentina+OR+Software+Argentina+OR+Innovacion+Argentina+OR+Startups+Buenos+Aires&hl=es-419&gl=AR&ceid=AR:es-419",
     "Economía Global": "https://news.google.com/rss/search?q=Wall+Street+Fed+Economia+Mundial+Mercados+Globales&hl=es-419&gl=AR&ceid=AR:es-419",
     "Economía Argentina": "https://news.google.com/rss/search?q=Merval+Banco+Central+Argentina+Economia+Dolar+Bonaerense&hl=es-419&gl=AR&ceid=AR:es-419"
 }
