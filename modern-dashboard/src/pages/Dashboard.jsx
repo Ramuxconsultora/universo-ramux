@@ -93,9 +93,10 @@ function Dashboard() {
                     {/* Featured Opinion Analysis */}
                     <NeumorphicPanel 
                         className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#12161f] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-2px] transition-all duration-500 overflow-hidden relative"
+                        style={{ transform: 'translate3d(0,0,0)' }}
                         onClick={() => navigate('/opinion/laboral')}
                     >
-                        <div className="absolute top-0 right-0 w-80 h-80 bg-[#F76B1C]/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors duration-700" />
+                        <div className="absolute top-0 right-0 w-80 h-80 bg-[#F76B1C]/5 rounded-full blur-[40px] pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors duration-700" />
                         
                         <div className="flex flex-col md:flex-row gap-10 items-center relative z-10">
                             <div className="flex-grow space-y-5">
@@ -260,7 +261,7 @@ function Dashboard() {
 
                         {activeTab === 'community' && (
                             <NeumorphicPanel className="p-20 text-center bg-[#1c2230]/50 border-white/5">
-                                <div className="w-24 h-24 bg-[#0a0e1a] rounded-[32px] shadow-2xl border border-white/10 flex items-center justify-center mx-auto mb-8 ring-1 ring-white/5">
+                        <div className="w-24 h-24 bg-[#0a0e1a] rounded-[32px] shadow-2xl border border-white/10 flex items-center justify-center mx-auto mb-8 ring-1 ring-white/5" style={{ transform: 'translate3d(0,0,0)' }}>
                                     <Users size={40} className="text-sky-500/30" />
                                 </div>
                                 <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-4">Módulo en Desarrollo</h3>
