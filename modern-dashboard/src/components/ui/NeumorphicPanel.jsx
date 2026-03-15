@@ -11,7 +11,8 @@ const NeumorphicPanel = ({
     inset = false,
     onClick,
     accent = false,
-    radiance = false // 'amber', 'blue', 'green', 'purple', 'ramux', or false
+    radiance = false, // 'amber', 'blue', 'green', 'purple', 'ramux', or false
+    radianceClassName = ""
 }) => {
     // Base Styles
     const baseClasses = radiance ? "card-radiance radiance-container" : (inset ? "soft-panel-inset" : "soft-panel");
@@ -31,7 +32,7 @@ const NeumorphicPanel = ({
             {/* Radiance Overlay Effect */}
             {radiance && (
                 <div 
-                    className={`radiance-overlay radiance-${radiance}`} 
+                    className={`radiance-overlay radiance-${radiance} ${radianceClassName}`} 
                     style={{ transform: 'translate3d(0,0,0)' }} 
                 />
             )}
