@@ -55,7 +55,7 @@ const Sidebar = () => {
             {/* Sidebar Content (hidden on mobile when closed) - Soft UI Container */}
             <div className={`
                 ${isOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-4 opacity-0 invisible lg:translate-y-0 lg:opacity-100 lg:visible'} 
-                fixed inset-x-4 top-24 bottom-6 z-40 lg:relative lg:inset-auto lg:top-0 lg:block space-y-6 bg-[#0a0e1a]/95 lg:bg-[#0a0e1a]/80 backdrop-blur-xl p-6 rounded-[32px] border border-white/10 lg:border-white/5 shadow-2xl lg:shadow-soft-dark transition-all duration-300 ring-1 ring-white/10 overflow-y-auto lg:overflow-visible
+                fixed inset-x-4 top-24 bottom-6 z-40 lg:relative lg:inset-auto lg:top-0 lg:block space-y-6 bg-[#0a0e1a]/95 lg:bg-[#0a0e1a]/80 backdrop-blur-sm p-6 rounded-[32px] border border-white/10 lg:border-white/5 shadow-2xl lg:shadow-soft-dark transition-all duration-300 ring-1 ring-white/10 overflow-y-auto lg:overflow-visible
             `}>
 
                 {/* Sección 1: Founder's Vision */}
