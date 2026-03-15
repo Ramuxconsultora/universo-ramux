@@ -26,7 +26,7 @@ const CourseCard = ({ course, type }) => {
     return (
         <NeumorphicPanel
             radiance={config.radiance}
-            className="flex flex-col relative group overflow-hidden h-full p-8 transition-transform duration-500 hover:scale-[1.02] bg-[#1a1f2b]/40 backdrop-blur-md"
+            className="flex flex-col relative group overflow-hidden h-full p-8 transition-all duration-500 hover:scale-[1.01] bg-[#12161f]/80 will-change-transform border-white/5 hover:border-white/10"
         >
             <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
                 {Icon ? <Icon size={100} className="text-white" /> : <BookOpen size={100} className="text-white" />}
