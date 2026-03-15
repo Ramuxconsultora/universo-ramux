@@ -45,19 +45,19 @@ const Compromiso = () => {
 
                 {/* Hero Header Section */}
                 <div className="relative group/header flex flex-col items-center text-center py-8">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-[40px] pointer-events-none group-hover/header:bg-cyan-500/10 transition-colors duration-1000" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-[24px] pointer-events-none group-hover/header:bg-cyan-500/10 transition-colors duration-1000" />
                     
-                    <div className="flex flex-col items-center space-y-6 relative z-10 w-full">
-                        <div className="flex items-center gap-3 px-5 py-2 bg-cyan-500/10 rounded-full border border-cyan-500/20 w-fit">
+                    <div className="flex flex-col items-center space-y-6 relative z-10 w-full text-center">
+                        <div className="flex items-center gap-3 px-5 py-2 bg-cyan-500/10 rounded-full border border-cyan-500/20 w-fit mx-auto">
                             <Heart size={16} className="text-cyan-400" />
                             <span className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.3em]">Propósito Ramux</span>
                         </div>
                         
-                        <h1 className="text-4xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase max-w-5xl">
+                        <h1 className="text-4xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase max-w-5xl mx-auto">
                             Compromiso <span className="text-cyan-400">Social</span>
                         </h1>
                         
-                        <div className="h-1.5 w-24 bg-cyan-500/30 rounded-full" />
+                        <div className="h-1.5 w-24 bg-cyan-500/30 rounded-full mx-auto" />
                     </div>
                 </div>
 
