@@ -14,6 +14,7 @@ import WelcomeHero from '../components/widgets/WelcomeHero';
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('news');
     const [activeScope, setActiveScope] = useState('Nacional');
+    const [activeCategory, setActiveCategory] = useState('all');
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -83,34 +84,34 @@ function Dashboard() {
         <Layout>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                {/* LEFT COLUMN: Feed (8 cols) */}
-                <div className="order-2 lg:order-1 lg:col-span-8 space-y-8">
+                {/* LEFT COLUMN: Feed (9 cols) */}
+                <div className="order-2 lg:order-1 lg:col-span-9 space-y-12">
 
                     {/* Welcome Hero */}
                     <WelcomeHero />
 
                     {/* Featured Opinion Analysis */}
                     <NeumorphicPanel 
-                        className="group p-6 md:p-8 bg-gradient-to-br from-[#1c2230] to-[#12161f] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-2px] transition-all duration-500 overflow-hidden relative"
+                        className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#12161f] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-2px] transition-all duration-500 overflow-hidden relative"
                         onClick={() => navigate('/opinion/laboral')}
                     >
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#F76B1C]/5 rounded-full blur-3xl pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors duration-700" />
+                        <div className="absolute top-0 right-0 w-80 h-80 bg-[#F76B1C]/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors duration-700" />
                         
-                        <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
-                            <div className="flex-grow space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-widest">Opinión y Coyuntura</span>
-                                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">15 MAR 2026</span>
+                        <div className="flex flex-col md:flex-row gap-10 items-center relative z-10">
+                            <div className="flex-grow space-y-5">
+                                <div className="flex items-center gap-4">
+                                    <span className="px-4 py-1.5 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[10px] font-black text-[#F76B1C] uppercase tracking-[0.3em]">Opinión y Coyuntura</span>
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">15 MAR 2026</span>
                                 </div>
-                                <h2 className="text-2xl md:text-3xl font-black text-white italic leading-tight tracking-tight group-hover:text-[#F76B1C] transition-colors">
-                                    La Nueva Era del Trabajo en Argentina
+                                <h2 className="text-3xl md:text-5xl font-black text-white italic leading-[1.1] tracking-tighter group-hover:text-[#F76B1C] transition-colors">
+                                    La Nueva Era del Trabajo <br/> en Argentina
                                 </h2>
-                                <p className="text-sm text-slate-400 font-medium leading-relaxed max-w-2xl line-clamp-2">
+                                <p className="text-base text-slate-400 font-medium leading-relaxed max-w-3xl line-clamp-2">
                                     Análisis técnico sobre la Ley de Modernización Laboral. Desglosamos el cambio de paradigma estructural hacia un esquema de flexibilidad y reducción de barreras.
                                 </p>
                             </div>
                             <div className="shrink-0">
-                                <div className="flex items-center gap-3 px-6 py-3 bg-[#F76B1C] text-white rounded-xl font-black uppercase tracking-widest text-xs shadow-[0_0_20px_rgba(247,107,28,0.3)] group-hover:shadow-[0_0_40px_rgba(247,107,28,0.5)] group-hover:scale-105 transition-all">
+                                <div className="flex items-center gap-3 px-8 py-4 bg-[#F76B1C] text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-[0_0_20px_rgba(247,107,28,0.3)] group-hover:shadow-[0_0_40px_rgba(247,107,28,0.5)] group-hover:scale-105 transition-all">
                                     Leer Análisis
                                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
@@ -119,123 +120,155 @@ function Dashboard() {
                     </NeumorphicPanel>
 
 
-                    {/* Top Widgets Grid (Just IA Chat now since MarketSimulator moved to Sidebar) */}
-                    <div className="mb-6">
+                    {/* Top Widgets Grid */}
+                    <div className="mb-10">
                         <IAChatWidget />
                     </div>
 
-                    {/* Tabs */}
-                    <div className="flex items-center justify-start gap-8 border-b border-white/5 pb-4">
-                        <button
-                            onClick={() => setActiveTab('news')}
-                            className={`text-lg font-bold pb-2 transition-all relative ${activeTab === 'news' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                        >
-                            <span className="flex items-center gap-2">
-                                <Newspaper size={18} /> Noticias
-                            </span>
-                            {activeTab === 'news' && <div className="absolute bottom-0 left-0 w-full h-1 bg-[#F76B1C] rounded-full shadow-[0_0_10px_#F76B1C]" />}
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('community')}
-                            className={`text-lg font-bold pb-2 transition-all relative ${activeTab === 'community' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
-                        >
-                            <span className="flex items-center gap-2">
-                                <Users size={18} /> Comunidad
-                            </span>
-                            {activeTab === 'community' && <div className="absolute bottom-0 left-0 w-full h-1 bg-[#F76B1C] rounded-full shadow-[0_0_10px_#F76B1C]" />}
-                        </button>
+                    {/* Restyled Tabs & Filters Header */}
+                    <div className="flex flex-col gap-10 border-b border-white/5 pb-10 mb-10">
+                        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-10">
+                                    <button
+                                        onClick={() => setActiveTab('news')}
+                                        className={`text-4xl lg:text-6xl font-black transition-all relative uppercase italic tracking-tighter ${activeTab === 'news' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                    >
+                                        Noticias
+                                        {activeTab === 'news' && <div className="absolute -bottom-2 left-0 w-1/2 h-2.5 bg-[#F76B1C] rounded-full shadow-[0_0_20px_#F76B1C]" />}
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('community')}
+                                        className={`text-2xl lg:text-3xl font-black transition-all relative uppercase italic tracking-tighter mt-2 ${activeTab === 'community' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                    >
+                                        Comunidad
+                                    </button>
+                                </div>
+                                <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em]">Inteligencia Estratégica en tiempo real</p>
+                            </div>
+
+                            {activeTab === 'news' && (
+                                <div className="flex bg-[#0a0e1a] p-2 rounded-[28px] shadow-2xl border border-white/5 ring-1 ring-white/10">
+                                    <button
+                                        onClick={() => setActiveScope('Nacional')}
+                                        className={`px-12 py-3.5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Nacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
+                                    >
+                                        Nacional
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveScope('Internacional')}
+                                        className={`px-12 py-3.5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Internacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
+                                    >
+                                        Internacional
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Category Filter Selector (Below News Title) */}
+                        {activeTab === 'news' && (
+                            <div className="flex flex-wrap gap-4 items-center">
+                                <button
+                                    onClick={() => setActiveCategory('all')}
+                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-slate-500 border-white/5 hover:border-white/20 hover:text-white'}`}
+                                >
+                                    Todos los Flujos
+                                </button>
+                                <button
+                                    onClick={() => setActiveCategory('economy')}
+                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'economy' ? 'bg-sky-500 text-white border-sky-500' : 'bg-transparent text-slate-500 border-white/5 hover:border-sky-500/20 hover:text-sky-400'}`}
+                                >
+                                    Economy & Finance
+                                </button>
+                                <button
+                                    onClick={() => setActiveCategory('tech')}
+                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'tech' ? 'bg-orange-500 text-white border-orange-500' : 'bg-transparent text-slate-500 border-white/5 hover:border-orange-500/20 hover:text-orange-400'}`}
+                                >
+                                    Tech & Innovation
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Area */}
-                    <div className="space-y-6">
+                    <div className="space-y-12">
                         {activeTab === 'news' && (
-                            <div className="space-y-6">
-                                {/* Scope Filters - Neumorphic Style */}
-                                <div className="flex justify-start gap-4 mb-4">
-                                    <div className="flex bg-[#12161f] p-1.5 rounded-2xl shadow-inner border border-black/10">
-                                        <button
-                                            onClick={() => setActiveScope('Nacional')}
-                                            className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeScope === 'Nacional' ? 'bg-[#F76B1C] text-white shadow-md border border-white/5' : 'text-slate-500 hover:text-slate-300'}`}
-                                        >
-                                            {t('Nacional')}
-                                        </button>
-                                        <button
-                                            onClick={() => setActiveScope('Internacional')}
-                                            className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeScope === 'Internacional' ? 'bg-[#F76B1C] text-white shadow-md border border-white/5' : 'text-slate-500 hover:text-slate-300'}`}
-                                        >
-                                            {t('Internacional')}
-                                        </button>
-                                    </div>
-                                </div>
-
+                            <div className="space-y-16">
                                 {/* Error State */}
                                 {errorMsg && (
-                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-5 rounded-3xl font-bold text-sm shadow-inner">
+                                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-8 rounded-[32px] font-black text-sm uppercase tracking-widest text-center">
                                         [!] Error de conexión: {errorMsg}
                                     </div>
                                 )}
 
                                 {news.length === 0 && !loading ? (
-                                    <NeumorphicPanel className="p-16 text-center">
-                                        <p className="text-slate-500 font-bold text-sm uppercase italic">Sin datos disponibles en este momento</p>
+                                    <NeumorphicPanel className="p-20 text-center bg-[#1c2230]/50">
+                                        <p className="text-slate-500 font-black text-xs uppercase tracking-[0.5em] italic">Sin datos disponibles en este momento</p>
                                     </NeumorphicPanel>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-
-                                        {/* Economy Bento Box - Optimized */}
-                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-[#1c2230]">
-                                            <div className="flex items-center gap-3 mb-8">
-                                                <div className="p-2.5 bg-sky-500/10 rounded-xl">
-                                                    <Activity className="text-sky-400" size={18} />
+                                    <div className="space-y-16">
+                                        {/* Economy Category Section */}
+                                        {(activeCategory === 'all' || activeCategory === 'economy') && (
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-4 mb-2">
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
+                                                    <div className="flex items-center gap-3 px-6 py-2 bg-sky-500/10 rounded-full border border-sky-500/20">
+                                                        <Activity className="text-sky-400" size={16} />
+                                                        <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Economy & Finance</h2>
+                                                    </div>
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
                                                 </div>
-                                                <h2 className="text-sm font-bold tracking-wide text-white uppercase">{t('Economy & Finance')}</h2>
-                                            </div>
 
-                                            <div className="space-y-1 flex-grow">
-                                                {news
-                                                    .filter(item => item.scope === activeScope && (item.category === 'Economía' || item.category.includes('Economía')))
-                                                    .map((item) => (
-                                                        <NewsCard key={item.id} item={item} />
-                                                    ))}
-                                            </div>
-                                        </NeumorphicPanel>
-
-                                        {/* Technology Bento Box - Optimized */}
-                                        <NeumorphicPanel className="p-8 flex flex-col h-full bg-[#1c2230]">
-                                            <div className="flex items-center gap-3 mb-8">
-                                                <div className="p-2.5 bg-orange-500/10 rounded-xl">
-                                                    <Cpu className="text-orange-400" size={18} />
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {news
+                                                        .filter(item => item.scope === activeScope && (item.category === 'Economía' || item.category.includes('Economía')))
+                                                        .map((item) => (
+                                                            <NewsCard key={item.id} item={item} />
+                                                        ))}
                                                 </div>
-                                                <h2 className="text-sm font-bold tracking-wide text-white uppercase">{t('Tech & Innovation')}</h2>
                                             </div>
+                                        )}
 
-                                            <div className="space-y-1 flex-grow">
-                                                {news
-                                                    .filter(item => item.scope === activeScope && (item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')))
-                                                    .map((item) => (
-                                                        <NewsCard key={item.id} item={item} />
-                                                    ))}
+                                        {/* Technology Category Section */}
+                                        {(activeCategory === 'all' || activeCategory === 'tech') && (
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-4 mb-2">
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
+                                                    <div className="flex items-center gap-3 px-6 py-2 bg-orange-500/10 rounded-full border border-orange-500/20">
+                                                        <Cpu className="text-orange-400" size={16} />
+                                                        <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Tech & Innovation</h2>
+                                                    </div>
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {news
+                                                        .filter(item => item.scope === activeScope && (item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')))
+                                                        .map((item) => (
+                                                            <NewsCard key={item.id} item={item} />
+                                                        ))}
+                                                </div>
                                             </div>
-                                        </NeumorphicPanel>
+                                        )}
                                     </div>
                                 )}
                             </div>
                         )}
 
                         {activeTab === 'community' && (
-                            <NeumorphicPanel className="p-20 text-center">
-                                <div className="w-20 h-20 bg-[#12161f] rounded-3xl shadow-inner border border-black/10 flex items-center justify-center mx-auto mb-6">
-                                    <Users size={32} className="text-sky-500/50" />
+                            <NeumorphicPanel className="p-20 text-center bg-[#1c2230]/50 border-white/5">
+                                <div className="w-24 h-24 bg-[#0a0e1a] rounded-[32px] shadow-2xl border border-white/10 flex items-center justify-center mx-auto mb-8 ring-1 ring-white/5">
+                                    <Users size={40} className="text-sky-500/30" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white tracking-tight">Módulo en Desarrollo</h3>
-                                <p className="text-slate-500 mt-3 max-w-sm mx-auto">Estamos construyendo el feed de comunidad. Pronto podrás interactuar con otros usuarios.</p>
+                                <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-4">Módulo en Desarrollo</h3>
+                                <p className="text-slate-500 text-sm font-medium max-w-sm mx-auto leading-relaxed">Estamos construyendo el tejido social de la plataforma. Pronto podrás conectar con otros usuarios.</p>
                             </NeumorphicPanel>
                         )}
                     </div>
                 </div>
 
-                {/* RIGHT COLUMN: Sidebar (4 cols) - Centrado y alineado con Hero */}
-                <div className="order-1 lg:order-2 lg:col-span-4 sticky top-28">
+                {/* RIGHT COLUMN: Sidebar (3 cols) */}
+                <div className="order-1 lg:order-2 lg:col-span-3 sticky top-28">
                     <Sidebar />
                 </div>
 
