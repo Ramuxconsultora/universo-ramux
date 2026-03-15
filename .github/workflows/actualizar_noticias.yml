@@ -27,5 +27,5 @@ jobs:
       env:
         SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }} 
       run: |
-        cd backend-scraper
+        cd modern-dashboard/backend-scraper
         python scraper.py
