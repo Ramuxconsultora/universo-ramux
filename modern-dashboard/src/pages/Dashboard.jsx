@@ -189,6 +189,12 @@ function Dashboard() {
                                     >
                                         Tech & Innovation
                                     </button>
+                                    <button
+                                        onClick={() => setActiveCategory('legal')}
+                                        className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'legal' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-amber-500/20 hover:text-amber-400'}`}
+                                    >
+                                        Legal & Compliance
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -248,6 +254,28 @@ function Dashboard() {
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     {news
                                                         .filter(item => item.scope === activeScope && (item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')))
+                                                        .map((item) => (
+                                                            <NewsCard key={item.id} item={item} />
+                                                        ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Legal & Laboral Category Section */}
+                                        {(activeCategory === 'all' || activeCategory === 'legal') && (
+                                            <div className="space-y-6">
+                                                <div className="flex items-center gap-4 mb-2">
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
+                                                    <div className="flex items-center gap-3 px-6 py-2 bg-amber-500/10 rounded-full border border-amber-500/20">
+                                                        <Scale className="text-amber-400" size={16} />
+                                                        <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Legal & Compliance</h2>
+                                                    </div>
+                                                    <div className="h-[1px] flex-grow bg-white/5" />
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {news
+                                                        .filter(item => item.scope === activeScope && (item.category === 'Legal/Laboral' || item.category.includes('Legal') || item.category.includes('Laboral')))
                                                         .map((item) => (
                                                             <NewsCard key={item.id} item={item} />
                                                         ))}
