@@ -15,6 +15,7 @@ import RadarLaboral from './pages/RadarLaboral';
 import ExpansionGlobal from './pages/ExpansionGlobal';
 import Opinion from './pages/Opinion';
 import ArticleLaboral from './pages/ArticleLaboral';
+import Compromiso from './pages/Compromiso';
 
 // Protected Route Wrapper using Supabase Auth
 const ProtectedRoute = ({ children }) => {
@@ -75,6 +76,10 @@ function App() {
         <Route
           path="/opinion/laboral"
           element={<ArticleLaboral />}
+        />
+        <Route
+          path="/compromiso-social"
+          element={<Compromiso />}
         />
         <Route
           path="/ranking"
