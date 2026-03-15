@@ -28,7 +28,7 @@ const AccordionItem = ({ title, children, isOpen, onToggle, icon: Icon, iconColo
             {isOpen ? <ChevronUp size={20} className="text-slate-500" /> : <ChevronDown size={20} className="text-slate-500" />}
         </button>
         <div className={`transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
-            <div className="p-6 pt-6 text-slate-400 text-sm leading-relaxed border-t border-white/5 bg-[#0a0e1a]/30">
+            <div className="p-6 pt-6 text-slate-300 text-base leading-relaxed border-t border-white/5 bg-[#0a0e1a]/30">
                 {children}
             </div>
         </div>
@@ -55,15 +55,15 @@ const ChangeAnnotatorCard = () => (
                 <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-colors group">
                     <div className="mt-1"><CheckCircle2 size={16} className="text-amber-500" /></div>
                     <div>
-                        <h4 className="text-xs font-black text-slate-200 uppercase mb-1">Fondo de Asistencia Laboral (FAL)</h4>
-                        <p className="text-[11px] text-slate-400 leading-relaxed">Implementación de cuentas individuales de capitalización para el cese laboral.</p>
+                        <h4 className="text-sm font-black text-slate-100 uppercase mb-1">Fondo de Asistencia Laboral (FAL)</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">Implementación de cuentas individuales de capitalización para el cese laboral.</p>
                     </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-colors group">
                     <div className="mt-1"><CheckCircle2 size={16} className="text-amber-500" /></div>
                     <div>
-                        <h4 className="text-xs font-black text-slate-200 uppercase mb-1">Período de Prueba Extendido</h4>
-                        <p className="text-[11px] text-slate-400 leading-relaxed">Escalas de 6, 8 y hasta 12 meses según la dotación de la empresa.</p>
+                        <h4 className="text-sm font-black text-slate-100 uppercase mb-1">Período de Prueba Extendido</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">Escalas de 6, 8 y hasta 12 meses según la dotación de la empresa.</p>
                     </div>
                 </div>
             </div>
@@ -71,15 +71,15 @@ const ChangeAnnotatorCard = () => (
                 <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-colors group">
                     <div className="mt-1"><CheckCircle2 size={16} className="text-amber-500" /></div>
                     <div>
-                        <h4 className="text-xs font-black text-slate-200 uppercase mb-1">Esquema Independientes</h4>
-                        <p className="text-[11px] text-slate-400 leading-relaxed">Nuevo marco: 1 emprendedor + hasta 3 colaboradores sin dependencia.</p>
+                        <h4 className="text-sm font-black text-slate-100 uppercase mb-1">Esquema Independientes</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">Nuevo marco: 1 emprendedor + hasta 3 colaboradores sin dependencia.</p>
                     </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-colors group">
                     <div className="mt-1"><CheckCircle2 size={16} className="text-amber-500" /></div>
                     <div>
-                        <h4 className="text-xs font-black text-slate-200 uppercase mb-1">Base Indemnizatoria</h4>
-                        <p className="text-[11px] text-slate-400 leading-relaxed">Exclusión explícita de SAC, premios y propinas del cálculo base.</p>
+                        <h4 className="text-sm font-black text-slate-100 uppercase mb-1">Base Indemnizatoria</h4>
+                        <p className="text-xs text-slate-300 leading-relaxed">Exclusión explícita de SAC, premios y propinas del cálculo base.</p>
                     </div>
                 </div>
             </div>
@@ -386,7 +386,7 @@ const RadarLaboral = () => {
                                         <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center transition-transform group-hover/item:scale-110">
                                             <CheckCircle2 size={12} className="text-emerald-500" />
                                         </div>
-                                        <span className="text-sm font-bold text-slate-300 uppercase tracking-tight">{item}</span>
+                                        <span className="text-base font-bold text-slate-100 uppercase tracking-tight">{item}</span>
                                     </div>
                                 ))}
                             </div>
