@@ -33,39 +33,39 @@ const NewsCard = ({ item }) => {
         >
             <NeumorphicPanel 
                 radiance={radiance} 
-                className="p-8 h-full flex flex-col items-start text-left"
+                className="p-5 h-full flex flex-col items-start text-left border-white/5"
             >
-                {/* Reference Icon (Top Left) */}
-                <div className="w-12 h-12 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center mb-6 shadow-xl group-hover:border-white/20 transition-all">
-                    <Tag size={20} className="text-white/60" />
+                {/* Reference Icon (Top Left) - Smaller */}
+                <div className="w-10 h-10 bg-black/40 rounded-xl border border-white/10 flex items-center justify-center mb-4 shadow-xl group-hover:border-white/20 transition-all">
+                    <Tag size={16} className="text-white/60" />
                 </div>
 
-                <div className="flex-grow">
-                    <div className="flex items-center gap-3 mb-3">
-                        <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+                <div className="flex-grow w-full">
+                    <div className="flex items-center gap-2 mb-2">
+                        <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.2em]">
                             {item.category || 'NOTICIA'}
                         </span>
                         <div className="w-1 h-1 bg-white/20 rounded-full" />
-                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-1">
-                            <Clock size={10} /> {timeAgo}
+                        <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-1">
+                            <Clock size={8} /> {timeAgo}
                         </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-white/80 transition-colors leading-[1.2] tracking-tight">
+                    <h3 className="text-sm font-bold text-white mb-2 group-hover:text-white/80 transition-colors leading-snug tracking-tight">
                         {item.title}
                     </h3>
 
-                    <p className="text-xs text-slate-400 mb-6 line-clamp-3 leading-relaxed font-medium">
+                    <p className="text-[11px] text-slate-400 mb-4 line-clamp-3 leading-relaxed font-medium">
                         {item.summary || item.content}
                     </p>
                 </div>
 
-                <div className="mt-auto pt-6 w-full flex justify-between items-center border-t border-white/5">
-                    <span className="text-[11px] font-black text-white group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
-                        LEER ARTÍCULO <ExternalLink size={12} />
+                <div className="mt-auto pt-4 w-full flex justify-between items-center border-t border-white/5">
+                    <span className="text-[10px] font-black text-white group-hover:translate-x-1 transition-transform inline-flex items-center gap-2 opacity-80 group-hover:opacity-100">
+                        LEER <ExternalLink size={10} />
                     </span>
-                    <span className="text-[9px] font-bold text-white/20 uppercase tracking-tighter">
-                        {item.source_name || item.source || 'RAMUX_INTEL'}
+                    <span className="text-[8px] font-bold text-white/20 uppercase tracking-tighter">
+                        {item.source_name || item.source || 'RAMUX'}
                     </span>
                 </div>
             </NeumorphicPanel>
