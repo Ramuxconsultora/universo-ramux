@@ -27,9 +27,9 @@ const IAChatWidget = () => {
     };
 
     return (
-        <NeumorphicPanel radiance="purple" className="flex flex-col h-[480px] group">
+        <NeumorphicPanel radiance="purple" className="flex flex-col h-[440px] group">
             {/* Header */}
-            <div className="flex justify-between items-center p-5 border-b border-black/10 bg-[#1a1f2b] relative">
+            <div className="flex justify-between items-center p-4 border-b border-black/10 bg-[#1a1f2b] relative">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-500/10 rounded-lg">
                         <Zap className="text-orange-500" size={18} />
@@ -53,7 +53,7 @@ const IAChatWidget = () => {
             </div>
 
             {/* Chat Area */}
-            <div className="flex-grow p-6 overflow-y-auto space-y-4 bg-black/5">
+            <div className="flex-grow p-4 overflow-y-auto space-y-4 bg-black/5">
                 {messages.map((msg) => (
                     <ChatMessage key={msg.id} message={msg.text} isUser={msg.isUser} />
                 ))}
