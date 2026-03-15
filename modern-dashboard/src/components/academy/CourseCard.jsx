@@ -65,7 +65,7 @@ const CourseCard = ({ course, type }) => {
                     </button>
 
                     {hasSimulator && (
-                        <button className="flex items-center justify-center gap-3 w-full py-3.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(14,165,233,0.3)] border border-sky-400/50 hover:scale-[1.02] transition-all group/sim">
+                        <button className="flex items-center justify-center gap-3 w-full py-3.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(14,165,233,0.3)] border border-sky-400/50 hover:translate-y-[-2px] transition-all group/sim">
                             <Activity size={16} className="text-sky-200 group-hover/sim:animate-pulse" />
                             Entrar al Simulador
                         </button>
