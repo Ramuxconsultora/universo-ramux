@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import NeumorphicPanel from '../components/ui/NeumorphicPanel';
@@ -17,8 +17,114 @@ import {
     Coins,
     ShieldCheck,
     ArrowLeft,
-    Home
+    Home,
+    Send,
+    MessageSquare,
+    ChevronDown
 } from 'lucide-react';
+
+const CourseInquiryForm = ({ courses }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        course: '',
+        message: ''
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const subject = encodeURIComponent(`Consulta Academia: ${formData.course}`);
+        const body = encodeURIComponent(
+            `Hola Ramux,\n\nMi nombre es ${formData.name}.\nMe interesa el curso: ${formData.course}\n\nMensaje:\n${formData.message}\n\nContacto: ${formData.email}`
+        );
+        window.location.href = `mailto:holaramux@gmail.com?subject=${subject}&body=${body}`;
+    };
+
+    return (
+        <NeumorphicPanel 
+            radiance="ramux" 
+            className="w-full xl:w-[450px] p-8 relative overflow-hidden group/form flex flex-col"
+        >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F76B1C]/5 rounded-full blur-[32px] pointer-events-none" />
+            
+            <div className="relative z-10 space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-[#F76B1C]/10 rounded-lg border border-[#F76B1C]/20">
+                        <MessageSquare size={18} className="text-[#F76B1C]" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-black text-white uppercase tracking-wider">Consultoría Académica</h3>
+                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">Resolvé tus dudas</p>
+                    </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Nombre</label>
+                            <input 
+                                required
+                                type="text" 
+                                placeholder="Tu nombre"
+                                className="w-full bg-[#0a0e1a]/80 border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#F76B1C]/50 transition-colors shadow-inner"
+                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Email</label>
+                            <input 
+                                required
+                                type="email" 
+                                placeholder="tu@correo.com"
+                                className="w-full bg-[#0a0e1a]/80 border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-sky-500/50 transition-colors shadow-inner"
+                                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5 relative">
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Cursos Disponibles</label>
+                        <div className="relative group/select">
+                            <select 
+                                required
+                                className="w-full bg-[#0a0e1a]/80 border border-white/5 rounded-xl px-4 py-3 text-sm text-white appearance-none focus:outline-none focus:border-[#F76B1C]/50 transition-colors shadow-inner cursor-pointer"
+                                onChange={(e) => setFormData({...formData, course: e.target.value})}
+                            >
+                                <option value="" disabled selected>Seleccioná un curso</option>
+                                {courses.map((c, i) => (
+                                    <optgroup key={i} label={c.category} className="bg-[#12161f] text-slate-400 uppercase text-[10px] tracking-widest font-black py-2">
+                                        {c.items.map((item, j) => (
+                                            <option key={j} value={item} className="bg-[#0a0e1a] text-sm text-white capitalize py-2 italic font-normal">{item}</option>
+                                        ))}
+                                    </optgroup>
+                                ))}
+                            </select>
+                            <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-hover/select:text-white transition-colors" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1">Tu consulta</label>
+                        <textarea 
+                            required
+                            rows="2"
+                            placeholder="¿En qué podemos ayudarte?"
+                            className="w-full bg-[#0a0e1a]/80 border border-white/5 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#F76B1C]/50 transition-colors shadow-inner resize-none"
+                            onChange={(e) => setFormData({...formData, message: e.target.value})}
+                        ></textarea>
+                    </div>
+
+                    <button 
+                        type="submit"
+                        className="w-full py-4 bg-white text-slate-950 font-black rounded-xl hover:bg-[#F76B1C] hover:text-white transition-all duration-500 shadow-xl flex items-center justify-center gap-3 uppercase text-xs tracking-widest group/btn"
+                    >
+                        Enviar Consulta <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </button>
+                </form>
+            </div>
+        </NeumorphicPanel>
+    );
+};
 
 const RamuxAcademy = () => {
     const navigate = useNavigate();
@@ -96,7 +202,7 @@ const RamuxAcademy = () => {
             <div className="max-w-[1600px] mx-auto space-y-6 animate-fade-in py-6 px-4">
                 
                 {/* Simplified Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/40 p-3 rounded-2xl border border-white/5 backdrop-blur-sm shadow-xl">
+                <div className="flex justify-between items-center bg-[#12161f]/80 p-3 rounded-2xl border border-white/5 shadow-xl">
                     <button
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 px-5 py-2 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-[10px] font-black uppercase tracking-widest group"
@@ -113,50 +219,37 @@ const RamuxAcademy = () => {
                     </button>
                 </div>
 
-                {/* Hero / Welcome Panel */}
-                <div className="flex flex-col xl:flex-row gap-4 items-stretch">
+                {/* Hero / Welcome Panel + Inquiry Form */}
+                <div className="flex flex-col xl:flex-row gap-6 items-stretch">
                     <NeumorphicPanel 
                         radiance="ramux"
-                        className="flex-grow p-8 md:p-10 relative overflow-hidden group/hero min-h-[220px]"
+                        className="flex-grow p-8 md:p-12 relative overflow-hidden group/hero min-h-[300px]"
                     >
-                        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none group-hover/hero:bg-[#F76B1C]/15 transition-all duration-1000" />
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[64px] pointer-events-none group-hover/hero:bg-[#F76B1C]/15 transition-all duration-1000" />
                         
-                        <div className="relative z-10 flex flex-col justify-center h-full space-y-4">
+                        <div className="relative z-10 flex flex-col justify-center h-full space-y-6">
                             <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 w-fit">
-                                <GraduationCap size={14} className="text-[#F76B1C]" />
+                                <GraduationCap size={16} className="text-[#F76B1C]" />
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Knowledge Hub</span>
                             </div>
                             
-                            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tighter uppercase max-w-2xl">
+                            <h1 className="text-4xl md:text-6xl font-black text-white leading-[0.9] tracking-tighter uppercase max-w-4xl">
                                 Ramux <span className="bg-gradient-to-r from-violet-500 to-[#F76B1C] bg-clip-text text-transparent">Academy</span>
                             </h1>
                             
-                            <p className="text-lg text-slate-400 max-w-xl leading-relaxed font-medium">
-                                Transformando el conocimiento estratégico en capacidad operativa de alto impacto.
+                            <p className="text-lg text-slate-300 max-w-xl leading-relaxed font-medium">
+                                Transformando el conocimiento estratégico en capacidad operativa de alto impacto mediante formación técnica y mentoría especializada.
                             </p>
                         </div>
                     </NeumorphicPanel>
 
-                    {/* Quick Stats / Progress */}
-                    <NeumorphicPanel radiotherapy="silver" className="w-full xl:w-96 p-6 flex flex-row xl:flex-col justify-between xl:justify-center items-center text-center gap-6">
-                        <div className="flex flex-col items-center gap-3">
-                            <div className="w-14 h-14 bg-[#12161f] rounded-2xl border border-white/5 flex items-center justify-center shadow-inner relative group/stat">
-                                <Target size={20} className="text-sky-400 group-hover/stat:scale-110 transition-transform" />
-                            </div>
-                            <h3 className="text-slate-400 font-black text-[9px] uppercase tracking-widest hidden xl:block">Progreso Global</h3>
-                        </div>
-                        
-                        <div className="flex flex-col items-center xl:space-y-1">
-                            <div className="text-4xl font-black text-white tracking-tighter">35<span className="text-xl text-slate-500 font-medium">%</span></div>
-                            <p className="text-[9px] text-slate-500 uppercase font-black tracking-[0.2em] hidden xl:block">Rango: Consultor Junior</p>
-                        </div>
-
-                        <div className="flex-grow xl:w-full space-y-2">
-                            <div className="w-full bg-[#0a0e1a] rounded-full h-2 overflow-hidden border border-white/5 shadow-inner">
-                                <div className="bg-gradient-to-r from-sky-400 to-violet-500 h-full w-[35%] rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]" />
-                            </div>
-                        </div>
-                    </NeumorphicPanel>
+                    <CourseInquiryForm courses={[
+                        { category: "LEGAL", items: legalModules.map(m => m.title) },
+                        { category: "GLOBAL", items: globalModules.map(m => m.title) },
+                        { category: "WEALTH", items: wealthModules.map(m => m.title) },
+                        { category: "IA", items: aiModules.map(m => m.title) },
+                        { category: "LEADERSHIP", items: leadershipModules.map(m => m.title) }
+                    ]} />
                 </div>
 
                 {/* ACADEMIC WIDGETS GRID */}
@@ -164,7 +257,7 @@ const RamuxAcademy = () => {
                     
                     {/* Legal Academy Widget */}
                     <div className="flex flex-col space-y-4">
-                        <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-2xl border border-white/5">
                             <div className="p-2.5 bg-amber-500/10 rounded-xl border border-amber-500/20">
                                 <ShieldCheck className="text-amber-500" size={20} />
                             </div>
@@ -182,7 +275,7 @@ const RamuxAcademy = () => {
 
                     {/* Global Academy Widget */}
                     <div className="flex flex-col space-y-4">
-                        <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-2xl border border-white/5">
                             <div className="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
                                 <Compass className="text-emerald-500" size={20} />
                             </div>
@@ -200,7 +293,7 @@ const RamuxAcademy = () => {
 
                     {/* Wealth Academy Widget */}
                     <div className="flex flex-col space-y-4">
-                        <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm relative group">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-2xl border border-white/5 relative group">
                             <div className="p-2.5 bg-yellow-500/10 rounded-xl border border-yellow-500/20">
                                 <Coins className="text-yellow-500" size={20} />
                             </div>
@@ -223,7 +316,7 @@ const RamuxAcademy = () => {
 
                     {/* IA Academy Widget */}
                     <div className="flex flex-col space-y-4">
-                        <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-2xl border border-white/5">
                             <div className="p-2.5 bg-sky-500/10 rounded-xl border border-sky-500/20">
                                 <Zap className="text-sky-400" size={20} />
                             </div>
@@ -241,7 +334,7 @@ const RamuxAcademy = () => {
 
                     {/* Leadership Academy Widget */}
                     <div className="flex flex-col space-y-4">
-                        <div className="flex items-center gap-4 bg-[#12161f]/40 p-4 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-2xl border border-white/5">
                             <div className="p-2.5 bg-violet-500/10 rounded-xl border border-violet-500/20">
                                 <Users className="text-violet-500" size={20} />
                             </div>
