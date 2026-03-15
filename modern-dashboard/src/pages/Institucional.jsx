@@ -28,7 +28,7 @@ const Institucional = () => {
             <div className="max-w-6xl mx-auto space-y-12 animate-fade-in py-6">
                 
                 {/* Simplified Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/40 p-4 rounded-3xl border border-white/5 backdrop-blur-sm shadow-xl">
+                <div className="flex justify-between items-center bg-[#12161f]/40 p-4 rounded-3xl border border-white/5 shadow-xl">
                     <button
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 px-6 py-2.5 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-xs font-black uppercase tracking-widest group"
@@ -41,16 +41,16 @@ const Institucional = () => {
                         onClick={() => navigate('/dashboard')}
                         className="flex items-center justify-center p-3 bg-sky-900/30 hover:bg-sky-500 text-sky-400 hover:text-white rounded-xl transition-all border border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] group"
                     >
-                        <Home size={18} className="group-hover:scale-110 transition-transform" />
+                        <Home size={18} className="group-hover:translate-y-[-2px] transition-transform" />
                     </button>
                 </div>
 
                 {/* Hero Header Section */}
                 <div className="relative group/header flex flex-col items-center text-center py-8">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-500/5 rounded-full blur-[120px] pointer-events-none group-hover/header:bg-sky-500/10 transition-colors duration-1000" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-sky-500/5 rounded-full blur-[40px] pointer-events-none group-hover/header:bg-sky-500/10 transition-colors duration-1000" />
                     
                     <div className="flex flex-col items-center space-y-6 relative z-10 w-full">
-                        <div className="flex items-center gap-3 px-5 py-2 bg-sky-500/10 rounded-full border border-sky-500/20 w-fit backdrop-blur-md">
+                        <div className="flex items-center gap-3 px-5 py-2 bg-sky-500/10 rounded-full border border-sky-500/20 w-fit">
                             <Building2 size={16} className="text-sky-400" />
                             <span className="text-[11px] font-black text-sky-400 uppercase tracking-[0.3em]">Nuestra Identidad</span>
                         </div>
@@ -69,7 +69,7 @@ const Institucional = () => {
                     className="p-10 md:p-14 relative overflow-hidden group/mission"
                 >
                     <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
-                        <div className="w-24 h-24 bg-[#12161f] rounded-3xl border border-white/5 flex items-center justify-center group-hover/mission:scale-110 transition-transform duration-700 shadow-inner">
+                        <div className="w-24 h-24 bg-[#12161f] rounded-3xl border border-white/5 flex items-center justify-center group-hover/mission:translate-y-[-4px] transition-transform duration-700 shadow-inner">
                             <Target size={40} className="text-[#F76B1C]" />
                         </div>
                         <div className="flex-grow space-y-4">
@@ -90,7 +90,7 @@ const Institucional = () => {
                         radiance="blue"
                         className="p-10 md:p-16 relative overflow-hidden group/bio"
                     >
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-[100px] pointer-events-none group-hover/bio:bg-sky-500/10 transition-colors duration-1000" />
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/5 rounded-full blur-[40px] pointer-events-none group-hover/bio:bg-sky-500/10 transition-colors duration-1000" />
                         
                         <div className="flex flex-col space-y-12 relative z-10">
                             {/* Bio Header */}
