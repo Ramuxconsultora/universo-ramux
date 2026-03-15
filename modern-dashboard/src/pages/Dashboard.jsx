@@ -126,66 +126,69 @@ function Dashboard() {
                     </div>
 
                     {/* Restyled Tabs & Filters Header */}
-                    <div className="flex flex-col gap-10 border-b border-white/5 pb-10 mb-10">
-                        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-10">
-                                    <button
-                                        onClick={() => setActiveTab('news')}
-                                        className={`text-4xl lg:text-6xl font-black transition-all relative uppercase italic tracking-tighter ${activeTab === 'news' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
-                                    >
-                                        Noticias
-                                        {activeTab === 'news' && <div className="absolute -bottom-2 left-0 w-1/2 h-2.5 bg-[#F76B1C] rounded-full shadow-[0_0_20px_#F76B1C]" />}
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab('community')}
-                                        className={`text-2xl lg:text-3xl font-black transition-all relative uppercase italic tracking-tighter mt-2 ${activeTab === 'community' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
-                                    >
-                                        Comunidad
-                                    </button>
-                                </div>
-                                <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em]">Inteligencia Estratégica en tiempo real</p>
+                    <div className="flex flex-col gap-8 border-b border-white/5 pb-10 mb-10">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-10">
+                                <button
+                                    onClick={() => setActiveTab('news')}
+                                    className={`text-4xl lg:text-7xl font-black transition-all relative uppercase italic tracking-tighter ${activeTab === 'news' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                >
+                                    Noticias
+                                    {activeTab === 'news' && <div className="absolute -bottom-2 left-0 w-1/2 h-2.5 bg-[#F76B1C] rounded-full shadow-[0_0_20px_#F76B1C]" />}
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('community')}
+                                    className={`text-2xl lg:text-3xl font-black transition-all relative uppercase italic tracking-tighter mt-2 ${activeTab === 'community' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                >
+                                    Comunidad
+                                </button>
                             </div>
-
-                            {activeTab === 'news' && (
-                                <div className="flex bg-[#0a0e1a] p-2 rounded-[28px] shadow-2xl border border-white/5 ring-1 ring-white/10">
-                                    <button
-                                        onClick={() => setActiveScope('Nacional')}
-                                        className={`px-12 py-3.5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Nacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
-                                    >
-                                        Nacional
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveScope('Internacional')}
-                                        className={`px-12 py-3.5 rounded-[22px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Internacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
-                                    >
-                                        Internacional
-                                    </button>
-                                </div>
-                            )}
+                            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.5em]">Inteligencia Estratégica en tiempo real</p>
                         </div>
 
-                        {/* Category Filter Selector (Below News Title) */}
                         {activeTab === 'news' && (
-                            <div className="flex flex-wrap gap-4 items-center">
-                                <button
-                                    onClick={() => setActiveCategory('all')}
-                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-slate-500 border-white/5 hover:border-white/20 hover:text-white'}`}
-                                >
-                                    Todos los Flujos
-                                </button>
-                                <button
-                                    onClick={() => setActiveCategory('economy')}
-                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'economy' ? 'bg-sky-500 text-white border-sky-500' : 'bg-transparent text-slate-500 border-white/5 hover:border-sky-500/20 hover:text-sky-400'}`}
-                                >
-                                    Economy & Finance
-                                </button>
-                                <button
-                                    onClick={() => setActiveCategory('tech')}
-                                    className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'tech' ? 'bg-orange-500 text-white border-orange-500' : 'bg-transparent text-slate-500 border-white/5 hover:border-orange-500/20 hover:text-orange-400'}`}
-                                >
-                                    Tech & Innovation
-                                </button>
+                            <div className="space-y-6">
+                                {/* Row 1: Scope Filters */}
+                                <div className="flex flex-wrap items-center gap-4">
+                                    <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10">
+                                        <button
+                                            onClick={() => setActiveScope('Nacional')}
+                                            className={`px-8 py-2.5 rounded-[18px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Nacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
+                                        >
+                                            Nacional
+                                        </button>
+                                        <button
+                                            onClick={() => setActiveScope('Internacional')}
+                                            className={`px-8 py-2.5 rounded-[18px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Internacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
+                                        >
+                                            Internacional
+                                        </button>
+                                    </div>
+                                    <div className="h-4 w-[1px] bg-white/10 mx-2 hidden md:block" />
+                                    <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest hidden md:block">Seleccionar Ámbito</span>
+                                </div>
+
+                                {/* Row 2: Category Filter Selector */}
+                                <div className="flex flex-wrap gap-3 items-center">
+                                    <button
+                                        onClick={() => setActiveCategory('all')}
+                                        className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-slate-500 border-white/10 hover:border-white/20 hover:text-white'}`}
+                                    >
+                                        Todas
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveCategory('economy')}
+                                        className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'economy' ? 'bg-sky-500/20 text-sky-400 border-sky-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-sky-500/20 hover:text-sky-400'}`}
+                                    >
+                                        Economy & Finance
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveCategory('tech')}
+                                        className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'tech' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-orange-500/20 hover:text-orange-400'}`}
+                                    >
+                                        Tech & Innovation
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
