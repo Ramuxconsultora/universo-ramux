@@ -12,12 +12,12 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_secret_fSvdNQzHXveRnv2iXSfsfw_
 
 # CONFIGURACIÓN DE FEEDS RSS AMPLIADA
 RSS_FEEDS = {
-    "IA y Tecnología": "https://news.google.com/rss/search?q=Inteligencia+Artificial+OpenAI+NVIDIA+Tech+Empresas+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Tecnología Nacional": "https://news.google.com/rss/search?q=Tecnologia+Argentina+OR+Fintech+Argentina+OR+Software+Argentina+OR+Innovacion+Argentina+OR+Startups+Buenos+Aires+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Economía Global": "https://news.google.com/rss/search?q=Wall+Street+Fed+Economia+Mundial+Mercados+Globales+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Economía Argentina": "https://news.google.com/rss/search?q=Merval+Banco+Central+Argentina+Economia+Dolar+Bonaerense+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Mercado de Capitales (CNV)": "https://news.google.com/rss/search?q=CNV+Argentina+OR+Comisión+Nacional+de+Valores+OR+Mercado+de+Capitales+OR+CEDEARs+OR+Bonos+AL30+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
-    "Radar Laboral": "https://news.google.com/rss/search?q=Reforma+Laboral+Argentina+OR+Leyes+Laborales+OR+Legislacion+Laboral+OR+Empleo+Argentina+when:1d&hl=es-419&gl=AR&ceid=AR:es-419"
+    "Tecnología Internacional": "https://news.google.com/rss/search?q=(Silicon+Valley+OR+Shenzhen+OR+Tokyo+OR+Nvidia+OR+OpenAI)+Tech+when:1d&hl=es-419&gl=US&ceid=US:es-419",
+    "Tecnología Nacional": "https://news.google.com/rss/search?q=Tecnologia+Argentina+OR+Fintech+Argentina+OR+Software+Argentina+OR+Startups+Buenos+Aires+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
+    "Economía Internacional": "https://news.google.com/rss/search?q=Wall+Street+OR+Fed+OR+Nasdaq+OR+S%26P500+OR+European+Central+Bank+when:1d&hl=es-419&gl=US&ceid=US:es-419",
+    "Economía Nacional": "https://news.google.com/rss/search?q=Dolar+OR+Merval+OR+BCRA+OR+CNV+OR+Cedears+Argentina+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
+    "Radar Laboral Internacional": "https://news.google.com/rss/search?q=Global+Labor+Trends+OR+EU+Work+Regulation+OR+Remote+Work+Global+when:1d&hl=es-419&gl=US&ceid=US:es-419",
+    "Radar Laboral Nacional": "https://news.google.com/rss/search?q=Reforma+Laboral+Argentina+OR+Leyes+Laborales+Argentina+OR+Gremio+Argentina+when:1d&hl=es-419&gl=AR&ceid=AR:es-419"
 }
 
 def fetch_and_insert_news():
@@ -36,16 +36,15 @@ def fetch_and_insert_news():
     for feed_name, feed_url in RSS_FEEDS.items():
         print(f"\nObteniendo {feed_name} de Google News...")
         
-        # Determinar Categoría UI y Alcance
+        # Determinar Categoría UI y Alcance (Dinámico según nombre de feed)
+        scope = "Nacional" if "Nacional" in feed_name else "Internacional"
+        
         if "Tecnología" in feed_name or "IA" in feed_name:
             category = "Tecnología"
-            scope = "Nacional" if "Nacional" in feed_name else "Internacional"
         elif "Laboral" in feed_name:
-            category = "Legal/Laboral" # Nueva categoría sugerida para organizar mejor la plataforma
-            scope = "Nacional"
+            category = "Legal/Laboral" 
         else:
             category = "Economía"
-            scope = "Nacional" if ("Argentina" in feed_name or "CNV" in feed_name) else "Internacional"
 
         try:
             response = requests.get(feed_url, headers=headers, timeout=10)
