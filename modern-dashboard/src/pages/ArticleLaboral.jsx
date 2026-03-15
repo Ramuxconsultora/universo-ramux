@@ -5,7 +5,8 @@ import NeumorphicPanel from '../components/ui/NeumorphicPanel';
 import { 
     BookOpenText, Scale, TrendingUp, ArrowLeft, Home, 
     CheckCircle2, AlertTriangle, Quote, Info, Landmark, 
-    Lightbulb, ShieldCheck, Zap, Globe, MessageSquare
+    Lightbulb, ShieldCheck, Zap, Globe, MessageSquare,
+    ArrowRight
 } from 'lucide-react';
 
 const OpinionCard = ({ title, items, type = 'pros', icon: Icon }) => (
@@ -90,6 +91,24 @@ const ArticleLaboral = () => {
                         </p>
                     </div>
                 </NeumorphicPanel>
+
+                {/* Simulator CTA Button */}
+                <div className="flex justify-center -mt-4 relative z-20">
+                    <button
+                        onClick={() => navigate('/radar-laboral')}
+                        className="group relative px-8 py-4 bg-gradient-to-r from-[#F76B1C] to-orange-600 rounded-2xl border border-white/20 shadow-[0_0_30px_rgba(247,107,28,0.3)] hover:shadow-[0_0_50px_rgba(247,107,28,0.5)] transition-all duration-500 hover:scale-[1.02] flex items-center gap-4 overflow-hidden"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                        <div className="p-2 bg-white/10 rounded-xl">
+                            <Zap size={20} className="text-white animate-pulse" />
+                        </div>
+                        <div className="text-left">
+                            <p className="text-[10px] font-black text-white/70 uppercase tracking-[0.2em] leading-none mb-1">Herramienta Exclusiva</p>
+                            <p className="text-sm md:text-base font-black text-white uppercase tracking-tight">Prueba nuestro simulador de liquidación laboral</p>
+                        </div>
+                        <ArrowRight size={20} className="text-white group-hover:translate-x-1 transition-transform" />
+                    </button>
+                </div>
 
                 {/* Lead Text */}
                 <div className="max-w-4xl mx-auto py-12">
