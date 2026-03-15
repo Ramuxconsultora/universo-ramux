@@ -18,9 +18,17 @@ import ArticleLaboral from './pages/ArticleLaboral';
 import Compromiso from './pages/Compromiso';
 import CapitalWealth from './pages/CapitalWealth';
 
-// Protected Route Wrapper using Supabase Auth
+// Protected Route Wrapper using Firebase Auth
 const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F76B1C]"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -48,11 +56,7 @@ function App() {
         />
         <Route
           path="/news/:id"
-          element={
-            <ProtectedRoute>
-              <NewsDetail />
-            </ProtectedRoute>
-          }
+          element={<NewsDetail />}
         />
         <Route
           path="/academy"
@@ -91,6 +95,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Ranking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
