@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useMemo } from 'react';
 
 const NavigationContext = createContext();
 
@@ -9,8 +9,15 @@ export const NavigationProvider = ({ children }) => {
     const closeMenu = () => setIsMenuOpen(false);
     const openMenu = () => setIsMenuOpen(true);
 
+    const value = useMemo(() => ({
+        isMenuOpen,
+        toggleMenu,
+        closeMenu,
+        openMenu
+    }), [isMenuOpen]);
+
     return (
-        <NavigationContext.Provider value={{ isMenuOpen, toggleMenu, closeMenu, openMenu }}>
+        <NavigationContext.Provider value={value}>
             {children}
         </NavigationContext.Provider>
     );
