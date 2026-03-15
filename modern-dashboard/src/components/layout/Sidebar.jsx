@@ -1,7 +1,7 @@
 import React from 'react';
 import SidebarSection from './SidebarSection';
 import SidebarLink from './SidebarLink';
-import { useNav } from '../../contexts/NavContext';
+import { useNavigation } from '../../contexts/NavigationContext';
 import {
     Building2, Newspaper, Briefcase, GraduationCap,
     Coins, TrendingUp, ChevronUp, ChevronDown, Menu, BookOpen, Scale, Globe, Sprout,
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
-    const { isMenuOpen, closeMenu } = useNav();
+    const { isMenuOpen, closeMenu } = useNavigation();
 
     // Body scroll lock effect
     React.useEffect(() => {
