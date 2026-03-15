@@ -44,36 +44,36 @@ const WelcomeHero = () => {
                         CONTÁCTANOS
                     </a>
                 </div>
+            </div>
 
-                {/* Fibonacci Ornament and Label - Positioned near title on mobile, bottom-right on desktop */}
-                <div className="flex flex-col items-center group/orbits absolute top-6 right-4 sm:top-auto sm:bottom-4 sm:right-6 opacity-30 group-hover/card:opacity-100 transition-all duration-700 pointer-events-none scale-[0.35] sm:scale-75 lg:scale-100 origin-top-right sm:origin-bottom-right">
-                    <div className="w-40 h-40 lg:w-48 lg:h-48 relative">
-                        <svg
-                            viewBox="0 0 100 100"
-                            className="w-full h-full text-white/20 group-hover/card:text-sky-400 transition-all duration-700"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1"
-                        >
-                            <circle cx="50" cy="50" r="4.5" fill="#F76B1C" className="animate-pulse" />
-                            <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '8s' }}>
-                                <circle cx="50" cy="50" r="15" strokeDasharray="30 64" strokeLinecap="round" className="text-white/20" />
-                                <circle cx="65" cy="50" r="2" fill="#F76B1C" />
-                            </g>
-                            <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '14s' }}>
-                                <circle cx="50" cy="50" r="28" strokeDasharray="50 120" strokeLinecap="round" className="text-white/10" />
-                                <circle cx="78" cy="50" r="2.5" fill="#F76B1C" />
-                            </g>
-                            <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '22s' }}>
-                                <circle cx="50" cy="50" r="42" strokeDasharray="80 180" strokeLinecap="round" className="text-white/10" />
-                                <circle cx="92" cy="50" r="3" fill="#F76B1C" />
-                            </g>
-                        </svg>
-                    </div>
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 group-hover/card:text-sky-300 transition-all duration-300 font-bold mt-2 text-center whitespace-nowrap cursor-default">
-                        Órbita de Fibonacci
-                    </span>
+            {/* Fibonacci Ornament and Label - Moved outside content div to be truly absolute to card */}
+            <div className="flex flex-col items-center group/orbits absolute top-4 right-4 sm:top-auto sm:bottom-4 sm:right-6 opacity-30 group-hover/card:opacity-100 transition-all duration-700 pointer-events-none scale-[0.3] sm:scale-75 lg:scale-100 origin-top-right sm:origin-bottom-right z-10">
+                <div className="w-40 h-40 lg:w-48 lg:h-48 relative">
+                    <svg
+                        viewBox="0 0 100 100"
+                        className="w-full h-full text-white/20 group-hover/card:text-sky-400 transition-all duration-700"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1"
+                    >
+                        <circle cx="50" cy="50" r="4.5" fill="#F76B1C" className="animate-pulse" />
+                        <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '8s' }}>
+                            <circle cx="50" cy="50" r="15" strokeDasharray="30 64" strokeLinecap="round" className="text-white/20" />
+                            <circle cx="65" cy="50" r="2" fill="#F76B1C" />
+                        </g>
+                        <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '14s' }}>
+                            <circle cx="50" cy="50" r="28" strokeDasharray="50 120" strokeLinecap="round" className="text-white/10" />
+                            <circle cx="78" cy="50" r="2.5" fill="#F76B1C" />
+                        </g>
+                        <g className="origin-center animate-spin-slow-reverse" style={{ animationDuration: '22s' }}>
+                            <circle cx="50" cy="50" r="42" strokeDasharray="80 180" strokeLinecap="round" className="text-white/10" />
+                            <circle cx="92" cy="50" r="3" fill="#F76B1C" />
+                        </g>
+                    </svg>
                 </div>
+                <span className="text-[10px] uppercase tracking-[0.3em] text-white/20 group-hover/card:text-sky-300 transition-all duration-300 font-bold mt-2 text-center whitespace-nowrap cursor-default">
+                    Órbita de Fibonacci
+                </span>
             </div>
         </NeumorphicPanel>
     );
