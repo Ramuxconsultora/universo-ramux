@@ -28,7 +28,7 @@ const FinancialWidget = React.memo(({ title, value, previousValue, prefix = '$',
     }
 
     const isAccent = type === 'accent';
-    let trendColorClass = 'text-slate-500 bg-[#12161f] shadow-inner';
+    let trendColorClass = 'text-slate-400 bg-[#12161f] shadow-inner';
     let TrendIcon = Minus;
 
     if (trend === 'up') {
@@ -42,7 +42,7 @@ const FinancialWidget = React.memo(({ title, value, previousValue, prefix = '$',
     return (
         <NeumorphicPanel className="p-6 flex flex-col justify-between h-[120px]">
             <div className="flex justify-between items-center mb-1">
-                <h4 className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{title}</h4>
+                <h4 className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">{title}</h4>
 
                 {previousValue && (
                     <span className={`text-[9px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1 ${trendColorClass}`}>
@@ -53,11 +53,11 @@ const FinancialWidget = React.memo(({ title, value, previousValue, prefix = '$',
             </div>
 
             <div className="flex items-baseline gap-1">
-                {prefix && <span className={`text-sm font-bold ${isAccent ? 'text-[#F76B1C]' : 'text-slate-600'}`}>{prefix}</span>}
+                {prefix && <span className={`text-sm font-bold ${isAccent ? 'text-[#F76B1C]' : 'text-slate-400'}`}>{prefix}</span>}
                 <span className={`text-2xl font-black tabular-nums tracking-tight ${isAccent ? 'text-[#F76B1C]' : 'text-white'}`}>
                     {value.toLocaleString('es-AR')}
                 </span>
-                {suffix && <span className="text-slate-600 font-bold ml-1 text-xs">{suffix}</span>}
+                {suffix && <span className="text-slate-400 font-bold ml-1 text-xs">{suffix}</span>}
             </div>
         </NeumorphicPanel>
     );
