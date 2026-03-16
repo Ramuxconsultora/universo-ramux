@@ -15,6 +15,7 @@ import {
     Search
 } from 'lucide-react';
 import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
+import TradingViewChart from '../components/widgets/TradingViewChart.jsx';
 import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 const ToolWidget = (props) => {
@@ -125,6 +126,19 @@ const CapitalWealth = () => {
                     <ErrorBoundary>
                         <MarketSimulator />
                     </ErrorBoundary>
+
+                    {/* Technical Analysis Chart */}
+                    <div className="space-y-6 pt-4">
+                        <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
+                            <div className="p-2 bg-sky-500/10 rounded-lg border border-sky-500/20 shadow-inner">
+                                <BarChart2 className="text-sky-400" size={20} />
+                            </div>
+                            <h2 className="text-xl font-black text-white uppercase tracking-tight">Análisis Técnico Pro</h2>
+                        </div>
+                        <ErrorBoundary>
+                            <TradingViewChart symbol="GGAL" />
+                        </ErrorBoundary>
+                    </div>
                 </div>
 
                 {/* Grid de Herramientas Secundarias */}
