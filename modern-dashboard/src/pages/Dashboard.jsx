@@ -10,6 +10,7 @@ import NeumorphicPanel from '../components/ui/NeumorphicPanel';
 import IAChatWidget from '../components/widgets/IAChatWidget';
 import WelcomeHero from '../components/widgets/WelcomeHero';
 import DolarAPIWidget from '../components/widgets/DolarAPIWidget';
+import MarketIndicators from '../components/widgets/MarketIndicators';
 
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('news');
@@ -102,6 +103,7 @@ function Dashboard() {
 
                 <IAChatWidget />
 
+                <MarketIndicators />
                 <DolarAPIWidget />
 
                 {/* Sección de Feed con Filtros Avanzados */}
