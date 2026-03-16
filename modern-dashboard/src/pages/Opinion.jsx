@@ -54,24 +54,6 @@ const Opinion = () => {
     return (
         <Layout>
             <div className="max-w-[1400px] mx-auto space-y-8 animate-fade-in py-6 px-4">
-                
-                {/* Simplified Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/80 p-3 rounded-2xl border border-white/5 shadow-xl">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 px-5 py-2 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-[10px] font-black uppercase tracking-widest group"
-                    >
-                        <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
-                        Volver
-                    </button>
-                    
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="flex items-center justify-center p-2.5 bg-sky-900/30 hover:bg-sky-500 text-sky-400 hover:text-white rounded-xl transition-all border border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] group"
-                    >
-                        <Home size={16} className="group-hover:scale-110 transition-transform" />
-                    </button>
-                </div>
 
                 {/* Founder's Vision Hero Card */}
                 <NeumorphicPanel 
