@@ -3,13 +3,15 @@ name: IOL Market Data Sync
 on:
   schedule:
     - cron: '*/15 * * * *'   # cada 15 minutos
-  workflow_dispatch:          # también permite correrlo manualmente
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,4 +27,4 @@ jobs:
           IOL_PASSWORD: ${{ secrets.IOL_PASSWORD }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: python scraper/iol_sync.py
+        run: python modern-dashboard/backend-scraper/IOL_sync.py
