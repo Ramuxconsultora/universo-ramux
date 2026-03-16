@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, DollarSign, Activity, Clock, AlertCircle } from 'lucide-react';
-import NeumorphicPanel from '../ui/NeumorphicPanel';
+import NeumorphicPanel from '../ui/NeumorphicPanel.jsx';
 
 // 1. Componente de Carga (Skeleton)
 const WidgetSkeleton = () => (
@@ -18,25 +18,17 @@ const PriceCard = ({ title, value, type = 'default' }) => {
     const isAccent = type === 'accent';
     
     return (
-        <NeumorphicPanel className="p-5 flex flex-col justify-between h-[110px] group hover:border-[#F76B1C]/30 transition-all duration-300">
-            <div className="flex justify-between items-center">
-                <h4 className="text-slate-400 text-[9px] font-black uppercase tracking-[0.2em]">{title}</h4>
-                <div className={`p-1 rounded-lg ${isAccent ? 'bg-[#F76B1C]/10 text-[#F76B1C]' : 'bg-white/5 text-slate-500'}`}>
-                    <Activity size={10} />
-                </div>
+        <NeumorphicPanel className="p-4 flex flex-col justify-between h-[90px] group border-white/5 hover:border-[#F76B1C]/20 transition-all">
+            <h4 className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{title}</h4>
+            <div className="flex items-baseline gap-1">
+                <span className={`text-[10px] font-bold ${isAccent ? 'text-[#F76B1C]' : 'text-slate-600'}`}>$</span>
+                <span className={`text-xl font-black tabular-nums tracking-tight ${isAccent ? 'text-[#F76B1C]' : 'text-white'}`}>
+                    {typeof value === 'number' ? value.toLocaleString('es-AR') : '---'}
+                </span>
             </div>
-
-            <div className="space-y-0.5">
-                <div className="flex items-baseline gap-1">
-                    <span className={`text-xs font-bold ${isAccent ? 'text-[#F76B1C]' : 'text-slate-500'}`}>$</span>
-                    <span className={`text-2xl font-black tabular-nums tracking-tighter ${isAccent ? 'text-[#F76B1C]' : 'text-white'}`}>
-                        {typeof value === 'number' ? value.toLocaleString('es-AR') : '---'}
-                    </span>
-                </div>
-                <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
-                    <TrendingUp size={8} className="text-emerald-500" /> Venta
-                </p>
-            </div>
+            <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest flex items-center gap-1">
+                <TrendingUp size={8} className="text-emerald-500" /> Venta
+            </p>
         </NeumorphicPanel>
     );
 };
