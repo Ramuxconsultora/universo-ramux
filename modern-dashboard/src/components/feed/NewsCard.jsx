@@ -12,14 +12,14 @@ const NewsCard = React.memo(({ item }) => {
 
         // Prioridad por Región
         if (scp.includes('entre ríos')) return 'emerald'; // Verde para Entre Ríos
-        if (scp.includes('buenos aires')) return 'blue'; 
-        
+        if (scp.includes('buenos aires')) return 'blue';
+
         // Prioridad por Servicio
         if (cat.includes('finan') || cat.includes('asesoría')) return 'blue';
         if (cat.includes('tech') || cat.includes('tecno')) return 'purple';
         if (cat.includes('legal') || cat.includes('compliance')) return 'amber';
         if (cat.includes('rrhh') || cat.includes('gestión')) return 'emerald';
-        
+
         return 'blue';
     };
 
