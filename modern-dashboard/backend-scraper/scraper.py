@@ -14,88 +14,40 @@ SUPABASE_KEY = os.getenv("VITE_SUPABASE_ANON_KEY")
 def get_google_url(query):
     """Genera una URL de Google News codificada correctamente."""
     base_url = "https://news.google.com/rss/search?q="
+    # Ajustamos hl y gl según el contexto para mejorar relevancia
     params = "&hl=es-419&gl=AR&ceid=AR:es-419"
     return base_url + urllib.parse.quote(query) + params
 
+# --- FUENTES Y CATEGORÍAS ---
+# Se aumentó la precisión de los queries para asegurar relevancia en 4 días
 RSS_SOURCES = [
-    # --- FINANZAS Y MERCADO ---
-    {
-        "name": "Finanzas y Mercado Nacional",
-        "query": "(mercado de capitales OR finanzas OR inversiones OR bonos OR merval) argentina when:4d",
-        "scope": "Nacional",
-        "default_category": "Finanzas y Mercado"
-    },
-    {
-        "name": "Finanzas y Mercado Internacional",
-        "query": "(stock market OR finance OR investment OR wall street) when:4d",
-        "scope": "Internacional",
-        "default_category": "Finanzas y Mercado"
-    },
+    # FINANZAS Y MERCADO
+    {"name": "Finanzas Nacional", "query": "(mercado de capitales OR finanzas OR inversiones OR merval OR bonos) argentina when:4d", "scope": "Nacional", "category": "Finanzas y Mercado"},
+    {"name": "Finanzas Internacional", "query": "(stock market OR wall street OR trading OR global finance) when:4d", "scope": "Internacional", "category": "Finanzas y Mercado"},
     
-    # --- LEGALES ---
-    {
-        "name": "Legales Nacional",
-        "query": "(leyes OR normativa OR regulación OR juicio OR legal) argentina when:4d",
-        "scope": "Nacional",
-        "default_category": "Legales"
-    },
-    {
-        "name": "Legales Internacional",
-        "query": "(legal news OR regulations OR law OR litigation) when:4d",
-        "scope": "Internacional",
-        "default_category": "Legales"
-    },
+    # LEGALES
+    {"name": "Legales Nacional", "query": "(leyes OR normativa OR boletín oficial OR jurisprudencia OR legal) argentina when:4d", "scope": "Nacional", "category": "Legales"},
+    {"name": "Legales Internacional", "query": "(international law OR regulations OR legal news OR court ruling) when:4d", "scope": "Internacional", "category": "Legales"},
 
-    # --- RECURSOS HUMANOS ---
-    {
-        "name": "Recursos Humanos Nacional",
-        "query": "(recursos humanos OR RRHH OR empleo OR laboral) argentina when:4d",
-        "scope": "Nacional",
-        "default_category": "Recursos Humanos"
-    },
-    {
-        "name": "Recursos Humanos Internacional",
-        "query": "(human resources OR HR OR talent management OR employment) when:4d",
-        "scope": "Internacional",
-        "default_category": "Recursos Humanos"
-    },
+    # RECURSOS HUMANOS
+    {"name": "RRHH Nacional", "query": "(recursos humanos OR RRHH OR mercado laboral OR empleo) argentina when:4d", "scope": "Nacional", "category": "Recursos Humanos"},
+    {"name": "RRHH Internacional", "query": "(human resources OR talent management OR future of work OR remote work) when:4d", "scope": "Internacional", "category": "Recursos Humanos"},
 
-    # --- TECNOLOGÍA E INNOVACIÓN ---
-    {
-        "name": "Tecnología e Innovación Nacional",
-        "query": "(tecnología OR innovación OR startups OR IA) argentina when:4d",
-        "scope": "Nacional",
-        "default_category": "Tecnología e Innovación"
-    },
-    {
-        "name": "Tecnología e Innovación Internacional",
-        "query": "(technology OR innovation OR startups OR AI) when:4d",
-        "scope": "Internacional",
-        "default_category": "Tecnología e Innovación"
-    },
+    # TECNOLOGÍA E INNOVACIÓN
+    {"name": "Tecno Nacional", "query": "(tecnología OR innovación OR startups OR software OR IA) argentina when:4d", "scope": "Nacional", "category": "Tecnología e Innovación"},
+    {"name": "Tecno Internacional", "query": "(tech news OR innovation OR artificial intelligence OR silicon valley) when:4d", "scope": "Internacional", "category": "Tecnología e Innovación"},
 
-    # --- ECONOMÍA ---
-    {
-        "name": "Economía Nacional",
-        "query": "(economía OR macroeconomía OR inflación) argentina when:4d",
-        "scope": "Nacional",
-        "default_category": "Economía"
-    },
-    {
-        "name": "Economía Internacional",
-        "query": "(economy OR macroeconomics OR global markets) when:4d",
-        "scope": "Internacional",
-        "default_category": "Economía"
-    }
+    # ECONOMÍA
+    {"name": "Economía Nacional", "query": "(economía OR macroeconomía OR inflación OR pbi) argentina when:4d", "scope": "Nacional", "category": "Economía"},
+    {"name": "Economía Internacional", "query": "(global economy OR IMF OR world bank OR inflation global) when:4d", "scope": "Internacional", "category": "Economía"}
 ]
 
 def clean_summary(html_content):
-    if not html_content: return "Sin resumen."
+    if not html_content: return "Sin resumen disponible."
     soup = BeautifulSoup(html_content, 'html.parser')
-    # Eliminamos links de Google News que a veces vienen en el summary
     for a in soup.find_all('a'): a.decompose()
     text = soup.get_text(separator=' ', strip=True)
-    return text[:160] + "..." if len(text) > 163 else text
+    return text[:180] + "..." if len(text) > 183 else text
 
 def fetch_and_insert_news():
     if not SUPABASE_URL or not SUPABASE_KEY:
@@ -106,31 +58,34 @@ def fetch_and_insert_news():
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
     
     ahora = datetime.now(timezone.utc)
-    hace_15_dias = ahora - timedelta(days=15)
+    hace_4_dias = ahora - timedelta(days=4)
 
     for source in RSS_SOURCES:
         search_url = get_google_url(source["query"])
-        print(f"\n--- Procesando: {source['name']} ---")
+        print(f"\n>>> Buscando: {source['name']} ({source['scope']})")
         
         try:
             response = requests.get(search_url, headers=headers, timeout=25)
             feed = feedparser.parse(response.content)
             
-            if not feed.entries:
-                print(f"Aviso: No se encontraron noticias para {source['name']}")
-                continue
+            # Ordenar por fecha (más reciente primero)
+            entries = sorted(feed.entries, 
+                            key=lambda x: x.get('published_parsed', 0), 
+                            reverse=True)
 
             inserted = 0
-            for entry in feed.entries:
-                if inserted >= 12: break # Aumentamos cupo para asegurar 10 tras duplicados
+            # Intentamos procesar hasta encontrar 20 válidas (no duplicadas)
+            for entry in entries:
+                if inserted >= 20: break 
                 
-                # Obtener fecha real de publicación
+                # Obtener fecha
                 if hasattr(entry, 'published_parsed') and entry.published_parsed:
                     pub_date = datetime.fromtimestamp(time.mktime(entry.published_parsed), tz=timezone.utc)
                 else:
                     pub_date = ahora
 
-                if pub_date < hace_15_dias: continue 
+                # Filtro estricto de 4 días
+                if pub_date < hace_4_dias: continue 
 
                 # Evitar duplicados por URL
                 existing = supabase.table('noticias').select('id').eq('url', entry.link).execute()
@@ -138,9 +93,9 @@ def fetch_and_insert_news():
                 
                 new_item = {
                     "title": entry.title,
-                    "category": source["default_category"],
+                    "category": source["category"],
                     "summary": clean_summary(entry.summary if hasattr(entry, 'summary') else ""),
-                    "source_name": source["name"],
+                    "source_name": entry.get('source', {}).get('title', source["name"]),
                     "url": entry.link,
                     "scope": source["scope"],
                     "created_at": pub_date.isoformat() 
@@ -148,12 +103,14 @@ def fetch_and_insert_news():
                 
                 try:
                     supabase.table('noticias').insert(new_item).execute()
-                    print(f"OK: {entry.title[:40]}...")
                     inserted += 1
-                    time.sleep(0.4)
+                    print(f"  [{inserted}] Insertado: {entry.title[:50]}...")
+                    time.sleep(0.2) # Delay para no saturar la API
                 except Exception as e:
-                    print(f"Error insertando en Supabase: {e}")
+                    print(f"  Error en inserción: {e}")
                     
+            print(f"--- Total {source['name']}: {inserted} noticias guardadas ---")
+
         except Exception as e:
             print(f"Error de conexión en {source['name']}: {e}")
 
