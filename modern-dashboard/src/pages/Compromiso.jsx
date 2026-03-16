@@ -24,24 +24,6 @@ const Compromiso = () => {
     return (
         <Layout>
             <div className="max-w-6xl mx-auto space-y-12 animate-fade-in py-6 px-4">
-                
-                {/* Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/40 p-4 rounded-3xl border border-white/5 shadow-xl">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-xs font-black uppercase tracking-widest group"
-                    >
-                        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-                        Volver
-                    </button>
-                    
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="flex items-center justify-center p-3 bg-cyan-900/30 hover:bg-cyan-500 text-cyan-400 hover:text-white rounded-xl transition-all border border-cyan-500/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] group"
-                    >
-                        <Home size={18} className="group-hover:translate-y-[-2px] transition-transform" />
-                    </button>
-                </div>
 
                 {/* Hero Header Section */}
                 <div className="relative group/header flex flex-col items-center text-center py-8">
