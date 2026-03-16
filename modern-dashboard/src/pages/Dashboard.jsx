@@ -12,6 +12,10 @@ import WelcomeHero from '../components/widgets/WelcomeHero.jsx';
 import DolarAPIWidget from '../components/widgets/DolarAPIWidget.jsx';
 import MarketIndicators from '../components/widgets/MarketIndicators.jsx';
 import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
+import MarqueeTicker from '../components/widgets/MarqueeTicker.jsx';
+import PortfolioPieChart from '../components/widgets/PortfolioPieChart.jsx';
+import EducationWidget from '../components/widgets/EducationWidget.jsx';
+import TradingViewChart from '../components/widgets/TradingViewChart.jsx';
 import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 function Dashboard() {
@@ -78,8 +82,15 @@ function Dashboard() {
     return (
         <Layout>
             <div className="space-y-12 pb-20">
-                {/* 1. Ticker de Mercado (Sticky-ish top) */}
-                <div className="sticky top-0 z-40 -mt-8 -mx-4 md:-mx-8">
+                {/* 0. Top Marquee Ticker (Integral Flow) */}
+                <div className="-mx-4 md:-mx-8 bg-[#F76B1C] shadow-lg relative z-20">
+                    <ErrorBoundary>
+                        <MarqueeTicker />
+                    </ErrorBoundary>
+                </div>
+
+                {/* 1. Ticker de Mercado (Static Grid) */}
+                <div className="-mx-4 md:-mx-8 pt-4">
                     <ErrorBoundary>
                         <MarketIndicators />
                     </ErrorBoundary>
@@ -90,24 +101,38 @@ function Dashboard() {
                     <WelcomeHero />
                 </ErrorBoundary>
 
-                {/* 3. Grid de Inteligencia y Mercado */}
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-stretch">
-                    <div className="space-y-8">
+                {/* 3. Grid de Inteligencia y Mercado (Main Tools) */}
+                <div className="space-y-8">
+                    <ErrorBoundary>
+                        <DolarAPIWidget />
+                    </ErrorBoundary>
+                    
+                    {/* Interactive Technical Chart */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-sky-500/5 rounded-xl border border-sky-500/10 w-fit">
+                            <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
+                            <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Live Technical Analysis</span>
+                        </div>
                         <ErrorBoundary>
-                            <DolarAPIWidget />
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <MarketSimulator />
+                            <TradingViewChart symbol="GGAL" />
                         </ErrorBoundary>
                     </div>
-                    <div className="flex flex-col h-full">
+
+                    <ErrorBoundary>
+                        <MarketSimulator />
+                    </ErrorBoundary>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <ErrorBoundary>
-                            <IAChatWidget />
+                            <PortfolioPieChart />
+                        </ErrorBoundary>
+                        <ErrorBoundary>
+                            <EducationWidget />
                         </ErrorBoundary>
                     </div>
                 </div>
 
-                {/* 4. Banner Destacado: Análisis de Coyuntura */}
+                {/* 4. Banner Destacado: La Nueva Era del Trabajo */}
                 <NeumorphicPanel
                     className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#0a0e1a] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-4px] transition-all duration-500 overflow-hidden relative"
                     onClick={() => navigate('/opinion/laboral')}
@@ -116,11 +141,11 @@ function Dashboard() {
                     <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
                         <div className="flex-grow space-y-4">
                             <div className="flex items-center gap-3">
-                                <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">Coyuntura Nacional</span>
+                                <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">La Nueva Era del Trabajo</span>
                                 <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1"><Clock size={10} /> Actualizado hoy</span>
                             </div>
                             <h2 className="text-3xl md:text-5xl font-black text-slate-200 italic leading-none tracking-tighter uppercase group-hover:text-white transition-colors duration-500">
-                                El Impacto de la <br /><span className="text-[#F76B1C]">Reforma Técnica</span>
+                                Análisis Técnico de la <br /><span className="text-[#F76B1C]">Ley de Modernización Laboral</span>
                             </h2>
                             <p className="text-sm text-slate-400 font-medium max-w-2xl">
                                 Análisis profundo sobre las nuevas normativas legales y su repercusión en el mercado de capitales argentino.
@@ -129,6 +154,15 @@ function Dashboard() {
                         <ArrowRight className="text-white/20 group-hover:text-[#F76B1C] group-hover:translate-x-2 transition-all" size={40} />
                     </div>
                 </NeumorphicPanel>
+
+                {/* 5. IA Financial & Legal Chat (Positioned below the Banner as requested) */}
+                <div className="flex flex-col">
+                    <ErrorBoundary>
+                        <IAChatWidget />
+                    </ErrorBoundary>
+                </div>
+
+
 
                 {/* Sección de Feed con Filtros Avanzados */}
                 <div className="space-y-8">
