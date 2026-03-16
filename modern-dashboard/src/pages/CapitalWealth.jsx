@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../components/layout/Layout';
-import NeumorphicPanel from '../components/ui/NeumorphicPanel';
+import Layout from '../components/layout/Layout.jsx';
+import NeumorphicPanel from '../components/ui/NeumorphicPanel.jsx';
 import { 
     TrendingUp, 
     BarChart2, 
@@ -14,7 +14,8 @@ import {
     ArrowRight,
     Search
 } from 'lucide-react';
-import MarketSimulator from '../components/widgets/MarketSimulator';
+import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
+import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 const ToolWidget = (props) => {
     const { icon: Icon, title, subtitle, colorClass = "text-[#F76B1C]" } = props;
@@ -121,7 +122,9 @@ const CapitalWealth = () => {
                         </div>
                         <h2 className="text-xl font-black text-white uppercase tracking-tight">Centro de Estrategia Live</h2>
                     </div>
-                    <MarketSimulator />
+                    <ErrorBoundary>
+                        <MarketSimulator />
+                    </ErrorBoundary>
                 </div>
 
                 {/* Grid de Herramientas Secundarias */}
