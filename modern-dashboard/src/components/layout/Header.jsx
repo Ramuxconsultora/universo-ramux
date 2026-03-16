@@ -16,8 +16,12 @@ const Header = () => {
                 <div className="flex-1 flex justify-start items-center">
                     {user ? (
                         <a href="/profile" className="flex items-center gap-4 group cursor-pointer no-underline">
-                            <div className="w-10 h-10 rounded-xl bg-[#1a1f2b] border border-white/5 flex items-center justify-center group-hover:border-[#F76B1C] transition-colors uppercase font-bold text-[#F76B1C] shadow-sm">
-                                {user.email ? user.email.charAt(0) : <User size={20} />}
+                            <div className="w-10 h-10 rounded-xl bg-[#1a1f2b] border border-white/5 flex items-center justify-center group-hover:border-[#F76B1C] transition-colors overflow-hidden shadow-sm">
+                                {user.photoURL ? (
+                                    <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="uppercase font-bold text-[#F76B1C]">{user.email?.charAt(0) || <User size={20} />}</span>
+                                )}
                             </div>
                             <div className="hidden md:block">
                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('STATUS_ONLINE')}</p>
