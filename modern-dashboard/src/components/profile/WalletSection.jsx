@@ -2,7 +2,8 @@ import React from 'react';
 import { Wallet, TrendingUp, History, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import GlassPanel from '../ui/GlassPanel';
 
-const WalletSection = ({ balance = "12,450.00", roiChange = "+15.2%", history = [] }) => {
+const WalletSection = ({ balance = "0,00", usdBalance = "0,00", roiChange = "+0.0%", history = [] }) => {
+    console.log("[DEBUG-WALLET-UI]", { balance, usdBalance });
     // Mini Chart Data
     const dataPoints = [30, 45, 35, 60, 55, 80, 75, 95];
     const maxVal = Math.max(...dataPoints);
@@ -18,8 +19,6 @@ const WalletSection = ({ balance = "12,450.00", roiChange = "+15.2%", history = 
 
     const defaultHistory = [
         { id: 1, type: 'gain', amount: '+50 RMX', label: 'Cursos completados', date: 'Hoy' },
-        { id: 2, type: 'gain', amount: '+120 RMX', label: 'Simulador: Profit Directo', date: 'Ayer' },
-        { id: 3, type: 'spend', amount: '-30 RMX', label: 'Módulo Premium: Opciones', date: '14 Mar' },
     ];
 
     const currentHistory = history.length > 0 ? history : defaultHistory;
@@ -32,12 +31,20 @@ const WalletSection = ({ balance = "12,450.00", roiChange = "+15.2%", history = 
                 
                 <div className="space-y-10 relative z-10">
                     <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                            <p className="text-slate-500 font-black text-xs uppercase tracking-[0.3em]">Balance Total RMX</p>
-                            <div className="flex items-center gap-3">
-                                <h3 className="text-4xl font-black text-white tracking-tighter italic">${balance}</h3>
-                                <div className="p-2 rounded-xl bg-orange-500/10 border border-orange-500/20">
-                                    <Wallet size={20} className="text-[#F76B1C]" />
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-slate-500 font-black text-[9px] uppercase tracking-[0.3em] mb-1">Balance Total ARS</p>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-3xl font-black text-white tracking-tighter italic">${balance}</h3>
+                                    <div className="p-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                                        <Wallet size={16} className="text-[#F76B1C]" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-slate-500 font-black text-[9px] uppercase tracking-[0.3em] mb-1">Balance Total USD</p>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-2xl font-black text-emerald-400 tracking-tighter italic">u$s {usdBalance}</h3>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +55,7 @@ const WalletSection = ({ balance = "12,450.00", roiChange = "+15.2%", history = 
                     </div>
 
                     {/* SVG Line Chart */}
-                    <div className="relative h-24 w-full group/chart">
+                    <div className="relative h-20 w-full group/chart">
                         <svg viewBox="0 0 200 60" className="w-full h-full overflow-visible">
                             <defs>
                                 <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -90,30 +97,34 @@ const WalletSection = ({ balance = "12,450.00", roiChange = "+15.2%", history = 
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-3">
                         <History size={20} className="text-slate-400" />
-                        <h4 className="text-xs font-black text-white uppercase tracking-[0.3em]">Historial Financiero</h4>
+                        <h4 className="text-xs font-black text-white uppercase tracking-[0.3em]">Historial de Operaciones</h4>
                     </div>
                     <button className="text-[10px] font-black text-sky-400 uppercase tracking-widest hover:text-sky-300 transition-colors">
                         Ver Todo
                     </button>
                 </div>
 
-                <div className="flex-grow space-y-4">
-                    {currentHistory.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/[0.08] transition-all group/item">
-                            <div className="flex items-center gap-4">
-                                <div className={`p-2 rounded-xl ${item.type === 'gain' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                                    {item.type === 'gain' ? <ArrowUpRight size={16} /> : <ArrowDownLeft size={16} />}
+                <div className="flex-grow space-y-4 overflow-y-auto max-h-[300px] no-scrollbar">
+                    {currentHistory.length === 0 ? (
+                        <p className="text-[10px] text-slate-600 font-bold uppercase text-center py-10 tracking-widest">Sin movimientos registrados</p>
+                    ) : (
+                        currentHistory.map((item) => (
+                            <div key={item.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/[0.08] transition-all group/item">
+                                <div className="flex items-center gap-4">
+                                    <div className={`p-2 rounded-xl ${item.type === 'gain' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                                        {item.type === 'gain' ? <ArrowUpRight size={16} /> : <ArrowDownLeft size={16} />}
+                                    </div>
+                                    <div>
+                                        <p className="text-[11px] font-black text-white uppercase tracking-tight">{item.label}</p>
+                                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{item.date}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-[11px] font-black text-white uppercase tracking-tight">{item.label}</p>
-                                    <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{item.date}</p>
-                                </div>
+                                <p className={`text-xs font-black font-mono ${item.type === 'gain' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                    {item.amount}
+                                </p>
                             </div>
-                            <p className={`text-xs font-black font-mono ${item.type === 'gain' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                                {item.amount}
-                            </p>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </GlassPanel>
         </div>
