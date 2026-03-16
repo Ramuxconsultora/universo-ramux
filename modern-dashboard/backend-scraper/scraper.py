@@ -18,43 +18,74 @@ def get_google_url(query):
     return base_url + urllib.parse.quote(query) + params
 
 RSS_SOURCES = [
-    # --- GEOGRÁFICAS (Prioridad Regional) ---
+    # --- FINANZAS Y MERCADO ---
     {
-        "name": "Entre Ríos Noticias",
-        "query": "(Paraná OR Entre Ríos OR Concordia) when:15d",
-        "scope": "Entre Ríos",
-        "default_category": "Regional"
+        "name": "Finanzas y Mercado Nacional",
+        "query": "(mercado de capitales OR finanzas OR inversiones OR bonos OR merval) argentina when:4d",
+        "scope": "Nacional",
+        "default_category": "Finanzas y Mercado"
     },
     {
-        "name": "Buenos Aires Económico",
-        "query": "(CABA OR Buenos Aires OR AMBA) economía when:15d",
-        "scope": "Buenos Aires",
+        "name": "Finanzas y Mercado Internacional",
+        "query": "(stock market OR finance OR investment OR wall street) when:4d",
+        "scope": "Internacional",
+        "default_category": "Finanzas y Mercado"
+    },
+    
+    # --- LEGALES ---
+    {
+        "name": "Legales Nacional",
+        "query": "(leyes OR normativa OR regulación OR juicio OR legal) argentina when:4d",
+        "scope": "Nacional",
+        "default_category": "Legales"
+    },
+    {
+        "name": "Legales Internacional",
+        "query": "(legal news OR regulations OR law OR litigation) when:4d",
+        "scope": "Internacional",
+        "default_category": "Legales"
+    },
+
+    # --- RECURSOS HUMANOS ---
+    {
+        "name": "Recursos Humanos Nacional",
+        "query": "(recursos humanos OR RRHH OR empleo OR laboral) argentina when:4d",
+        "scope": "Nacional",
+        "default_category": "Recursos Humanos"
+    },
+    {
+        "name": "Recursos Humanos Internacional",
+        "query": "(human resources OR HR OR talent management OR employment) when:4d",
+        "scope": "Internacional",
+        "default_category": "Recursos Humanos"
+    },
+
+    # --- TECNOLOGÍA E INNOVACIÓN ---
+    {
+        "name": "Tecnología e Innovación Nacional",
+        "query": "(tecnología OR innovación OR startups OR IA) argentina when:4d",
+        "scope": "Nacional",
+        "default_category": "Tecnología e Innovación"
+    },
+    {
+        "name": "Tecnología e Innovación Internacional",
+        "query": "(technology OR innovation OR startups OR AI) when:4d",
+        "scope": "Internacional",
+        "default_category": "Tecnología e Innovación"
+    },
+
+    # --- ECONOMÍA ---
+    {
+        "name": "Economía Nacional",
+        "query": "(economía OR macroeconomía OR inflación) argentina when:4d",
+        "scope": "Nacional",
         "default_category": "Economía"
     },
-    # --- SERVICIOS CONSULTORA (Tags) ---
     {
-        "name": "Asesoría Financiera",
-        "query": "(inversiones OR mercado de capitales OR finanzas OR bonos) argentina when:15d",
-        "scope": "Nacional",
-        "default_category": "Asesoría Financiera"
-    },
-    {
-        "name": "Legal & Compliance",
-        "query": "(CNV OR regulación OR normativa OR compliance OR leyes) argentina when:15d",
-        "scope": "Nacional",
-        "default_category": "Legal & Compliance"
-    },
-    {
-        "name": "Gestión de RRHH",
-        "query": "(recursos humanos OR RRHH OR empleo OR relaciones laborales) argentina when:15d",
-        "scope": "Nacional",
-        "default_category": "Gestión de RRHH"
-    },
-    {
-        "name": "Tecnología & IA",
-        "query": "(IA OR inteligencia artificial OR fintech OR blockchain) when:15d",
+        "name": "Economía Internacional",
+        "query": "(economy OR macroeconomics OR global markets) when:4d",
         "scope": "Internacional",
-        "default_category": "Tecnología"
+        "default_category": "Economía"
     }
 ]
 
