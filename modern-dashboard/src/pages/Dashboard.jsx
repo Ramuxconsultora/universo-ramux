@@ -4,9 +4,9 @@ import { ArrowRight, Users, Clock, Filter, Globe, MapPin } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 
 // Components
-import Layout from '../components/layout/Layout';
-import NewsCard from '../components/feed/NewsCard';
-import NeumorphicPanel from '../components/ui/NeumorphicPanel';
+import Layout from '../components/layout/Layout.jsx';
+import NewsCard from '../components/feed/NewsCard.jsx';
+import NeumorphicPanel from '../components/ui/NeumorphicPanel.jsx';
 import IAChatWidget from '../components/widgets/IAChatWidget.jsx';
 import WelcomeHero from '../components/widgets/WelcomeHero.jsx';
 import DolarAPIWidget from '../components/widgets/DolarAPIWidget.jsx';
