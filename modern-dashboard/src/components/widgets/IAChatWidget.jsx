@@ -1,5 +1,5 @@
 import React from 'react';
-import NeumorphicPanel from '../ui/NeumorphicPanel';
+import NeumorphicPanel from '../ui/NeumorphicPanel.jsx';
 import { Zap, Mail, ShieldCheck, Sparkles, Binary, Cpu } from 'lucide-react';
 
 const IAChatWidget = () => {
