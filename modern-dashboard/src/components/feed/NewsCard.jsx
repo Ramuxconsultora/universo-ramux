@@ -15,10 +15,11 @@ const NewsCard = React.memo(({ item }) => {
         if (scp.includes('buenos aires')) return 'blue';
 
         // Prioridad por Servicio
-        if (cat.includes('finan') || cat.includes('asesoría')) return 'blue';
+        if (cat.includes('finan') || cat.includes('asesoría') || cat.includes('econo')) return 'blue';
         if (cat.includes('tech') || cat.includes('tecno')) return 'purple';
         if (cat.includes('legal') || cat.includes('compliance')) return 'amber';
         if (cat.includes('rrhh') || cat.includes('gestión')) return 'emerald';
+        if (cat.includes('region')) return 'emerald';
 
         return 'blue';
     };
