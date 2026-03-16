@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { TrendingUp, TrendingDown, Minus, Activity } from 'lucide-react';
-import NeumorphicPanel from '../ui/NeumorphicPanel';
 
-const QuoteCard = ({ quote }) => {
-    const { symbol, price, variation, category } = quote;
+const TickerItem = ({ quote }) => {
+    const { symbol, price, variation } = quote;
     const isPositive = variation > 0;
     const isNegative = variation < 0;
 
     return (
-        <div className="flex flex-col p-4 bg-[#12161f] rounded-2xl border border-white/5 hover:border-[#F76B1C]/30 transition-all group">
-            <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{symbol}</span>
-                <span className="text-[8px] font-bold text-slate-600 uppercase bg-black/30 px-1.5 py-0.5 rounded-md">{category}</span>
+        <div className="flex items-center justify-between px-6 py-4 border-r border-b border-white/5 group hover:bg-white/[0.02] transition-colors last:border-b-0">
+            <div className="flex flex-col">
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-white transition-colors">
+                    {symbol}
+                </span>
+                <span className="text-xs font-black text-white tabular-nums tracking-tight">
+                    ${price?.toLocaleString('es-AR')}
+                </span>
             </div>
-            <div className="flex items-baseline justify-between">
-                <span className="text-lg font-black text-white tabular-nums">${price?.toLocaleString('es-AR')}</span>
-                <div className={`flex items-center gap-0.5 text-[10px] font-bold ${isPositive ? 'text-emerald-500' : isNegative ? 'text-red-500' : 'text-slate-500'}`}>
-                    {isPositive ? <TrendingUp size={10} /> : isNegative ? <TrendingDown size={10} /> : <Minus size={10} />}
-                    {variation}%
-                </div>
+            <div className={`flex items-center gap-1 text-[10px] font-bold ${isPositive ? 'text-emerald-500' : isNegative ? 'text-red-500' : 'text-slate-500'}`}>
+                {isPositive ? <TrendingUp size={12} /> : isNegative ? <TrendingDown size={12} /> : <Minus size={12} />}
+                {variation}%
             </div>
         </div>
     );
@@ -48,7 +48,6 @@ const MarketIndicators = () => {
 
         fetchQuotes();
 
-        // Suscripción en tiempo real
         const channel = supabase
             .channel('market_quotes_realtime')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'market_quotes' }, (payload) => {
@@ -69,36 +68,37 @@ const MarketIndicators = () => {
 
     if (loading && quotes.length === 0) {
         return (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-8 opacity-50">
-                {Array.from({ length: 7 }).map((_, i) => (
-                    <div key={i} className="h-20 bg-white/5 rounded-2xl animate-pulse" />
-                ))}
+            <div className="w-full h-10 bg-black/20 border-y border-white/5 flex items-center overflow-hidden">
+                <div className="animate-pulse flex gap-8 px-4 w-full">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                        <div key={i} className="h-3 w-24 bg-white/5 rounded" />
+                    ))}
+                </div>
             </div>
         );
     }
 
-    if (quotes.length === 0) {
-        return (
-            <div className="w-full mb-8 border border-dashed border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center opacity-40">
-                <Activity size={24} className="text-slate-600 mb-2" />
-                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Esperando sincronización de mercado (IOL Sync)...</p>
-            </div>
-        );
-    }
+    if (quotes.length === 0) return null;
 
     return (
-        <div className="w-full mb-8">
-            <div className="flex items-center gap-3 mb-4 px-2">
-                <Activity size={14} className="text-[#F76B1C]" />
-                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Mercado en Vivo • IOL Sync</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                {quotes.map((quote) => (
-                    <QuoteCard key={quote.symbol} quote={quote} />
-                ))}
+        <div className="w-full bg-black/40 backdrop-blur-md border-y border-white/5 group">
+            <div className="flex flex-col lg:flex-row items-stretch">
+                {/* Fixed Label - Spans full height on large screens */}
+                <div className="flex items-center gap-4 px-8 py-5 border-b lg:border-b-0 lg:border-r border-white/10 bg-black/60 z-10 shrink-0">
+                    <Activity size={18} className="text-[#F76B1C]" />
+                    <span className="text-xs font-black text-white uppercase tracking-[0.4em]">MERCADO EN VIVO</span>
+                </div>
+                
+                {/* Data Grid: Wraps into 2 lines on desktop if needed, multi-line on mobile */}
+                <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+                    {quotes.map((quote) => (
+                        <TickerItem key={quote.symbol} quote={quote} />
+                    ))}
+                </div>
             </div>
         </div>
     );
 };
 
 export default MarketIndicators;
+
