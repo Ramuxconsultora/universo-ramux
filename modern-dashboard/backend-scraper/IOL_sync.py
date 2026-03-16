@@ -5,16 +5,20 @@ from datetime import datetime, timezone
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
+# Cargar variables de entorno
 load_dotenv()
 
-# Configuración
+# Configuración Supabase
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") # Necesitamos Service Role para bypass RLS si es necesario, o usar la key anon si la política lo permite
+
+# Configuración IOL
 IOL_USERNAME = os.getenv("IOL_USERNAME")
 IOL_PASSWORD = os.getenv("IOL_PASSWORD")
 IOL_TOKEN_URL = "https://api.invertironline.com/token"
 IOL_API_URL = "https://api.invertironline.com/api/v2"
 
+# Activos a monitorear
 TICKERS = [
     {"symbol": "GGAL", "type": "accion", "market": "BCBA"},
     {"symbol": "YPFD", "type": "accion", "market": "BCBA"},
@@ -48,10 +52,11 @@ class IOLSync:
             response.raise_for_status()
             data = response.json()
             self.token = data["access_token"]
-            self.token_expires = time.time() + data.get("expires_in", 3600) - 60
+            # Guardamos el tiempo de expiración (restando un margen de seguridad)
+            self.token_expires = time.time() + data["expires_in"] - 60
             return self.token
         except Exception as e:
-            print(f"❌ Error de autenticación IOL: {e}")
+            print(f"Error al obtener token de IOL: {e}")
             return None
 
     def fetch_quote(self, symbol, market):
@@ -60,7 +65,7 @@ class IOLSync:
 
         headers = {"Authorization": f"Bearer {token}"}
         
-        # CAMBIO CLAVE: IOL suele usar /api/v2/{mercado}/Titulos/{simbolo}/Cotizacion
+        # El formato /api/v2/{mercado}/Titulos/{simbolo}/Cotizacion es más robusto para IOL V2
         url = f"{IOL_API_URL}/{market}/Titulos/{symbol}/Cotizacion"
 
         try:
@@ -87,29 +92,39 @@ class IOLSync:
             
             if data and "ultimoPrecio" in data:
                 price = data.get("ultimoPrecio")
-                variation = data.get("variaciones", 0) # A veces es 'variaciones' en plural o 'variacion'
+                # IOL a veces envía 'variacion' y otras 'variaciones'
+                variation = data.get("variacion") if data.get("variacion") is not None else data.get("variaciones", 0)
                 
                 quote_data = {
                     "symbol": symbol,
                     "price": float(price),
-                    "variation": float(variation) if variation else 0,
+                    "variation": float(variation) if variation is not None else 0,
                     "last_update": datetime.now(timezone.utc).isoformat(),
                     "category": item["type"].upper()
                 }
                 
                 try:
-                    # Requiere que 'symbol' sea Primary Key en Supabase
                     self.supabase.table("market_quotes").upsert(quote_data).execute()
                     print(f"✅ {symbol:5} | ${price:<8} | {variation}%")
                 except Exception as e:
-                    print(f"❌ Error Supabase {symbol}: {e}")
+                    # Fallback por si falta la columna category en la DB
+                    if "category" in str(e):
+                        del quote_data["category"]
+                        try:
+                            self.supabase.table("market_quotes").upsert(quote_data).execute()
+                            print(f"✅ {symbol:5} (sin cat) | ${price:<8}")
+                        except Exception as e2:
+                            print(f"❌ Error crítico Supabase {symbol}: {e2}")
+                    else:
+                        print(f"❌ Error Supabase {symbol}: {e}")
             else:
-                print(f"⚠️ No se obtuvo data para {symbol}")
+                print(f"⚠️ No se obtuvo data válida para {symbol}")
             
-            time.sleep(0.5) # IOL es sensible al spam
+            time.sleep(0.5) 
 
 if __name__ == "__main__":
     if not all([IOL_USERNAME, IOL_PASSWORD, SUPABASE_URL, SUPABASE_KEY]):
-        print("Faltan variables de entorno.")
+        print("❌ Faltan variables de entorno en el archivo .env.")
     else:
         IOLSync().sync()
+
