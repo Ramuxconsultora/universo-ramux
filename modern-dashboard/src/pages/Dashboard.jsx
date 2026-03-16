@@ -11,6 +11,7 @@ import IAChatWidget from '../components/widgets/IAChatWidget.jsx';
 import WelcomeHero from '../components/widgets/WelcomeHero.jsx';
 import DolarAPIWidget from '../components/widgets/DolarAPIWidget.jsx';
 import MarketIndicators from '../components/widgets/MarketIndicators.jsx';
+import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
 import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 function Dashboard() {
@@ -76,12 +77,37 @@ function Dashboard() {
 
     return (
         <Layout>
-            <div className="space-y-12">
+            <div className="space-y-12 pb-20">
+                {/* 1. Ticker de Mercado (Sticky-ish top) */}
+                <div className="sticky top-0 z-40 -mt-8 -mx-4 md:-mx-8">
+                    <ErrorBoundary>
+                        <MarketIndicators />
+                    </ErrorBoundary>
+                </div>
+
+                {/* 2. Hero Section */}
                 <ErrorBoundary>
                     <WelcomeHero />
                 </ErrorBoundary>
 
-                {/* Banner Destacado: Análisis de Coyuntura */}
+                {/* 3. Grid de Inteligencia y Mercado */}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-stretch">
+                    <div className="space-y-8">
+                        <ErrorBoundary>
+                            <DolarAPIWidget />
+                        </ErrorBoundary>
+                        <ErrorBoundary>
+                            <MarketSimulator />
+                        </ErrorBoundary>
+                    </div>
+                    <div className="flex flex-col h-full">
+                        <ErrorBoundary>
+                            <IAChatWidget />
+                        </ErrorBoundary>
+                    </div>
+                </div>
+
+                {/* 4. Banner Destacado: Análisis de Coyuntura */}
                 <NeumorphicPanel
                     className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#0a0e1a] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-4px] transition-all duration-500 overflow-hidden relative"
                     onClick={() => navigate('/opinion/laboral')}
@@ -103,18 +129,6 @@ function Dashboard() {
                         <ArrowRight className="text-white/20 group-hover:text-[#F76B1C] group-hover:translate-x-2 transition-all" size={40} />
                     </div>
                 </NeumorphicPanel>
-
-                <ErrorBoundary>
-                    <IAChatWidget />
-                </ErrorBoundary>
-
-                <ErrorBoundary>
-                    <MarketIndicators />
-                </ErrorBoundary>
-                
-                <ErrorBoundary>
-                    <DolarAPIWidget />
-                </ErrorBoundary>
 
                 {/* Sección de Feed con Filtros Avanzados */}
                 <div className="space-y-8">
