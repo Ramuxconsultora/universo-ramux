@@ -2,7 +2,8 @@ name: Scraper de Noticias
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    # Se ejecuta cada 12 horas (a las 00:00 y a las 12:00 UTC)
+    - cron: '0 */12 * * *'
   workflow_dispatch: 
 
 jobs:
@@ -21,11 +22,15 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install feedparser requests supabase
+        # He añadido beautifulsoup4 y lxml para evitar el error anterior
+        pip install feedparser requests supabase beautifulsoup4 lxml
 
     - name: Ejecutar el Scraper
       env:
+        # Asegúrate de que este nombre coincida exactamente con el de tus "Actions Secrets" en GitHub
         SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }} 
+        # Si usas la URL de Supabase como variable, añádela aquí también:
+        # SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       run: |
         cd modern-dashboard/backend-scraper
         python scraper.py
