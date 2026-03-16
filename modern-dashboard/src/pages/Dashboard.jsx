@@ -29,7 +29,7 @@ function Dashboard() {
                     .from('noticias')
                     .select('id, title, summary, category, source_name, url, scope, created_at')
                     .order('created_at', { ascending: false })
-                    .limit(60); // Fetches more to allow for filtering
+                    .limit(200); // Increased limit for larger dataset
 
                 if (error) {
                     setErrorMsg(error.message);
@@ -127,7 +127,7 @@ function Dashboard() {
                         <div className="space-y-6">
                             <div className="flex flex-wrap items-center gap-4">
                                 <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10 overflow-x-auto no-scrollbar">
-                                    {['Todos', 'Entre Ríos', 'Buenos Aires', 'Nacional', 'Internacional'].map((scope) => (
+                                    {['Todos', 'Nacional', 'Internacional'].map((scope) => (
                                         <button
                                             key={scope}
                                             onClick={() => setActiveScope(scope)}
@@ -139,7 +139,7 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-3 items-center">
-                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología', 'Regional', 'Economía'].map((cat) => (
+                                {['Todas', 'Finanzas y Mercado', 'Legales', 'Recursos Humanos', 'Tecnología e Innovación', 'Economía'].map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
