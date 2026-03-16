@@ -3,12 +3,12 @@ import feedparser
 from bs4 import BeautifulSoup
 import requests
 from supabase import create_client, Client
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
-import random
 
-SUPABASE_URL = "https://gwqjgddgadljotrwcmde.supabase.co"
-SUPABASE_KEY = "sb_secret_fSvdNQzHXveRnv2iXSfsfw_GJ7-hNxE"
+# Configuración de variables de entorno (Cargadas desde GitHub Secrets)
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://gwqjgddgadljotrwcmde.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 RSS_SOURCES = [
     {
@@ -47,21 +47,26 @@ def clean_summary(html_content):
     return text
 
 def prune_old_news(supabase: Client):
-    print("Pruning news older than 7 days...")
+    print("--- Pruning news older than 7 days ---")
     try:
-        seven_days_ago = datetime.utcnow() - timedelta(days=7)
+        # Uso de timezone-aware datetime para evitar errores
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
         seven_days_ago_iso = seven_days_ago.isoformat()
         res = supabase.table('noticias').delete().lt('created_at', seven_days_ago_iso).execute()
-        print(f"Old news prune executed successfully. {len(res.data) if res.data else 0} removed.")
+        print(f"Old news prune executed. Items removed: {len(res.data) if res.data else 0}")
     except Exception as e:
         print(f"Error pruning old news: {e}")
 
 def fetch_and_insert_news():
-    print(f"Connecting to Supabase at {SUPABASE_URL}...")
+    if not SUPABASE_KEY:
+        print("Error: SUPABASE_KEY no encontrada en las variables de entorno.")
+        return
+
+    print(f"Connecting to Supabase...")
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     
     headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
     
     total_inserted = 0
@@ -72,30 +77,28 @@ def fetch_and_insert_news():
         scope = source["scope"]
         category = source["default_category"]
         
-        print(f"Fetching from {source_name}...")
+        print(f"\nFetching from {source_name}...")
         
         try:
-            response = requests.get(feed_url, headers=headers, timeout=10)
+            response = requests.get(feed_url, headers=headers, timeout=15)
             if response.status_code != 200:
-                print(f"Failed to fetch {source_name}: {response.status_code}")
+                print(f"Failed to fetch {source_name}: Status {response.status_code}")
                 continue
                 
             feed = feedparser.parse(response.content)
+            # Tomamos las últimas 10 noticias de cada fuente
             entries = feed.entries[:10] 
             
             for entry in entries:
                 title = entry.title
                 link = entry.link
                 
-                # We no longer extract or assign image_url
-                
                 summary_html = entry.summary if hasattr(entry, 'summary') else ""
                 summary = clean_summary(summary_html)
                 
-                # Duplicate check
+                # Verificación de duplicados por URL
                 existing = supabase.table('noticias').select('id').eq('url', link).execute()
                 if existing.data and len(existing.data) > 0:
-                    print(f"Skipping duplicate: {title[:30]}...")
                     continue
                 
                 new_item = {
@@ -104,21 +107,23 @@ def fetch_and_insert_news():
                     "summary": summary,
                     "source_name": source_name,
                     "url": link,
-                    "scope": scope
-                    # image_url left undefined / null
+                    "scope": scope,
+                    "created_at": datetime.now(timezone.utc).isoformat()
                 }
                 
                 try:
-                    res = supabase.table('noticias').insert(new_item).execute()
-                    print(f"Inserted: {title[:30]}...")
+                    supabase.table('noticias').insert(new_item).execute()
+                    print(f"Inserted: {title[:50]}...")
                     total_inserted += 1
+                    # Pequeña pausa para no saturar la API
+                    time.sleep(0.5) 
                 except Exception as e:
-                    print(f"Error inserting: {e}")
+                    print(f"Error inserting record: {e}")
                     
         except Exception as e:
-            print(f"Error processing feed {source_name}: {e}")
+            print(f"Error processing source {source_name}: {e}")
             
-    print(f"Done! Inserted {total_inserted} new news items.")
+    print(f"\n--- Done! Total inserted: {total_inserted} ---")
     prune_old_news(supabase)
 
 if __name__ == "__main__":
