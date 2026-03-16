@@ -1,138 +1,197 @@
-import React, { useState, useEffect } from 'react';
-import NeumorphicPanel from '../ui/NeumorphicPanel';
-import { Activity, TrendingUp, BarChart2, TrendingDown, Minus, Wallet } from 'lucide-react';
-import { supabase } from '../../lib/supabaseClient';
+import React, { useLayoutEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Layout from '../components/layout/Layout';
+import NeumorphicPanel from '../components/ui/NeumorphicPanel';
+import { 
+    TrendingUp, 
+    BarChart2, 
+    PieChart, 
+    Calendar, 
+    ShieldCheck, 
+    Activity, 
+    FileText, 
+    BookOpen, 
+    ArrowRight,
+    Search
+} from 'lucide-react';
+import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
+import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
-const MarketSimulator = () => {
-    const [quotes, setQuotes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [portfolio, setPortfolio] = useState({
-        cash: 1000000,
-        assets: {
-            'GGAL': 100,
-            'AL30': 500
-        }
-    });
-
-    useEffect(() => {
-        const fetchQuotes = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('market_quotes')
-                    .select('*');
-                if (error) throw error;
-                setQuotes(data || []);
-            } catch (err) {
-                console.error("Error fetching quotes for simulator:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchQuotes();
-        const channel = supabase
-            .channel('simulator_updates')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'market_quotes' }, fetchQuotes)
-            .subscribe();
-
-        return () => { supabase.removeChannel(channel); };
-    }, []);
-
-    const calculatePortfolioValue = () => {
-        let assetsValue = 0;
-        Object.entries(portfolio.assets).forEach(([symbol, amount]) => {
-            const quote = quotes.find(q => q.symbol === symbol);
-            if (quote) assetsValue += quote.price * amount;
-        });
-        return portfolio.cash + assetsValue;
-    };
-
-    const ggalQuote = quotes.find(q => q.symbol === 'GGAL');
-    const al30Quote = quotes.find(q => q.symbol === 'AL30');
-
+const ToolWidget = (props) => {
+    const { icon: Icon, title, subtitle, colorClass = "text-[#F76B1C]" } = props;
     return (
-        <NeumorphicPanel radiance="blue" className="h-full min-h-[400px] flex flex-col p-6">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#F76B1C]/10 flex items-center justify-center shadow-inner border border-[#F76B1C]/10">
-                        <Activity className="text-[#F76B1C]" size={24} />
-                    </div>
-                    <div>
-                        <h3 className="font-extrabold text-white text-xl tracking-tight">Estrategia & Simulación</h3>
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-[#F76B1C] uppercase tracking-widest">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#F76B1C] animate-pulse"></span>
-                            Live_Market_Data: Active
-                        </div>
-                    </div>
+        <NeumorphicPanel className="p-6 bg-[#12161f]/40 hover:bg-[#12161f]/60 transition-all duration-500 group flex flex-col h-full border-white/5">
+            <div className="flex items-center gap-4 mb-4">
+                <div className={`p-3 rounded-xl bg-white/5 border border-white/10 shadow-inner group-hover:translate-y-[-4px] transition-transform duration-500`}>
+                    <Icon size={20} className={colorClass} />
                 </div>
-                <div className="text-right">
-                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Portfolio_Value</p>
-                    <p className="text-xl font-black text-white italic">
-                        ${calculatePortfolioValue().toLocaleString('es-AR')}
+                <div>
+                    <h3 className="text-sm font-black text-white uppercase tracking-tight whitespace-nowrap">{title}</h3>
+                    <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest">{subtitle}</p>
+                </div>
+            </div>
+            <div className="flex-grow flex items-center justify-center py-8">
+                <div className="w-full h-32 bg-[#0a0e1a]/50 rounded-xl border border-dashed border-white/5 flex items-center justify-center">
+                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">[ Módulo en Desarrollo ]</p>
+                </div>
+            </div>
+            <button className="w-full py-3 mt-4 bg-white/5 hover:bg-white/10 text-white font-black rounded-xl border border-white/5 transition-all text-[10px] uppercase tracking-widest opacity-60 hover:opacity-100">
+                Abrir Herramienta
+            </button>
+        </NeumorphicPanel>
+    );
+};
+
+const TrainingModule = (props) => {
+    const { icon: Icon, title, desc } = props;
+    return (
+        <NeumorphicPanel className="p-6 bg-[#1a1c24]/80 border-white/5 hover:border-sky-500/30 transition-all">
+            <div className="flex gap-4 items-start">
+                <div className="p-3 bg-sky-500/10 rounded-xl">
+                    <Icon size={20} className="text-sky-400" />
+                </div>
+                <div className="space-y-2">
+                    <h4 className="text-sm font-black text-white uppercase tracking-tight">{title}</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                        {desc}
                     </p>
-                </div>
-            </div>
-
-            {/* Metrics Inset */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
-                {ggalQuote ? (
-                    <div className="bg-[#12161f] p-5 rounded-[24px] shadow-inner border border-black/10">
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{ggalQuote.symbol}_Live</p>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-white">${ggalQuote.price?.toLocaleString('es-AR')}</span>
-                            {ggalQuote.variation > 0 ? <TrendingUp size={16} className="text-emerald-500" /> : <TrendingDown size={16} className="text-red-500" />}
-                        </div>
-                        <p className={`text-[10px] mt-1 font-bold ${ggalQuote.variation > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                            {ggalQuote.variation > 0 ? '+' : ''}{ggalQuote.variation}% (IOL)
-                        </p>
+                    <div className="pt-2">
+                        <button className="flex items-center gap-2 text-[10px] font-black text-sky-400 uppercase tracking-widest hover:text-white transition-colors">
+                            Acceder <ArrowRight size={12} />
+                        </button>
                     </div>
-                ) : <div className="h-24 bg-white/5 rounded-[24px] animate-pulse" />}
-
-                {al30Quote ? (
-                    <div className="bg-[#12161f] p-5 rounded-[24px] shadow-inner border border-black/10">
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{al30Quote.symbol}_Core</p>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-white">${al30Quote.price?.toLocaleString('es-AR')}</span>
-                            {al30Quote.variation > 0 ? <TrendingUp size={16} className="text-[#F76B1C]" /> : <TrendingDown size={16} className="text-red-500" />}
-                        </div>
-                        <p className={`text-[10px] mt-1 font-bold ${al30Quote.variation > 0 ? 'text-[#F76B1C]' : 'text-red-500'}`}>
-                            {al30Quote.variation > 0 ? '+' : ''}{al30Quote.variation}% (IOL)
-                        </p>
-                    </div>
-                ) : <div className="h-24 bg-white/5 rounded-[24px] animate-pulse" />}
-            </div>
-
-            {/* Visualizer Area (Deep Inset) */}
-            <div className="flex-grow bg-[#0d1017] rounded-[24px] shadow-inner border border-black/20 p-6 flex flex-col relative overflow-hidden">
-                <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-2">
-                    <Wallet size={14} className="text-slate-500" />
-                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Posiciones_Activas</span>
                 </div>
-                
-                <div className="space-y-3">
-                    {Object.entries(portfolio.assets).map(([symbol, count]) => (
-                        <div key={symbol} className="flex justify-between items-center text-[11px] font-bold">
-                            <span className="text-white uppercase tracking-widest">{symbol}</span>
-                            <span className="text-slate-500">{count} unidades</span>
-                            <span className="text-[#F76B1C]">
-                                ${((quotes.find(q => q.symbol === symbol)?.price || 0) * count).toLocaleString('es-AR')}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="mt-auto pt-4 flex justify-between items-center border-t border-white/5">
-                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Cash_Liquidity</span>
-                    <span className="text-xs font-black text-emerald-500">${portfolio.cash.toLocaleString('es-AR')}</span>
-                </div>
-
-                {/* Decorative background grid */}
-                <div className="absolute inset-0 [background-size:25px_25px] [background-image:linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] opacity-30 z-[-1]"></div>
             </div>
         </NeumorphicPanel>
     );
 };
 
-export default MarketSimulator;
+const CapitalWealth = () => {
+    const navigate = useNavigate();
 
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    return (
+        <Layout>
+            <div className="max-w-[1400px] mx-auto space-y-8 animate-fade-in py-6 px-4 pb-20">
+                
+
+                {/* Hero Header */}
+                <NeumorphicPanel 
+                    radiance="ramux"
+                    className="p-10 md:p-16 relative overflow-hidden group/hero"
+                >
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#F76B1C]/5 rounded-full blur-[40px] opacity-30 pointer-events-none" />
+                    <div className="relative z-10 space-y-6 max-w-4xl">
+                        <div className="flex items-center gap-3 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 w-fit">
+                            <TrendingUp size={16} className="text-[#F76B1C]" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Wealth Management</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] tracking-tighter uppercase italic whitespace-nowrap">
+                            Capital & <span className="bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent italic">Wealth</span>
+                        </h1>
+                        <p className="text-lg text-slate-300 leading-relaxed font-medium border-l-4 border-[#F76B1C] pl-6">
+                            Herramientas y asesoramiento especializado en el mercado de capitales. Combinamos el análisis financiero con interfaces tecnológicas intuitivas para que la toma de decisiones de inversión sea estratégica, informada y eficiente.
+                        </p>
+                    </div>
+                </NeumorphicPanel>
+
+                {/* Legal Transparency Notice */}
+                <NeumorphicPanel className="p-8 bg-amber-500/5 border border-amber-500/20 relative overflow-hidden">
+                    <div className="flex items-start gap-4 relative z-10">
+                        <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20 mt-1">
+                            <ShieldCheck className="text-amber-500" size={20} />
+                        </div>
+                        <div className="space-y-2">
+                            <h3 className="text-sm font-black text-amber-500 uppercase tracking-widest">Aviso de Transparencia Legal</h3>
+                            <p className="text-sm text-slate-300 leading-relaxed font-medium">
+                                Ramux se encuentra actualmente en proceso de gestión y obtención de la matrícula correspondiente ante la <span className="text-white font-bold">Comisión Nacional de Valores (CNV)</span>. El contenido actual es de carácter educativo y tecnológico; el asesoramiento financiero personalizado quedará habilitado una vez finalizado el marco legal pertinente.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl -mr-16 -mt-16" />
+                </NeumorphicPanel>
+
+                {/* Featured Tool: Market Simulator */}
+                <div className="space-y-6">
+                    <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
+                        <div className="p-2 bg-[#F76B1C]/10 rounded-lg border border-[#F76B1C]/20 shadow-inner">
+                            <Activity className="text-[#F76B1C]" size={20} />
+                        </div>
+                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Centro de Estrategia Live</h2>
+                    </div>
+                    <ErrorBoundary>
+                        <MarketSimulator />
+                    </ErrorBoundary>
+                </div>
+
+                {/* Grid de Herramientas Secundarias */}
+                <div className="space-y-6">
+                    <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
+                        <div className="p-2 bg-sky-500/10 rounded-lg border border-sky-500/20 shadow-inner">
+                            <Search className="text-sky-400" size={20} />
+                        </div>
+                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Módulos de Análisis</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <ToolWidget 
+                            icon={Search} 
+                            title="Market Scanner AI" 
+                            subtitle="Análisis en Tiempo Real"
+                            colorClass="text-sky-400"
+                        />
+                        <ToolWidget 
+                            icon={Calendar} 
+                            title="Radar de Dividendos" 
+                            subtitle="Calendario de Pagos"
+                            colorClass="text-emerald-400"
+                        />
+                        <ToolWidget 
+                            icon={PieChart} 
+                            title="Wealth Analytics" 
+                            subtitle="Salud y Diversificación"
+                            colorClass="text-violet-400"
+                        />
+                        <ToolWidget 
+                            icon={ShieldCheck} 
+                            title="Risk Evaluator" 
+                            subtitle="Perfil de Riesgo"
+                            colorClass="text-amber-400"
+                        />
+                    </div>
+                </div>
+
+                {/* Training & Strategy Center */}
+                <div className="space-y-6 pt-4">
+                    <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
+                        <div className="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20 shadow-inner">
+                            <BookOpen className="text-indigo-400" size={20} />
+                        </div>
+                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Centro de Formación y Estrategia</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <TrainingModule 
+                            icon={FileText}
+                            title="Módulo de Idoneidad"
+                            desc="Acceso a guías técnicas y conceptos fundamentales del mercado de capitales (basado en normativa CNV). Preparación conceptual para inversores sofisticados."
+                        />
+                        <TrainingModule 
+                            icon={Activity}
+                            title="Reportes de Coyuntura"
+                            desc="Suscripción a análisis semanales sobre el mercado local e internacional. Reportes estratégicos de macroeconomía y microfinanzas."
+                        />
+                    </div>
+                </div>
+
+                <div className="pt-12 text-center pb-12">
+                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em]">Wealth Architecture • Ramux 2026</p>
+                </div>
+            </div>
+        </Layout>
+    );
+};
+
+export default CapitalWealth;
