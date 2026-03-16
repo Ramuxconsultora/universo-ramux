@@ -5,20 +5,16 @@ from datetime import datetime, timezone
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
 load_dotenv()
 
-# Configuración Supabase
+# Configuración
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") # Necesitamos Service Role para bypass RLS si es necesario, o usar la key anon si la política lo permite
-
-# Configuración IOL
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 IOL_USERNAME = os.getenv("IOL_USERNAME")
 IOL_PASSWORD = os.getenv("IOL_PASSWORD")
 IOL_TOKEN_URL = "https://api.invertironline.com/token"
 IOL_API_URL = "https://api.invertironline.com/api/v2"
 
-# Activos a monitorear
 TICKERS = [
     {"symbol": "GGAL", "type": "accion", "market": "BCBA"},
     {"symbol": "YPFD", "type": "accion", "market": "BCBA"},
@@ -52,61 +48,68 @@ class IOLSync:
             response.raise_for_status()
             data = response.json()
             self.token = data["access_token"]
-            # Guardamos el tiempo de expiración (restando un margen de seguridad)
-            self.token_expires = time.time() + data["expires_in"] - 60
+            self.token_expires = time.time() + data.get("expires_in", 3600) - 60
             return self.token
         except Exception as e:
-            print(f"Error al obtener token de IOL: {e}")
+            print(f"❌ Error de autenticación IOL: {e}")
             return None
 
     def fetch_quote(self, symbol, market):
         token = self.get_token()
-        if not token:
-            return None
+        if not token: return None
 
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"{IOL_API_URL}/Titulos/{symbol}/Cotizacion"
-        params = {"mercado": market}
+        
+        # CAMBIO CLAVE: IOL suele usar /api/v2/{mercado}/Titulos/{simbolo}/Cotizacion
+        url = f"{IOL_API_URL}/{market}/Titulos/{symbol}/Cotizacion"
 
         try:
-            response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            return response.json()
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                # Intentar formato alternativo si el primero falla
+                alt_url = f"{IOL_API_URL}/Titulos/{symbol}/Cotizacion"
+                response = requests.get(alt_url, headers=headers, params={"mercado": market})
+                return response.json() if response.status_code == 200 else None
         except Exception as e:
-            print(f"Error al obtener cotización de {symbol}: {e}")
+            print(f"Error en {symbol}: {e}")
             return None
 
     def sync(self):
-        print(f"Iniciando sincronización: {datetime.now()}")
+        print(f"🚀 {datetime.now()}: Iniciando sync...")
         
         for item in TICKERS:
             symbol = item["symbol"]
             market = item["market"]
             
             data = self.fetch_quote(symbol, market)
-            if data:
+            
+            if data and "ultimoPrecio" in data:
+                price = data.get("ultimoPrecio")
+                variation = data.get("variaciones", 0) # A veces es 'variaciones' en plural o 'variacion'
+                
                 quote_data = {
                     "symbol": symbol,
-                    "name": symbol, # Podríamos obtener el nombre completo con otro endpoint si fuera necesario
-                    "price": data.get("ultimoPrecio"),
-                    "variation": data.get("variacion"),
+                    "price": float(price),
+                    "variation": float(variation) if variation else 0,
                     "last_update": datetime.now(timezone.utc).isoformat(),
                     "category": item["type"].upper()
                 }
                 
                 try:
+                    # Requiere que 'symbol' sea Primary Key en Supabase
                     self.supabase.table("market_quotes").upsert(quote_data).execute()
-                    print(f"Sincronizado {symbol}: ${quote_data['price']} ({quote_data['variation']}%)")
+                    print(f"✅ {symbol:5} | ${price:<8} | {variation}%")
                 except Exception as e:
-                    print(f"Error al subir a Supabase ({symbol}): {e}")
+                    print(f"❌ Error Supabase {symbol}: {e}")
+            else:
+                print(f"⚠️ No se obtuvo data para {symbol}")
             
-            # Respetar rate limits de la API
-            time.sleep(1)
+            time.sleep(0.5) # IOL es sensible al spam
 
 if __name__ == "__main__":
-    # Verificación de credenciales
     if not all([IOL_USERNAME, IOL_PASSWORD, SUPABASE_URL, SUPABASE_KEY]):
-        print("Error: Faltan variables de entorno (IOL_USERNAME, IOL_PASSWORD, etc.)")
+        print("Faltan variables de entorno.")
     else:
-        syncer = IOLSync()
-        syncer.sync()
+        IOLSync().sync()
