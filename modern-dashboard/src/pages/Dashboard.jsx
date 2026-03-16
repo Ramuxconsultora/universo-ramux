@@ -27,7 +27,7 @@ function Dashboard() {
             try {
                 const { data, error } = await supabase
                     .from('noticias')
-                    .select('title, summary, category, source_name, url, scope, created_at')
+                    .select('id, title, summary, category, source_name, url, scope, created_at')
                     .order('created_at', { ascending: false })
                     .limit(60); // Fetches more to allow for filtering
 
@@ -139,7 +139,7 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-3 items-center">
-                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología', 'Regional'].map((cat) => (
+                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología', 'Regional', 'Economía'].map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
