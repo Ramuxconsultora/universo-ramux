@@ -2,9 +2,12 @@ name: Scraper de Noticias
 
 on:
   schedule:
-    # Se ejecuta cada 12 horas (00:00 y 12:00 UTC)
     - cron: '0 */12 * * *'
   workflow_dispatch: 
+
+# Añadimos esta variable para que use Node 24 y desaparezca la advertencia
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   run-scraper:
@@ -26,7 +29,6 @@ jobs:
 
     - name: Ejecutar el Scraper
       env:
-        # Mapeamos tus secretos de GitHub a las variables que lee el script de Python
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       run: |
