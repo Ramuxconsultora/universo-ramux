@@ -131,24 +131,6 @@ const Servicios = () => {
         <Layout>
             <div className="max-w-7xl mx-auto space-y-12 animate-fade-in py-6">
                 
-                {/* Navigation Bar */}
-                <div className="flex justify-between items-center bg-[#12161f]/40 p-4 rounded-3xl border border-white/5 backdrop-blur-sm shadow-xl">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-slate-800/50 hover:bg-[#F76B1C] text-slate-300 hover:text-white rounded-xl transition-all border border-slate-700 hover:border-[#F76B1C] text-xs font-black uppercase tracking-widest group"
-                    >
-                        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-                        Volver
-                    </button>
-
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="flex items-center justify-center p-3 bg-sky-900/30 hover:bg-sky-500 text-sky-400 hover:text-white rounded-xl transition-all border border-sky-500/30 hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] group"
-                    >
-                        <Home size={18} className="group-hover:scale-110 transition-transform" />
-                    </button>
-                </div>
-
                 <div className="relative group/header flex flex-col items-center text-center">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-sky-500/5 rounded-full blur-[60px] pointer-events-none transition-colors duration-1000" />
                     
