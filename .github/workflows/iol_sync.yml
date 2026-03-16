@@ -1,32 +1,28 @@
-name: IOL Market Sync
+name: IOL Market Data Sync
 
 on:
   schedule:
-    # Se ejecuta cada 15 minutos de lunes a viernes (horario de mercado)
-    # 12:00 a 21:00 UTC es aprox 09:00 a 18:00 AR
-    - cron: '*/15 12-21 * * 1-5'
-  workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
+    - cron: '*/15 * * * *'   # cada 15 minutos
+  workflow_dispatch:          # también permite correrlo manualmente
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
-      - name: Instalar dependencias
-        run: |
-          pip install requests supabase python-dotenv
+      - name: Install dependencies
+        run: pip install requests supabase python-dotenv
 
-      - name: Ejecutar Sincronización
+      - name: Run IOL Sync
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           IOL_USERNAME: ${{ secrets.IOL_USERNAME }}
           IOL_PASSWORD: ${{ secrets.IOL_PASSWORD }}
-        run: python iol_sync.py
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python scraper/iol_sync.py
