@@ -127,7 +127,7 @@ function Dashboard() {
                         <div className="space-y-6">
                             <div className="flex flex-wrap items-center gap-4">
                                 <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10 overflow-x-auto no-scrollbar">
-                                    {['Todos', 'Entre Ríos', 'CABA-Buenos Aires', 'Nacional', 'Internacional'].map((scope) => (
+                                    {['Todos', 'Entre Ríos', 'Buenos Aires', 'Nacional', 'Internacional'].map((scope) => (
                                         <button
                                             key={scope}
                                             onClick={() => setActiveScope(scope)}
@@ -139,7 +139,7 @@ function Dashboard() {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-3 items-center">
-                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología'].map((cat) => (
+                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología', 'Regional'].map((cat) => (
                                     <button
                                         key={cat}
                                         onClick={() => setActiveCategory(cat)}
