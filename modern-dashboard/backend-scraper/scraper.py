@@ -13,40 +13,40 @@ SUPABASE_KEY = os.getenv("VITE_SUPABASE_ANON_KEY")
 RSS_SOURCES = [
     # --- ECONOMÍA ---
     {
-        "name": "Mercados Argentina",
-        "url": "https://news.google.com/rss/search?q=economía+argentina+bonos+acciones+merval+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
+        "name": "Economía Nacional",
+        "url": "https://news.google.com/rss/search?q=(economía+OR+finanzas+OR+merval+OR+bonos)+argentina+when:3d&hl=es-419&gl=AR&ceid=AR:es-419",
         "scope": "Nacional",
         "default_category": "Economía"
     },
     {
-        "name": "Global Markets",
-        "url": "https://news.google.com/rss/search?q=wall+street+fed+inflation+global+markets+when:1d&hl=en-US&gl=US&ceid=US:en",
+        "name": "Economía Internacional",
+        "url": "https://news.google.com/rss/search?q=(global+markets+OR+wall+street+OR+fed+OR+inflation)+when:3d&hl=en-US&gl=US&ceid=US:en",
         "scope": "Internacional",
         "default_category": "Economía"
     },
     # --- TECNOLOGÍA ---
     {
-        "name": "Tech & AI Argentina",
-        "url": "https://news.google.com/rss/search?q=tecnología+IA+startups+argentina+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
+        "name": "Tecnología Nacional",
+        "url": "https://news.google.com/rss/search?q=(tecnología+OR+IA+OR+startups+OR+biotech)+argentina+when:3d&hl=es-419&gl=AR&ceid=AR:es-419",
         "scope": "Nacional",
         "default_category": "Tecnología"
     },
     {
-        "name": "Global Tech & AI",
-        "url": "https://news.google.com/rss/search?q=artificial+intelligence+tech+innovation+when:1d&hl=en-US&gl=US&ceid=US:en",
+        "name": "Tecnología Internacional",
+        "url": "https://news.google.com/rss/search?q=(AI+OR+artificial+intelligence+OR+tech+innovation+OR+chips)+when:3d&hl=en-US&gl=US&ceid=US:en",
         "scope": "Internacional",
         "default_category": "Tecnología"
     },
     # --- LEGAL & COMPLIANCE ---
     {
-        "name": "Legal & Regulación ARG",
-        "url": "https://news.google.com/rss/search?q=CNV+leyes+regulación+finanzas+argentina+when:1d&hl=es-419&gl=AR&ceid=AR:es-419",
+        "name": "Legal & Compliance Nacional",
+        "url": "https://news.google.com/rss/search?q=(CNV+OR+regulación+OR+normativa+OR+legal+OR+compliance)+argentina+when:3d&hl=es-419&gl=AR&ceid=AR:es-419",
         "scope": "Nacional",
         "default_category": "Legal & Compliance"
     },
     {
-        "name": "Global Compliance",
-        "url": "https://news.google.com/rss/search?q=financial+regulation+compliance+SEC+global+when:1d&hl=en-US&gl=US&ceid=US:en",
+        "name": "Legal & Compliance Internacional",
+        "url": "https://news.google.com/rss/search?q=(financial+regulation+OR+compliance+OR+SEC+OR+legal+tech)+when:3d&hl=en-US&gl=US&ceid=US:en",
         "scope": "Internacional",
         "default_category": "Legal & Compliance"
     }
@@ -69,35 +69,39 @@ def fetch_and_insert_news():
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
     
-    total_inserted = 0
     ahora = datetime.now(timezone.utc)
-    hace_24_horas = ahora - timedelta(hours=24)
+    hace_72_horas = ahora - timedelta(hours=72) # Ampliado a 72hs
 
     for source in RSS_SOURCES:
-        print(f"\nScrapeando: {source['name']} ({source['scope']})")
+        print(f"\n--- Scrapeando: {source['name']} ---")
+        inserted_for_this_source = 0
+        
         try:
             response = requests.get(source["url"], headers=headers, timeout=20)
             feed = feedparser.parse(response.content)
             
-            for entry in feed.entries[:10]:
-                # --- FILTRO DE FECHA ESTRICTO ---
+            # Revisamos hasta 30 para intentar completar las 10 deseadas tras los filtros
+            for entry in feed.entries:
+                if inserted_for_this_source >= 10:
+                    break # Ya completamos el cupo de 10 para este tag
+                
+                # --- FILTRO DE FECHA ---
                 pub_date = None
                 if hasattr(entry, 'published_parsed') and entry.published_parsed:
                     pub_date = datetime.fromtimestamp(time.mktime(entry.published_parsed), tz=timezone.utc)
                 
-                if pub_date and pub_date < hace_24_horas:
-                    continue # Saltamos noticias viejas
+                if pub_date and pub_date < hace_72_horas:
+                    continue # Demasiado vieja
 
-                title = entry.title
                 link = entry.link
                 
-                # Evitar duplicados
+                # Evitar duplicados en DB
                 existing = supabase.table('noticias').select('id').eq('url', link).execute()
                 if existing.data:
                     continue
                 
                 new_item = {
-                    "title": title,
+                    "title": entry.title,
                     "category": source["default_category"],
                     "summary": clean_summary(entry.summary if hasattr(entry, 'summary') else ""),
                     "source_name": source["name"],
@@ -108,16 +112,19 @@ def fetch_and_insert_news():
                 
                 try:
                     supabase.table('noticias').insert(new_item).execute()
-                    print(f"OK: {title[:45]}...")
-                    total_inserted += 1
-                    time.sleep(0.5)
+                    print(f"OK ({inserted_for_this_source + 1}/10): {entry.title[:45]}...")
+                    inserted_for_this_source += 1
+                    time.sleep(0.4) # Pausa amigable
                 except Exception as e:
                     print(f"Error insert: {e}")
+                    
+            if inserted_for_this_source < 10:
+                print(f"Aviso: Solo se encontraron {inserted_for_this_source} noticias frescas para {source['name']}")
                     
         except Exception as e:
             print(f"Error en fuente {source['name']}: {e}")
             
-    print(f"\n--- Fin del proceso. Nuevas noticias: {total_inserted} ---")
+    print(f"\n--- Proceso finalizado ---")
 
 if __name__ == "__main__":
     fetch_and_insert_news()
