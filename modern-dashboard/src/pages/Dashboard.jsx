@@ -7,10 +7,11 @@ import { supabase } from '../lib/supabaseClient';
 import Layout from '../components/layout/Layout';
 import NewsCard from '../components/feed/NewsCard';
 import NeumorphicPanel from '../components/ui/NeumorphicPanel';
-import IAChatWidget from '../components/widgets/IAChatWidget';
-import WelcomeHero from '../components/widgets/WelcomeHero';
-import DolarAPIWidget from '../components/widgets/DolarAPIWidget';
-import MarketIndicators from '../components/widgets/MarketIndicators';
+import IAChatWidget from '../components/widgets/IAChatWidget.jsx';
+import WelcomeHero from '../components/widgets/WelcomeHero.jsx';
+import DolarAPIWidget from '../components/widgets/DolarAPIWidget.jsx';
+import MarketIndicators from '../components/widgets/MarketIndicators.jsx';
+import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('news');
@@ -76,7 +77,9 @@ function Dashboard() {
     return (
         <Layout>
             <div className="space-y-12">
-                <WelcomeHero />
+                <ErrorBoundary>
+                    <WelcomeHero />
+                </ErrorBoundary>
 
                 {/* Banner Destacado: Análisis de Coyuntura */}
                 <NeumorphicPanel
@@ -101,10 +104,17 @@ function Dashboard() {
                     </div>
                 </NeumorphicPanel>
 
-                <IAChatWidget />
+                <ErrorBoundary>
+                    <IAChatWidget />
+                </ErrorBoundary>
 
-                <MarketIndicators />
-                <DolarAPIWidget />
+                <ErrorBoundary>
+                    <MarketIndicators />
+                </ErrorBoundary>
+                
+                <ErrorBoundary>
+                    <DolarAPIWidget />
+                </ErrorBoundary>
 
                 {/* Sección de Feed con Filtros Avanzados */}
                 <div className="space-y-8">
