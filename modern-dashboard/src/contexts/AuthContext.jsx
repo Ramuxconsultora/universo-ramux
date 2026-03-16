@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 // Asegúrate de que este archivo '../firebase' exporte la instancia de 'auth' correctamente
-import { auth } from '../firebase.js'; 
+import { auth } from '../firebase.js';
 import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
+import { initializeWallet } from '../lib/walletService';
 
 const AuthContext = createContext({
     user: null,
@@ -28,8 +29,12 @@ export const AuthProvider = ({ children }) => {
         }, 8000);
 
         // Suscripción al estado de autenticación
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+            if (currentUser) {
+                // Initialize wallet on login if it doesn't exist
+                await initializeWallet(currentUser.uid, currentUser.email);
+            }
             setLoading(false);
             clearTimeout(timer);
         });
