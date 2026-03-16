@@ -13,8 +13,8 @@ import WelcomeHero from '../components/widgets/WelcomeHero';
 
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('news');
-    const [activeScope, setActiveScope] = useState('Nacional');
-    const [activeCategory, setActiveCategory] = useState('all');
+    const [activeScope, setActiveScope] = useState('Todos');
+    const [activeCategory, setActiveCategory] = useState('Todas');
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -27,9 +27,9 @@ function Dashboard() {
             try {
                 const { data, error } = await supabase
                     .from('noticias')
-                    .select('*')
+                    .select('title, summary, category, source_name, url, scope, created_at')
                     .order('created_at', { ascending: false })
-                    .limit(40); // Limit results for performance
+                    .limit(60); // Fetches more to allow for filtering
 
                 if (error) {
                     setErrorMsg(error.message);
@@ -57,26 +57,15 @@ function Dashboard() {
         };
     }, []);
 
-    // Memoized category filtering to avoid heavy work on every render
-    const categories = useMemo(() => {
-        const filteredByScope = news.filter(item => item.scope === activeScope);
-        
-        return {
-            economy: filteredByScope.filter(item => item.category === 'Economía' || item.category.includes('Economía')),
-            tech: filteredByScope.filter(item => item.category === 'Tecnología' || item.category.includes('Tecnología') || item.category.includes('IA')),
-            legal: filteredByScope.filter(item => item.category === 'Legal/Laboral' || item.category.includes('Legal') || item.category.includes('Laboral'))
-        };
-    }, [news, activeScope]);
+    // Unified filtering logic
+    const filteredNews = useMemo(() => {
+        return news.filter(item => {
+            const scopeMatch = activeScope === 'Todos' || item.scope === activeScope;
+            const categoryMatch = activeCategory === 'Todas' || item.category === activeCategory;
+            return scopeMatch && categoryMatch;
+        });
+    }, [news, activeScope, activeCategory]);
 
-    if (loading) {
-        return (
-            <Layout>
-                <div className="flex justify-center items-center min-h-[50vh]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500"></div>
-                </div>
-            </Layout>
-        );
-    }
 
     return (
         <Layout>
@@ -119,14 +108,14 @@ function Dashboard() {
                         <div className="flex items-center gap-10">
                             <button
                                 onClick={() => setActiveTab('news')}
-                                className={`text-4xl lg:text-7xl font-black transition-all relative uppercase italic tracking-tighter ${activeTab === 'news' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                className={`text-4xl lg:text-7xl font-black transition-all relative uppercase italic tracking-tighter ${activeTab === 'news' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
                             >
                                 Noticias
                                 {activeTab === 'news' && <div className="absolute -bottom-2 left-0 w-1/2 h-2.5 bg-[#F76B1C] rounded-full shadow-[0_0_20px_#F76B1C]" />}
                             </button>
                             <button
                                 onClick={() => setActiveTab('community')}
-                                className={`text-2xl lg:text-3xl font-black transition-all relative uppercase italic tracking-tighter mt-2 ${activeTab === 'community' ? 'text-white' : 'text-slate-700 hover:text-slate-500'}`}
+                                className={`text-2xl lg:text-3xl font-black transition-all relative uppercase italic tracking-tighter mt-2 ${activeTab === 'community' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
                             >
                                 Comunidad
                             </button>
@@ -137,46 +126,28 @@ function Dashboard() {
                     {activeTab === 'news' && (
                         <div className="space-y-6">
                             <div className="flex flex-wrap items-center gap-4">
-                                <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10">
-                                    <button
-                                        onClick={() => setActiveScope('Nacional')}
-                                        className={`px-8 py-2.5 rounded-[18px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Nacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
-                                    >
-                                        Nacional
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveScope('Internacional')}
-                                        className={`px-8 py-2.5 rounded-[18px] text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeScope === 'Internacional' ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-600 hover:text-white hover:bg-white/5'}`}
-                                    >
-                                        Internacional
-                                    </button>
+                                <div className="flex bg-[#0a0e1a] p-1.5 rounded-[22px] shadow-2xl border border-white/5 ring-1 ring-white/10 overflow-x-auto no-scrollbar">
+                                    {['Todos', 'Entre Ríos', 'CABA-Buenos Aires', 'Nacional', 'Internacional'].map((scope) => (
+                                        <button
+                                            key={scope}
+                                            onClick={() => setActiveScope(scope)}
+                                            className={`px-6 py-2.5 rounded-[18px] text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap ${activeScope === scope ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                                        >
+                                            {scope}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-3 items-center">
-                                <button
-                                    onClick={() => setActiveCategory('all')}
-                                    className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'all' ? 'bg-white text-black border-white' : 'bg-transparent text-slate-500 border-white/10 hover:border-white/20 hover:text-white'}`}
-                                >
-                                    Todas
-                                </button>
-                                <button
-                                    onClick={() => setActiveCategory('economy')}
-                                    className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'economy' ? 'bg-sky-500/20 text-sky-400 border-sky-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-sky-500/20 hover:text-sky-400'}`}
-                                >
-                                    Economy & Finance
-                                </button>
-                                <button
-                                    onClick={() => setActiveCategory('tech')}
-                                    className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'tech' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-orange-500/20 hover:text-orange-400'}`}
-                                >
-                                    Tech & Innovation
-                                </button>
-                                <button
-                                    onClick={() => setActiveCategory('legal')}
-                                    className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === 'legal' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-transparent text-slate-500 border-white/10 hover:border-amber-500/20 hover:text-amber-400'}`}
-                                >
-                                    Legal & Compliance
-                                </button>
+                                {['Todas', 'Asesoría Financiera', 'Legal & Compliance', 'Gestión de RRHH', 'Tecnología'].map((cat) => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setActiveCategory(cat)}
+                                        className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border transition-all ${activeCategory === cat ? 'bg-white text-black border-white' : 'bg-transparent text-slate-400 border-white/10 hover:border-white/20 hover:text-white'}`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     )}
@@ -193,61 +164,36 @@ function Dashboard() {
 
                             {news.length === 0 && !loading ? (
                                 <NeumorphicPanel className="p-20 text-center bg-[#1c2230]/50">
-                                    <p className="text-slate-500 font-black text-xs uppercase tracking-[0.5em] italic">Sin datos disponibles en este momento</p>
+                                    <p className="text-slate-300 font-black text-xs uppercase tracking-[0.5em] italic">Sin datos disponibles en este momento</p>
                                 </NeumorphicPanel>
                             ) : (
-                                <div className="space-y-16">
-                                    {(activeCategory === 'all' || activeCategory === 'economy') && categories.economy.length > 0 && (
-                                        <div className="space-y-6">
-                                            <div className="flex items-center gap-4 mb-2">
-                                                <div className="h-[1px] flex-grow bg-white/5" />
-                                                <div className="flex items-center gap-3 px-6 py-2 bg-sky-500/10 rounded-full border border-sky-500/20">
-                                                    <Activity className="text-sky-400" size={16} />
-                                                    <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Economy & Finance</h2>
+                                <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity duration-300 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                                    {loading ? (
+                                        // Skeleton Loading State
+                                        Array.from({ length: 4 }).map((_, i) => (
+                                            <div key={i} className="bg-[#1c2230] rounded-[32px] p-4 h-[220px] animate-pulse flex flex-col gap-4 border border-white/5">
+                                                <div className="flex justify-between">
+                                                    <div className="w-10 h-10 bg-white/5 rounded-xl" />
+                                                    <div className="w-20 h-4 bg-white/5 rounded-full" />
                                                 </div>
-                                                <div className="h-[1px] flex-grow bg-white/5" />
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {categories.economy.map((item) => (
-                                                    <NewsCard key={item.id} item={item} />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {(activeCategory === 'all' || activeCategory === 'tech') && categories.tech.length > 0 && (
-                                        <div className="space-y-6">
-                                            <div className="flex items-center gap-4 mb-2">
-                                                <div className="h-[1px] flex-grow bg-white/5" />
-                                                <div className="flex items-center gap-3 px-6 py-2 bg-orange-500/10 rounded-full border border-orange-500/20">
-                                                    <Cpu className="text-orange-400" size={16} />
-                                                    <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Tech & Innovation</h2>
+                                                <div className="space-y-2">
+                                                    <div className="w-24 h-3 bg-white/5 rounded-full" />
+                                                    <div className="w-full h-4 bg-white/10 rounded-full" />
+                                                    <div className="w-3/4 h-4 bg-white/10 rounded-full" />
                                                 </div>
-                                                <div className="h-[1px] flex-grow bg-white/5" />
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {categories.tech.map((item) => (
-                                                    <NewsCard key={item.id} item={item} />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {(activeCategory === 'all' || activeCategory === 'legal') && categories.legal.length > 0 && (
-                                        <div className="space-y-6">
-                                            <div className="flex items-center gap-4 mb-2">
-                                                <div className="h-[1px] flex-grow bg-white/5" />
-                                                <div className="flex items-center gap-3 px-6 py-2 bg-amber-500/10 rounded-full border border-amber-500/20">
-                                                    <Scale className="text-amber-400" size={16} />
-                                                    <h2 className="text-[10px] font-black tracking-[0.3em] text-white uppercase italic">Legal & Compliance</h2>
+                                                <div className="mt-auto pt-4 border-t border-white/5 flex justify-between">
+                                                    <div className="w-12 h-3 bg-white/5 rounded-full" />
+                                                    <div className="w-16 h-3 bg-white/5 rounded-full" />
                                                 </div>
-                                                <div className="h-[1px] flex-grow bg-white/5" />
                                             </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {categories.legal.map((item) => (
-                                                    <NewsCard key={item.id} item={item} />
-                                                ))}
-                                            </div>
+                                        ))
+                                    ) : filteredNews.length > 0 ? (
+                                        filteredNews.map((item) => (
+                                            <NewsCard key={item.id} item={item} />
+                                        ))
+                                    ) : (
+                                        <div className="col-span-full py-20 text-center">
+                                            <p className="text-slate-300 font-black text-xs uppercase tracking-[0.5em] italic">No hay noticias que coincidan con estos filtros</p>
                                         </div>
                                     )}
                                 </div>
