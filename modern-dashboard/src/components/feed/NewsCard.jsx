@@ -1,75 +1,52 @@
 import React from 'react';
-import { ExternalLink, Clock, Tag, Globe, MapPin, Building2, Briefcase, Scale, Users, Cpu } from 'lucide-react';
+import { ExternalLink, Clock, Tag, Globe, MapPin, Building2, Briefcase } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
 
 const NewsCard = React.memo(({ item }) => {
-    // 1. Detección de color ampliada y blindada para los nuevos tags de Ramux
+    // 1. Detección de color ampliada para tus servicios y regiones
     const getRadianceColor = (category, scope) => {
         const cat = category?.toLowerCase() || '';
         const scp = scope?.toLowerCase() || '';
 
-        // Prioridad 1: Regiones específicas de la consultora
-        if (scp.includes('entre ríos')) return 'emerald'; // Verde institucional para Entre Ríos
-        if (scp.includes('buenos aires') || scp.includes('caba')) return 'blue';
+        // Prioridad por Región
+        if (scp.includes('entre ríos')) return 'emerald'; // Verde para Entre Ríos
+        if (scp.includes('buenos aires')) return 'blue';
 
-        // Prioridad 2: Servicios de la consultora (Tags)
-        if (cat.includes('finan') || cat.includes('asesoría') || cat.includes('econo')) return 'blue';
-        if (cat.includes('tech') || cat.includes('tecno') || cat.includes('ia')) return 'purple';
-        if (cat.includes('legal') || cat.includes('compliance') || cat.includes('regulación')) return 'amber';
-        if (cat.includes('rrhh') || cat.includes('gestión') || cat.includes('laboral')) return 'emerald';
-        if (cat.includes('region')) return 'emerald';
+        // Prioridad por Servicio
+        if (cat.includes('finan') || cat.includes('mercado') || cat.includes('econo')) return 'blue';
+        if (cat.includes('tech') || cat.includes('innovación')) return 'purple';
+        if (cat.includes('legal')) return 'amber';
+        if (cat.includes('recursos') || cat.includes('rrhh')) return 'emerald';
 
         return 'blue';
     };
 
     const radiance = getRadianceColor(item.category, item.scope);
 
-    // 2. Limpieza robusta de HTML y entidades para Google News
     const cleanSummary = (text) => {
         if (!text) return 'Sin resumen disponible.';
         let cleaned = text.replace(/<[^>]*>?/gm, '');
-        cleaned = cleaned.replace(/&nbsp;/g, ' ')
-                         .replace(/&quot;/g, '"')
-                         .replace(/&#39;/g, "'")
-                         .replace(/&amp;/g, '&')
-                         .replace(/&lt;/g, '<')
-                         .replace(/&gt;/g, '>');
+        cleaned = cleaned.replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
         return cleaned.trim();
     };
 
     let timeAgo = '';
     try {
-        // Aseguramos que la fecha sea válida antes de formatear
-        const date = item.created_at ? new Date(item.created_at) : new Date();
-        timeAgo = formatDistanceToNow(date, { addSuffix: true, locale: es });
+        timeAgo = formatDistanceToNow(new Date(item.created_at || new Date()), { addSuffix: true, locale: es });
     } catch (e) {
         timeAgo = 'recientemente';
     }
 
-    // 3. Iconos dinámicos específicos para la especialidad de Ramux
-    const getScopeIcon = (scope, category) => {
+    // 2. Iconos dinámicos basados en el Scope de Ramux
+    const getScopeIcon = (scope) => {
         const scp = scope?.toLowerCase() || '';
-        const cat = category?.toLowerCase() || '';
-
-        // Si es internacional, siempre el globo
-        if (scp.includes('internacional')) return Globe;
-        
-        // Iconos por servicio si no es geográfico estricto
-        if (cat.includes('legal')) return Scale;
-        if (cat.includes('rrhh')) return Users;
-        if (cat.includes('tech')) return Cpu;
-
-        // Iconos por alcance geográfico nacional/provincial
-        if (scp.includes('entre ríos')) return Building2; 
-        if (scp.includes('buenos aires')) return MapPin;
         if (scp.includes('nacional')) return Briefcase;
-        
+        if (scp.includes('internacional')) return Globe;
         return Tag;
     };
-    
-    const ScopeIcon = getScopeIcon(item.scope, item.category);
+    const ScopeIcon = getScopeIcon(item.scope);
 
     return (
         <a
@@ -100,7 +77,7 @@ const NewsCard = React.memo(({ item }) => {
                         {item.source_name && (
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20">
                                 <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest">
-                                    {item.source_name.split(' ')[0]}
+                                    {item.source_name.split(' ')[0]} {/* Simplifica el nombre de la fuente */}
                                 </span>
                             </div>
                         )}
@@ -119,7 +96,7 @@ const NewsCard = React.memo(({ item }) => {
                         </span>
                     </div>
 
-                    {/* Título - Itálico y Heavy */}
+                    {/* Título - Itálico y Heavy como el resto de la plataforma */}
                     <h3 className="text-sm md:text-base font-black text-white mb-3 group-hover:text-[#F76B1C] transition-colors leading-tight tracking-tighter italic uppercase">
                         {item.title}
                     </h3>
