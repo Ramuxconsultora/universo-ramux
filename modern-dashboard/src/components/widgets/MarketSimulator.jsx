@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// CORRECCIÓN: La ruta relativa para llegar a 'ui' desde 'widgets'
-import NeumorphicPanel from '../ui/NeumorphicPanel.jsx'; 
+import NeumorphicPanel from '../ui/NeumorphicPanel.jsx';
 import { Activity, TrendingUp, BarChart2, TrendingDown, Minus, Wallet } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 
@@ -43,7 +42,7 @@ const MarketSimulator = () => {
         let assetsValue = 0;
         Object.entries(portfolio.assets).forEach(([symbol, amount]) => {
             const quote = quotes.find(q => q.symbol === symbol);
-            if (quote) assetsValue += (quote.price || 0) * amount;
+            if (quote) assetsValue += quote.price * amount;
         });
         return portfolio.cash + assetsValue;
     };
@@ -136,3 +135,4 @@ const MarketSimulator = () => {
 };
 
 export default MarketSimulator;
+
