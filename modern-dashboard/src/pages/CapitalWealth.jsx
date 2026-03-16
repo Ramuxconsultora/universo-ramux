@@ -11,11 +11,10 @@ import {
     Activity, 
     FileText, 
     BookOpen, 
-    ArrowLeft, 
-    Home, 
     ArrowRight,
     Search
 } from 'lucide-react';
+import MarketSimulator from '../components/widgets/MarketSimulator';
 
 const ToolWidget = (props) => {
     const { icon: Icon, title, subtitle, colorClass = "text-[#F76B1C]" } = props;
@@ -77,6 +76,7 @@ const CapitalWealth = () => {
         <Layout>
             <div className="max-w-[1400px] mx-auto space-y-8 animate-fade-in py-6 px-4 pb-20">
                 
+
                 {/* Hero Header */}
                 <NeumorphicPanel 
                     radiance="ramux"
@@ -113,27 +113,31 @@ const CapitalWealth = () => {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl -mr-16 -mt-16" />
                 </NeumorphicPanel>
 
-                {/* Grid de Herramientas */}
+                {/* Featured Tool: Market Simulator */}
+                <div className="space-y-6">
+                    <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
+                        <div className="p-2 bg-[#F76B1C]/10 rounded-lg border border-[#F76B1C]/20 shadow-inner">
+                            <Activity className="text-[#F76B1C]" size={20} />
+                        </div>
+                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Centro de Estrategia Live</h2>
+                    </div>
+                    <MarketSimulator />
+                </div>
+
+                {/* Grid de Herramientas Secundarias */}
                 <div className="space-y-6">
                     <div className="flex items-center gap-4 bg-[#12161f]/80 p-4 rounded-xl border border-white/5 w-fit">
                         <div className="p-2 bg-sky-500/10 rounded-lg border border-sky-500/20 shadow-inner">
-                            <Activity className="text-sky-400" size={20} />
+                            <Search className="text-sky-400" size={20} />
                         </div>
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Módulos de Herramientas</h2>
+                        <h2 className="text-xl font-black text-white uppercase tracking-tight">Módulos de Análisis</h2>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <ToolWidget 
                             icon={Search} 
                             title="Market Scanner AI" 
                             subtitle="Análisis en Tiempo Real"
                             colorClass="text-sky-400"
-                        />
-                        <ToolWidget 
-                            icon={BarChart2} 
-                            title="Simulador de Portafolio" 
-                            subtitle="Proyección de Rendimientos"
-                            colorClass="text-[#F76B1C]"
                         />
                         <ToolWidget 
                             icon={Calendar} 
@@ -146,6 +150,12 @@ const CapitalWealth = () => {
                             title="Wealth Analytics" 
                             subtitle="Salud y Diversificación"
                             colorClass="text-violet-400"
+                        />
+                        <ToolWidget 
+                            icon={ShieldCheck} 
+                            title="Risk Evaluator" 
+                            subtitle="Perfil de Riesgo"
+                            colorClass="text-amber-400"
                         />
                     </div>
                 </div>
