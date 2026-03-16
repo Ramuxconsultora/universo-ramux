@@ -1,18 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import NeumorphicPanel from '../ui/NeumorphicPanel.jsx';
-import { Activity, TrendingUp, BarChart2, TrendingDown, Minus, Wallet } from 'lucide-react';
+import { Activity, TrendingUp, BarChart2, TrendingDown, Minus, Wallet, ShoppingCart, Tag } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../contexts/AuthContext';
+import { getUserFinancialData, executeTrade } from '../../lib/walletService';
 
 const MarketSimulator = () => {
+    const { user } = useAuth();
     const [quotes, setQuotes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [portfolio, setPortfolio] = useState({
-        cash: 1000000,
-        assets: {
-            'GGAL': 100,
-            'AL30': 500
-        }
+    const [financialData, setFinancialData] = useState({
+        wallet: { ars_balance: 0, usd_balance: 0 },
+        assets: [],
+        history: []
     });
+    const [tradeQty, setTradeQty] = useState(1);
+    const [processing, setProcessing] = useState(false);
+
+    const refreshData = useCallback(async () => {
+        if (!user) return;
+        const data = await getUserFinancialData(user.uid, user.email);
+        if (data) setFinancialData(data);
+    }, [user]);
 
     useEffect(() => {
         const fetchQuotes = async () => {
@@ -30,28 +39,57 @@ const MarketSimulator = () => {
         };
 
         fetchQuotes();
+        refreshData();
+
         const channel = supabase
             .channel('simulator_updates')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'market_quotes' }, fetchQuotes)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_wallets', filter: `id=eq.${user?.uid}` }, refreshData)
             .subscribe();
 
         return () => { supabase.removeChannel(channel); };
-    }, []);
+    }, [user, refreshData]);
+
+    const handleTrade = async (ticker, type) => {
+        if (!user || processing) return;
+        
+        setProcessing(true);
+        const quote = quotes.find(q => q.symbol === ticker);
+        if (!quote) {
+            alert("Cotización no encontrada");
+            setProcessing(false);
+            return;
+        }
+
+        const result = await executeTrade(user.uid, {
+            ticker,
+            type,
+            quantity: tradeQty,
+            price: quote.price,
+            currency: 'ARS' // Por defecto ARS para este simulador
+        });
+
+        if (result.success) {
+            await refreshData();
+        } else {
+            alert(`Error: ${result.error}`);
+        }
+        setProcessing(false);
+    };
 
     const calculatePortfolioValue = () => {
         let assetsValue = 0;
-        Object.entries(portfolio.assets).forEach(([symbol, amount]) => {
-            const quote = quotes.find(q => q.symbol === symbol);
-            if (quote) assetsValue += quote.price * amount;
+        financialData.assets.forEach(asset => {
+            const quote = quotes.find(q => q.symbol === asset.ticker);
+            if (quote) assetsValue += quote.price * asset.quantity;
         });
-        return portfolio.cash + assetsValue;
+        return (financialData.wallet?.ars_balance || 0) + assetsValue;
     };
 
-    const ggalQuote = quotes.find(q => q.symbol === 'GGAL');
-    const al30Quote = quotes.find(q => q.symbol === 'AL30');
+    const mainAssets = ['GGAL', 'YPFD', 'PAMP', 'AL30'];
 
     return (
-        <NeumorphicPanel radiance="blue" className="h-full min-h-[400px] flex flex-col p-6">
+        <NeumorphicPanel radiance="blue" className="h-full min-h-[500px] flex flex-col p-6">
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center gap-4">
@@ -62,69 +100,93 @@ const MarketSimulator = () => {
                         <h3 className="font-extrabold text-white text-xl tracking-tight">Estrategia & Simulación</h3>
                         <div className="flex items-center gap-2 text-[10px] font-bold text-[#F76B1C] uppercase tracking-widest">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#F76B1C] animate-pulse"></span>
-                            Live_Market_Data: Active
+                            Virtual_Wallet: Active
                         </div>
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Portfolio_Value</p>
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Portfolio_Equity (ARS)</p>
                     <p className="text-xl font-black text-white italic">
                         ${calculatePortfolioValue().toLocaleString('es-AR')}
                     </p>
                 </div>
             </div>
 
-            {/* Metrics Inset */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
-                {ggalQuote ? (
-                    <div className="bg-[#12161f] p-5 rounded-[24px] shadow-inner border border-black/10">
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{ggalQuote.symbol}_Live</p>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-white">${ggalQuote.price?.toLocaleString('es-AR')}</span>
-                            {ggalQuote.variation > 0 ? <TrendingUp size={16} className="text-emerald-500" /> : <TrendingDown size={16} className="text-red-500" />}
+            {/* Trading Controls & Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {mainAssets.map(symbol => {
+                    const quote = quotes.find(q => q.symbol === symbol);
+                    if (!quote) return null;
+                    return (
+                        <div key={symbol} className="bg-[#12161f] p-4 rounded-3xl border border-white/5 space-y-3 group hover:border-[#F76B1C]/30 transition-all">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{symbol}</p>
+                                    <p className="text-lg font-black text-white">${quote.price?.toLocaleString('es-AR')}</p>
+                                </div>
+                                <div className={`px-2 py-0.5 rounded-full text-[9px] font-black ${quote.variation > 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
+                                    {quote.variation > 0 ? '+' : ''}{quote.variation}%
+                                </div>
+                            </div>
+                            
+                            <div className="flex gap-2">
+                                <button 
+                                    onClick={() => handleTrade(symbol, 'BUY')}
+                                    disabled={processing}
+                                    className="flex-grow flex items-center justify-center gap-2 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all border border-emerald-500/20"
+                                >
+                                    <ShoppingCart size={12} /> Compra
+                                </button>
+                                <button 
+                                    onClick={() => handleTrade(symbol, 'SELL')}
+                                    disabled={processing}
+                                    className="flex-grow flex items-center justify-center gap-2 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all border border-rose-500/20"
+                                >
+                                    <Tag size={12} /> Venta
+                                </button>
+                            </div>
                         </div>
-                        <p className={`text-[10px] mt-1 font-bold ${ggalQuote.variation > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
-                            {ggalQuote.variation > 0 ? '+' : ''}{ggalQuote.variation}% (IOL)
-                        </p>
-                    </div>
-                ) : <div className="h-24 bg-white/5 rounded-[24px] animate-pulse" />}
-
-                {al30Quote ? (
-                    <div className="bg-[#12161f] p-5 rounded-[24px] shadow-inner border border-black/10">
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">{al30Quote.symbol}_Core</p>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-black text-white">${al30Quote.price?.toLocaleString('es-AR')}</span>
-                            {al30Quote.variation > 0 ? <TrendingUp size={16} className="text-[#F76B1C]" /> : <TrendingDown size={16} className="text-red-500" />}
-                        </div>
-                        <p className={`text-[10px] mt-1 font-bold ${al30Quote.variation > 0 ? 'text-[#F76B1C]' : 'text-red-500'}`}>
-                            {al30Quote.variation > 0 ? '+' : ''}{al30Quote.variation}% (IOL)
-                        </p>
-                    </div>
-                ) : <div className="h-24 bg-white/5 rounded-[24px] animate-pulse" />}
+                    );
+                })}
             </div>
 
-            {/* Visualizer Area (Deep Inset) */}
+            {/* Order Configuration Inset */}
+            <div className="bg-black/40 rounded-3xl p-4 mb-6 border border-white/5 flex items-center justify-between">
+                <div>
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Cantidad de Orden</p>
+                    <div className="flex items-center gap-4">
+                        <button onClick={() => setTradeQty(q => Math.max(1, q - 1))} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10">-</button>
+                        <span className="text-xl font-black text-white">{tradeQty}</span>
+                        <button onClick={() => setTradeQty(q => q + 1)} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10">+</button>
+                    </div>
+                </div>
+                <div className="text-right">
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Efectivo Disponible</p>
+                    <p className="text-sm font-black text-emerald-400">${(financialData.wallet?.ars_balance || 0).toLocaleString('es-AR')}</p>
+                </div>
+            </div>
+
+            {/* Inset for Active Positions */}
             <div className="flex-grow bg-[#0d1017] rounded-[24px] shadow-inner border border-black/20 p-6 flex flex-col relative overflow-hidden">
                 <div className="flex items-center gap-2 mb-4 border-b border-white/5 pb-2">
                     <Wallet size={14} className="text-slate-500" />
-                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Posiciones_Activas</span>
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Posiciones_en_Cartera</span>
                 </div>
                 
-                <div className="space-y-3">
-                    {Object.entries(portfolio.assets).map(([symbol, count]) => (
-                        <div key={symbol} className="flex justify-between items-center text-[11px] font-bold">
-                            <span className="text-white uppercase tracking-widest">{symbol}</span>
-                            <span className="text-slate-500">{count} unidades</span>
-                            <span className="text-[#F76B1C]">
-                                ${((quotes.find(q => q.symbol === symbol)?.price || 0) * count).toLocaleString('es-AR')}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="mt-auto pt-4 flex justify-between items-center border-t border-white/5">
-                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Cash_Liquidity</span>
-                    <span className="text-xs font-black text-emerald-500">${portfolio.cash.toLocaleString('es-AR')}</span>
+                <div className="space-y-3 overflow-y-auto max-h-[150px] no-scrollbar">
+                    {financialData.assets.length === 0 ? (
+                        <p className="text-[10px] text-slate-600 font-bold uppercase text-center py-4">Sin activos operativos</p>
+                    ) : (
+                        financialData.assets.map((asset) => (
+                            <div key={asset.ticker} className="flex justify-between items-center text-[10px] font-bold">
+                                <span className="text-white uppercase tracking-widest">{asset.ticker}</span>
+                                <span className="text-slate-500">{asset.quantity} units (@ ${asset.average_price?.toLocaleString('es-AR')})</span>
+                                <span className="text-[#F76B1C]">
+                                    ${((quotes.find(q => q.symbol === asset.ticker)?.price || 0) * asset.quantity).toLocaleString('es-AR')}
+                                </span>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Decorative background grid */}
