@@ -35,7 +35,7 @@ const Layout = ({ children, showNav = true, showSidebar = true, navProps = {}, s
 
                 <div className="flex-grow pt-28 pb-12 px-4 max-w-[1600px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-12">
                     {/* Main Content Area */}
-                    <main className={`flex-grow w-full space-y-8 ${shouldCenter ? 'lg:max-w-4xl mx-auto' : ''}`}>
+                    <main className={`flex-1 min-w-0 space-y-8 ${shouldCenter ? 'lg:max-w-4xl mx-auto' : ''}`}>
                         {showNav && <NavigationBar {...navProps} />}
                         {children}
                     </main>
