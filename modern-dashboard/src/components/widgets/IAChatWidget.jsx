@@ -1,87 +1,71 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
-import ChatMessage from './ChatMessage';
-import { Zap, Send, Maximize2 } from 'lucide-react';
+import { Zap, Mail, ShieldCheck, Sparkles, Binary, Cpu } from 'lucide-react';
 
 const IAChatWidget = () => {
-    const [input, setInput] = useState('');
-    const [messages, setMessages] = useState([
-        { id: 1, text: "Hola, soy Ramux IA. ¿En qué te puedo ayudar hoy con normativa financiera o análisis de mercado?", isUser: false }
-    ]);
-
-    const handleSend = (e) => {
-        e.preventDefault();
-        if (!input.trim()) return;
-
-        const newUserMsg = { id: Date.now(), text: input, isUser: true };
-        setMessages(prev => [...prev, newUserMsg]);
-        setInput('');
-
-        setTimeout(() => {
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                text: "Estoy procesando tu solicitud sobre el marco normativo y los últimos reportes del mercado. Este es un entorno de prueba.",
-                isUser: false
-            }]);
-        }, 1000);
-    };
-
     return (
-        <NeumorphicPanel radiance="purple" className="flex flex-col h-[440px] group">
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b border-black/10 bg-[#1a1f2b] relative">
+        <NeumorphicPanel radiance="purple" className="flex flex-col h-[400px] group relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-15 transition-all duration-700 pointer-events-none">
+                <Binary size={160} strokeWidth={0.5} className="text-purple-400 rotate-12" />
+            </div>
+            
+            {/* Premium Header Tag */}
+            <div className="flex justify-between items-center p-6 pb-2 relative z-10">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-orange-500/10 rounded-lg">
-                        <Zap className="text-orange-500" size={18} />
+                    <div className="p-2 bg-[#F76B1C]/10 rounded-xl border border-[#F76B1C]/20 shadow-lg shadow-[#F76B1C]/5">
+                        <Zap className="text-[#F76B1C]" size={18} fill="#F76B1C" />
                     </div>
                     <div>
-                        <h3 className="font-extrabold text-white text-sm tracking-tight uppercase">Ramux Financial & Legal IA</h3>
-                        <p className="text-[10px] text-slate-500 font-medium lowercase">v3.0_premium</p>
+                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-0.5 block">Strategic Intelligence</span>
+                        <h3 className="font-black text-white text-base tracking-tighter uppercase italic leading-none">Ramux IA Financial & Legal</h3>
                     </div>
                 </div>
-                
-                {/* Premium Access Label (Shown on Hover) */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-                    <span className="px-3 py-1 bg-[#F76B1C] text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg shadow-[#F76B1C]/20 ring-1 ring-white/20">
-                        PREMIUM_ACCESS_GRANTED
-                    </span>
+                <div className="flex items-center gap-2 px-3 py-1 bg-purple-500/10 rounded-full border border-purple-500/20 shadow-inner">
+                    <Sparkles size={10} className="text-purple-400" />
+                    <span className="text-[8px] font-black text-purple-400 uppercase tracking-widest">Premium</span>
                 </div>
-
-                <button className="text-slate-500 hover:text-white transition-all z-10">
-                    <Maximize2 size={16} />
-                </button>
             </div>
 
-            {/* Chat Area */}
-            <div className="flex-grow p-4 overflow-y-auto space-y-4 bg-black/5">
-                {messages.map((msg) => (
-                    <ChatMessage key={msg.id} message={msg.text} isUser={msg.isUser} />
-                ))}
-            </div>
-
-            {/* Input Area (Inset effect) */}
-            <div className="p-5 border-t border-white/5 bg-[#141821] relative">
-                <div className="absolute inset-0 z-10 bg-black/40 flex items-center justify-center cursor-not-allowed">
-                    <span className="text-[10px] font-bold text-slate-400 bg-[#1a1f2b] px-4 py-1.5 rounded-full border border-white/5 shadow-md uppercase tracking-widest">IA_OFFLINE</span>
+            {/* Main Hero Content */}
+            <div className="flex-grow flex flex-col items-center justify-center px-8 text-center relative z-10 -mt-2">
+                <div className="mb-6 relative">
+                    <div className="absolute inset-0 bg-purple-500/20 blur-[30px] rounded-full scale-150 animate-pulse pointer-events-none" />
+                    <Cpu size={56} strokeWidth={1} className="text-white relative z-10 opacity-90 group-hover:scale-110 transition-transform duration-700 group-hover:text-[#F76B1C]" />
                 </div>
-                <form onSubmit={handleSend} className="relative opacity-30 pointer-events-none">
-                    <div className="flex bg-[#12161f] rounded-2xl shadow-inner border border-black/20 overflow-hidden">
-                        <input
-                            type="text"
-                            value={input}
-                            disabled
-                            placeholder="Pregunta a la IA..."
-                            className="w-full bg-transparent py-3 pl-4 pr-12 text-sm text-white focus:outline-none"
-                        />
-                        <button
-                            type="submit"
-                            disabled
-                            className="p-2 bg-sky-600 text-white rounded-xl m-1 opacity-50"
-                        >
-                            <Send size={16} />
-                        </button>
+
+                <div className="space-y-3 max-w-sm">
+                    <h2 className="text-xl md:text-2xl font-black text-white italic leading-tight tracking-tighter uppercase">
+                        Potencia tus <span className="text-purple-400">decisiones</span> con IA
+                    </h2>
+                    <p className="text-[12px] text-slate-400 font-medium leading-relaxed line-clamp-2">
+                        Análisis predictivos y procesamiento de normativas BCRA en tiempo real para el éxito empresarial.
+                    </p>
+                </div>
+
+                {/* Micro Benefits Grid - Compact */}
+                <div className="flex gap-2 mt-6 w-full max-w-xs">
+                    <div className="flex-1 flex items-center justify-center gap-2 p-2 bg-white/5 rounded-xl border border-white/5 group-hover:border-purple-500/20 transition-all backdrop-blur-sm">
+                        <ShieldCheck size={12} className="text-purple-400 shrink-0" />
+                        <span className="text-[8px] font-black text-slate-300 uppercase tracking-wider">Seguridad</span>
                     </div>
-                </form>
+                    <div className="flex-1 flex items-center justify-center gap-2 p-2 bg-white/5 rounded-xl border border-white/5 group-hover:border-[#F76B1C]/20 transition-all backdrop-blur-sm">
+                        <Binary size={12} className="text-[#F76B1C] shrink-0" />
+                        <span className="text-[8px] font-black text-slate-300 uppercase tracking-wider">Predictivo</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Inset Footer with CTA */}
+            <div className="p-5 mt-auto bg-black/20 border-t border-white/5 relative z-10">
+                <a
+                    href="mailto:holaramux@gmail.com?subject=Consulta%20Servicio%20IA%20Premium%20-%20Ramux"
+                    className="flex items-center justify-center gap-3 w-full py-3.5 bg-white text-black hover:bg-[#F76B1C] hover:text-white transition-all duration-300 rounded-[20px] font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_15px_30px_rgba(0,0,0,0.3)] group/btn active:scale-95"
+                >
+                    <Mail size={16} />
+                    Consultar servicio
+                    <span className="opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all">→</span>
+                </a>
             </div>
         </NeumorphicPanel>
     );
