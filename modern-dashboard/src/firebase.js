@@ -11,23 +11,26 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Validación simple para depuración
-if (!firebaseConfig.apiKey) {
-  console.error("⚠️ Error: VITE_FIREBASE_API_KEY no está definida en el entorno.");
+// Validación de variables de entorno de Firebase
+const requiredFirebaseVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID'
+];
+
+const missingFirebaseVars = requiredFirebaseVars.filter(key => !import.meta.env[key]);
+
+if (missingFirebaseVars.length > 0) {
+  console.error(`❌ Error: Faltan las siguientes variables de entorno de Firebase: ${missingFirebaseVars.join(', ')}`);
 }
 
-// Initialize Firebase envuelto en un try/catch para no romper el renderizado
-let app;
-let auth;
-let googleProvider;
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-try {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  googleProvider = new GoogleAuthProvider();
-} catch (error) {
-  console.error("🔥 Error al inicializar Firebase:", error);
-}
-
-export { auth, googleProvider };
+// Initialize and export Auth and Google Provider
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
 export default app;
