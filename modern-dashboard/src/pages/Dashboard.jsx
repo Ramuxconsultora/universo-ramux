@@ -89,12 +89,6 @@ function Dashboard() {
                     </ErrorBoundary>
                 </div>
 
-                {/* 1. Ticker de Mercado (Static Grid) */}
-                <div className="-mx-4 md:-mx-8 pt-4">
-                    <ErrorBoundary>
-                        <MarketIndicators />
-                    </ErrorBoundary>
-                </div>
 
                 {/* 2. Hero Section */}
                 <ErrorBoundary>
@@ -106,6 +100,13 @@ function Dashboard() {
                     <ErrorBoundary>
                         <DolarAPIWidget />
                     </ErrorBoundary>
+
+                    {/* 1. Ticker de Mercado (Relocated below Mercado de Cambios) */}
+                    <div className="pt-2">
+                        <ErrorBoundary>
+                            <MarketIndicators />
+                        </ErrorBoundary>
+                    </div>
                     
                     {/* Interactive Technical Chart */}
                     <div className="space-y-4">
