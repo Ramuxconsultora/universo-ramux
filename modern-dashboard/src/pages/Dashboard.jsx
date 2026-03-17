@@ -4,6 +4,8 @@ import { ArrowRight, Users, Clock, Filter, Globe, MapPin } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 
 // Components
+import { useAuth } from '../contexts/AuthContext.jsx';
+import { getUserFinancialData, getUserProgress } from '../lib/walletService';
 import Layout from '../components/layout/Layout.jsx';
 import NewsCard from '../components/feed/NewsCard.jsx';
 import NeumorphicPanel from '../components/ui/NeumorphicPanel.jsx';
@@ -19,6 +21,7 @@ import TradingViewChart from '../components/widgets/TradingViewChart.jsx';
 import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 function Dashboard() {
+    const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('news');
     const [activeScope, setActiveScope] = useState('Todos');
     const [activeCategory, setActiveCategory] = useState('Todas');
@@ -26,6 +29,9 @@ function Dashboard() {
 
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [financialData, setFinancialData] = useState(null);
+    const [academicProgress, setAcademicProgress] = useState([]);
+    const [quotes, setQuotes] = useState([]);
     const [errorMsg, setErrorMsg] = useState(null);
 
     // Definición de categorías según el Scraper
@@ -39,17 +45,23 @@ function Dashboard() {
     ];
 
     useEffect(() => {
-        const fetchNews = async () => {
+        const fetchAllData = async () => {
+            if (!user) return;
             try {
                 setLoading(true);
-                const { data, error } = await supabase
-                    .from('noticias')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(300); // Aumentamos para cubrir las 20 noticias x 10 categorías
+                const [newsRes, finRes, progRes, quotesRes] = await Promise.all([
+                    supabase.from('noticias').select('*').order('created_at', { ascending: false }).limit(300),
+                    getUserFinancialData(user.uid, user.email),
+                    getUserProgress(user.uid),
+                    supabase.from('market_quotes').select('*')
+                ]);
 
-                if (error) throw error;
-                setNews(data || []);
+                if (newsRes.error) throw newsRes.error;
+                
+                setNews(newsRes.data || []);
+                setFinancialData(finRes);
+                setAcademicProgress(progRes);
+                setQuotes(quotesRes.data || []);
             } catch (err) {
                 setErrorMsg(err.message);
             } finally {
@@ -57,18 +69,36 @@ function Dashboard() {
             }
         };
 
-        fetchNews();
+        fetchAllData();
 
         // Suscripción en tiempo real
-        const channel = supabase
+        const newsChannel = supabase
             .channel('news_changes')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'noticias' }, (payload) => {
                 setNews((prev) => [payload.new, ...prev]);
             })
             .subscribe();
 
-        return () => { supabase.removeChannel(channel); };
-    }, []);
+        const walletChannel = supabase
+            .channel('wallet_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_wallets', filter: `id=eq.${user?.uid}` }, () => {
+                getUserFinancialData(user.uid, user.email).then(setFinancialData);
+            })
+            .subscribe();
+
+        const assetsChannel = supabase
+            .channel('assets_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_assets', filter: `user_id=eq.${user?.uid}` }, () => {
+                getUserFinancialData(user.uid, user.email).then(setFinancialData);
+            })
+            .subscribe();
+
+        return () => { 
+            supabase.removeChannel(newsChannel); 
+            supabase.removeChannel(walletChannel);
+            supabase.removeChannel(assetsChannel);
+        };
+    }, [user]);
 
     // Lógica de Filtrado Unificada
     const filteredNews = useMemo(() => {
@@ -115,7 +145,7 @@ function Dashboard() {
                             <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Live Technical Analysis</span>
                         </div>
                         <ErrorBoundary>
-                            <TradingViewChart symbol="GGAL" />
+                            <TradingViewChart symbol="BCBA:GGAL" />
                         </ErrorBoundary>
                     </div>
 
@@ -125,10 +155,16 @@ function Dashboard() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <ErrorBoundary>
-                            <PortfolioPieChart />
+                            <PortfolioPieChart 
+                                wallet={financialData?.wallet} 
+                                assets={financialData?.assets} 
+                                quotes={quotes}
+                            />
                         </ErrorBoundary>
                         <ErrorBoundary>
-                            <EducationWidget />
+                            <EducationWidget 
+                                progressData={academicProgress} 
+                            />
                         </ErrorBoundary>
                     </div>
                 </div>
