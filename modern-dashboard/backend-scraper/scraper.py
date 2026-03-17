@@ -13,7 +13,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("VITE_SUPABASE_ANON_KEY")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+
+# Validación robusta de credenciales
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("❌ ERROR: Credenciales de Supabase no encontradas (VITE_SUPABASE_URL o SUPABASE_KEY). Verifica Secrets o .env")
+    exit(1)
 
 def get_google_url(query):
     """Genera una URL de Google News codificada correctamente."""
@@ -43,11 +48,6 @@ def clean_summary(html_content):
     return text[:180] + "..." if len(text) > 183 else text
 
 def fetch_and_insert_news():
-    # Validación robusta de credenciales
-    if not SUPABASE_URL or not SUPABASE_KEY:
-        print("❌ ERROR: Credenciales de Supabase no encontradas. Verifica Secrets o .env")
-        return
-
     try:
         supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     except Exception as e:
