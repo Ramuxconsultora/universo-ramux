@@ -3,13 +3,7 @@ import { BookOpen, GraduationCap, Download, CheckCircle2, ChevronRight } from 'l
 import GlassPanel from '../ui/GlassPanel';
 
 const ProgressSection = ({ courses = [] }) => {
-    const defaultCourses = [
-        { id: 1, title: 'Análisis Técnico Avanzado', progress: 75, status: 'in-progress' },
-        { id: 2, title: 'Gestión de RRHH en el Siglo XXI', progress: 100, status: 'completed' },
-        { id: 3, title: 'Macroeconomía para Inversores', progress: 20, status: 'in-progress' },
-    ];
-
-    const currentCourses = courses.length > 0 ? courses : defaultCourses;
+    const currentCourses = courses;
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
