@@ -1,17 +1,14 @@
-// config.js o App.jsx
-import { createClient } from '@supabase/supabase-api'
-
-// ✅ USAR ESTO EN ARCHIVOS .JSX
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-export const supabase = createClient(supabaseUrl, supabaseKey)
-
 import React from 'react';
-import { ExternalLink, Clock, Tag, Globe, MapPin, Building2, Briefcase } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js'; // Corregido el nombre del paquete
+import { ExternalLink, Clock, Tag, Globe, Briefcase } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
+
+// ✅ CONFIGURACIÓN DE SUPABASE (Al principio, después de los imports)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const NewsCard = React.memo(({ item }) => {
     // 1. Detección de color ampliada para tus servicios y regiones
@@ -20,7 +17,7 @@ const NewsCard = React.memo(({ item }) => {
         const scp = scope?.toLowerCase() || '';
 
         // Prioridad por Región
-        if (scp.includes('entre ríos')) return 'emerald'; // Verde para Entre Ríos
+        if (scp.includes('entre ríos')) return 'emerald'; 
         if (scp.includes('buenos aires')) return 'blue';
 
         // Prioridad por Servicio
@@ -86,7 +83,7 @@ const NewsCard = React.memo(({ item }) => {
                         {item.source_name && (
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-500/10 rounded-full border border-orange-500/20">
                                 <span className="text-[8px] font-black text-orange-400 uppercase tracking-widest">
-                                    {item.source_name.split(' ')[0]} {/* Simplifica el nombre de la fuente */}
+                                    {item.source_name.split(' ')[0]}
                                 </span>
                             </div>
                         )}
