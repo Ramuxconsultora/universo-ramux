@@ -1,3 +1,6 @@
+console.log("¿Vercel detecta la API Key?:", import.meta.env.VITE_FIREBASE_API_KEY ? "SÍ ✅" : "NO ❌");
+console.log("Entorno actual:", import.meta.env.MODE);
+
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
