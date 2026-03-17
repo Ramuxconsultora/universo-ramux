@@ -5,7 +5,11 @@ on:
     - cron: '0 11,16,0 * * *'
   workflow_dispatch: 
 
-# Añadimos esta variable para que use Node 24 y desaparezca la advertencia
+# Permisos necesarios para evitar el error de GITHUB_TOKEN e id-token
+permissions:
+  contents: write
+  id-token: write
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -25,10 +29,11 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install feedparser requests supabase beautifulsoup4 lxml
+        pip install feedparser requests supabase beautifulsoup4 lxml python-dotenv
 
     - name: Ejecutar el Scraper
       env:
+        # Asegúrate de que estos nombres coincidan con tus Secrets en GitHub
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       run: |
