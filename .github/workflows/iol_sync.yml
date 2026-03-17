@@ -2,13 +2,16 @@ name: IOL Market Data Sync
 
 on:
   schedule:
-    - cron: '*/15 * * * *'   # cada 15 minutos
+    - cron: '*/15 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
