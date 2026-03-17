@@ -2,7 +2,13 @@ import React from 'react';
 import NeumorphicPanel from '../ui/NeumorphicPanel';
 import { GraduationCap, CheckCircle2, ChevronRight } from 'lucide-react';
 
-const EducationWidget = ({ progress = 65 }) => {
+const EducationWidget = ({ progressData = [] }) => {
+    // 1. Calculate overall or representative progress
+    // For now, let's show the highest progress or just the first one if it exists
+    const sortedProgress = [...progressData].sort((a, b) => b.progress - a.progress);
+    const mainCourse = sortedProgress[0] || { course_title: 'Sin Cursos Activos', progress: 0, last_lesson: 'Comienza tu formación' };
+    const progress = mainCourse.progress;
+
     return (
         <NeumorphicPanel className="p-6 h-full flex flex-col">
             <div className="flex justify-between items-center mb-6">
@@ -23,8 +29,8 @@ const EducationWidget = ({ progress = 65 }) => {
                         />
                     </div>
                     <div className="flex justify-between text-[8px] font-bold text-slate-500 uppercase tracking-[0.2em]">
-                        <span>Beginner</span>
-                        <span>Expert</span>
+                        <span>Principiante</span>
+                        <span>Experto</span>
                     </div>
                 </div>
 
@@ -38,8 +44,8 @@ const EducationWidget = ({ progress = 65 }) => {
                                     <CheckCircle2 size={12} className="text-[#F76B1C]" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white uppercase tracking-tight italic">Análisis Técnico II</p>
-                                    <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Módulo 4: Velas Japonesas</p>
+                                    <p className="text-[10px] font-black text-white uppercase tracking-tight italic">{mainCourse.course_title}</p>
+                                    <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{mainCourse.last_lesson || 'Módulo Pendiente'}</p>
                                 </div>
                             </div>
                             <ChevronRight size={14} className="text-slate-600 group-hover:text-white transition-colors" />
