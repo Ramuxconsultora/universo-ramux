@@ -1,11 +1,19 @@
 
 import os
 from supabase import create_client, Client
+from dotenv import load_dotenv
 
-SUPABASE_URL = "https://gwqjgddgadljotrwcmde.supabase.co"
-SUPABASE_KEY = "sb_secret_fSvdNQzHXveRnv2iXSfsfw_GJ7-hNxE"
+# Cargar variables de entorno
+load_dotenv()
+
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 def clear_news():
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        print("❌ ERROR: VITE_SUPABASE_URL o SUPABASE_KEY no están definidas.")
+        return
+
     print(f"Connecting to Supabase...")
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     

@@ -4,11 +4,19 @@ import requests
 from supabase import create_client, Client
 from datetime import datetime, timedelta, timezone
 import time
+from dotenv import load_dotenv
+
+# 1. Cargar variables de entorno
+load_dotenv()
 
 # CREDENCIALES SUPABASE 
-# Recuerda usar variables de entorno en producción
-SUPABASE_URL = "https://gwqjgddgadljotrwcmde.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_secret_fSvdNQzHXveRnv2iXSfsfw_GJ7-hNxE")
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# Validación de variables
+if not SUPABASE_URL or not SUPABASE_KEY:
+    print("❌ ERROR: VITE_SUPABASE_URL o SUPABASE_KEY no están definidas en el entorno.")
+    exit(1)
 
 # CONFIGURACIÓN DE FEEDS RSS AMPLIADA
 RSS_FEEDS = {
