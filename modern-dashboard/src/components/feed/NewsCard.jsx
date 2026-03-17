@@ -1,3 +1,12 @@
+// config.js o App.jsx
+import { createClient } from '@supabase/supabase-api'
+
+// ✅ USAR ESTO EN ARCHIVOS .JSX
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+export const supabase = createClient(supabaseUrl, supabaseKey)
+
 import React from 'react';
 import { ExternalLink, Clock, Tag, Globe, MapPin, Building2, Briefcase } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
