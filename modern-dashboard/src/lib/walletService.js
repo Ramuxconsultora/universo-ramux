@@ -39,18 +39,6 @@ export const initializeWallet = async (userId, email = '') => {
 
         if (walletData) {
             console.log("[DEBUG-INIT] Current Wallet State:", walletData);
-            if (isFounder) {
-                console.log("[DEBUG-INIT] FOUNDER VERIFIED - Resetting to $100M/$100K");
-                const { data: updated, error: upgradeError } = await supabase.from('user_wallets').upsert({
-                    id: userId,
-                    ars_balance: 100000000,
-                    usd_balance: 100000,
-                    updated_at: new Date().toISOString()
-                }).select().single();
-                
-                if (upgradeError) console.error("[DEBUG-INIT] Founder Upgrade Error:", upgradeError);
-                return updated || walletData;
-            }
             return walletData;
         }
 
@@ -189,6 +177,52 @@ export const executeTrade = async (userId, tradeData) => {
 
     } catch (error) {
         console.error("Trade execution error:", error);
+        return { success: false, error: error.message };
+    }
+};
+
+/**
+ * Fetches academic progress for a user.
+ */
+export const getUserProgress = async (userId) => {
+    if (!userId) return [];
+    try {
+        const { data, error } = await supabase
+            .from('user_progress')
+            .select('*')
+            .eq('user_id', userId);
+        
+        if (error) throw error;
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching academic progress:", error);
+        return [];
+    }
+};
+
+/**
+ * Updates progress for a specific course.
+ */
+export const updateCourseProgress = async (userId, courseTitle, progress, lastLesson = '') => {
+    if (!userId) return { success: false };
+    try {
+        const { data, error } = await supabase
+            .from('user_progress')
+            .upsert({
+                user_id: userId,
+                course_title: courseTitle,
+                progress: progress,
+                status: progress >= 100 ? 'completed' : 'in-progress',
+                last_lesson: lastLesson,
+                updated_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+        return { success: true, data };
+    } catch (error) {
+        console.error("Error updating course progress:", error);
         return { success: false, error: error.message };
     }
 };
