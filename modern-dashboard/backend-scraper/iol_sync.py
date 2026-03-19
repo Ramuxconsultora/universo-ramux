@@ -16,7 +16,9 @@ IOL_USERNAME = os.getenv("IOL_USERNAME")
 IOL_PASSWORD = os.getenv("IOL_PASSWORD")
 
 # Validación de variables de entorno
-required_vars = ["VITE_SUPABASE_URL", "SUPABASE_KEY", "IOL_USERNAME", "IOL_PASSWORD"]
+# IOL_USERNAME/PASSWORD son necesarios SOLO si no se provee un VITE_IOL_TOKEN
+has_token = os.getenv("VITE_IOL_TOKEN") or os.getenv("IOL_TOKEN")
+required_vars = ["VITE_SUPABASE_URL", "SUPABASE_KEY"] if has_token else ["VITE_SUPABASE_URL", "SUPABASE_KEY", "IOL_USERNAME", "IOL_PASSWORD"]
 missing_vars = [v for v in required_vars if not os.getenv(v) and not (v == "SUPABASE_KEY" and os.getenv("SUPABASE_SERVICE_ROLE_KEY"))]
 
 if missing_vars:
@@ -43,8 +45,19 @@ TICKERS = [
 
 class IOLSync:
     def __init__(self):
-        self.token = None
-        self.token_expires = 0
+        # 1. Intentar cargar token desde variables de entorno (Vercel/GitHub Actions)
+        # Esto permite reutilizar un token obtenido en Postman o por otro proceso
+        self.token = os.getenv("VITE_IOL_TOKEN") or os.getenv("IOL_TOKEN")
+        expires_str = os.getenv("VITE_IOL_TOKEN_EXPIRES") or os.getenv("IOL_TOKEN_EXPIRES")
+        
+        try:
+            self.token_expires = float(expires_str) if expires_str else 0
+        except ValueError:
+            self.token_expires = 0
+            
+        if self.token:
+            print(f"ℹ️ Usando token pre-configurado (Expira en: {max(0, int(self.token_expires - time.time()))}s)")
+
         # Validación de URL y KEY antes de crear el cliente
         if not SUPABASE_URL or not SUPABASE_KEY:
             raise ValueError("Faltan las credenciales de Supabase. Revisa los Secrets o el .env")
