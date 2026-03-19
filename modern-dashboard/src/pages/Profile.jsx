@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/layout/Layout';
 import { Loader2, TrendingUp, GraduationCap } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import { getUserFinancialData, updateProfileField } from '../lib/walletService';
 
 // Profile Components
@@ -12,11 +13,14 @@ import ProgressSection from '../components/profile/ProgressSection';
 import ModuleNavigationWidgets from '../components/profile/ModuleNavigationWidgets';
 import FeaturedOpinionWidget from '../components/profile/FeaturedOpinionWidget';
 import SettingsSection from '../components/profile/SettingsSection';
+import PortfolioPieChart from '../components/widgets/PortfolioPieChart';
+import PortfolioValueChart from '../components/widgets/PortfolioValueChart';
 
 const Profile = () => {
     const { user, signOut } = useAuth();
     const navigate = useNavigate();
     const [financialData, setFinancialData] = useState(null);
+    const [quotes, setQuotes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -27,12 +31,26 @@ const Profile = () => {
 
         const fetchData = async () => {
             setLoading(true);
-            const data = await getUserFinancialData(user.uid, user.email);
-            setFinancialData(data);
+            const [finData, quotesRes] = await Promise.all([
+                getUserFinancialData(user.uid, user.email),
+                supabase.from('market_quotes').select('*')
+            ]);
+            
+            setFinancialData(finData);
+            if (quotesRes.data) setQuotes(quotesRes.data);
             setLoading(false);
         };
 
         fetchData();
+
+        const channel = supabase.channel('market_quotes_profile')
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'market_quotes' }, payload => {
+                setQuotes(prev => prev.map(q => q.symbol === payload.new.symbol ? payload.new : q));
+            }).subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
     }, [user, navigate]);
 
     if (!user) return null;
@@ -107,6 +125,19 @@ const Profile = () => {
                                     date: new Date(h.created_at).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })
                                 }))}
                             />
+
+                            {/* Analytics Grid */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <PortfolioValueChart 
+                                    wallet={financialData?.wallet} 
+                                    history={financialData?.history} 
+                                />
+                                <PortfolioPieChart 
+                                    wallet={financialData?.wallet}
+                                    assets={financialData?.assets}
+                                    quotes={quotes}
+                                />
+                            </div>
                         </div>
 
                         {/* Section 3: Navigation Hub (Capital & Radar) */}
