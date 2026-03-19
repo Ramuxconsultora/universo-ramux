@@ -9,53 +9,58 @@ import galacticBackground from '../../assets/galactic-background.png';
 const Layout = ({ children, showNav = true, showSidebar = true, navProps = {}, sidebarProps = {} }) => {
     const location = useLocation();
     
-    // Sidebar logic: Persistent en dashboard y noticias
-    // Agregamos el check para que en el detalle de noticia (/news/...) el layout sepa cómo comportarse
+    // Lógica de rutas para comportamiento de Sidebar
     const isDashboard = location.pathname === '/dashboard' || location.pathname === '/noticias';
     const isNewsDetail = location.pathname.startsWith('/news/');
     
-    // Combine passed props with auto-calculated drawer mode
-    // Si es detalle de noticia, preferimos modo "Drawer" para que el texto ocupe más espacio
+    // Configuramos si el Sidebar debe ser solo un "Drawer" (menú oculto) o estar fijo
     const finalSidebarProps = {
         isDrawerOnly: !isDashboard || isNewsDetail,
         ...sidebarProps
     };
 
-    // Centered layout if sidebar is hidden or in drawer mode (ideal para lectura de noticias)
+    // Si es detalle de noticia, centramos el contenido para mejorar la lectura
     const shouldCenter = !showSidebar || finalSidebarProps.isDrawerOnly;
 
     return (
         <NavigationProvider>
-            {/* Contenedor principal con scroll suave y fondo oscuro base */}
+            {/* Contenedor Base */}
             <div className="antialiased min-h-screen flex flex-col font-sans text-white relative bg-[#02040a] overflow-x-hidden">
                 
-                {/* Galactic Background Layer con opacidad controlada para no cansar la vista */}
+                {/* Capa de Fondo Galáctico (Fixed para que no se mueva al hacer scroll) */}
                 <div className="fixed inset-0 z-[-2] bg-cover bg-center bg-no-repeat opacity-40"
                     style={{ backgroundImage: `url(${galacticBackground})` }}
                 ></div>
                 
-                {/* Cosmic Overlay: Degradado para asegurar que el texto blanco siempre se lea bien */}
+                {/* Overlay de Legibilidad (Garantiza contraste con el texto) */}
                 <div className="fixed inset-0 z-[-1] bg-gradient-to-b from-[#02040a] via-transparent to-[#02040a] pointer-events-none"></div>
 
+                {/* El Header nuevo tiene z-[100] y h-20 */}
                 <Header />
 
-                {/* Ajuste de Padding Top (pt-24 o pt-28) para que el Header no tape el contenido */}
-                <div className="flex-grow pt-24 pb-12 px-4 max-w-[1600px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-12">
+                {/* 
+                   CONTENIDO PRINCIPAL 
+                   pt-32: Deja espacio para el Header (h-20) + un margen visual de seguridad.
+                */}
+                <div className="flex-grow pt-32 pb-12 px-4 max-w-[1600px] mx-auto w-full relative z-10 flex flex-col lg:flex-row gap-8 lg:gap-12">
                     
-                    {/* Main Content Area */}
+                    {/* Área de Contenido */}
                     <main className={`flex-1 min-w-0 space-y-8 ${shouldCenter ? 'lg:max-w-5xl mx-auto w-full' : 'w-full'}`}>
-                        {/* Barra de navegación interna (opcional según la página) */}
+                        
+                        {/* 
+                           NavigationBar: Se renderiza dentro del flujo para que baje con el scroll 
+                           proporcionando los botones de "Regresar" y "Menú" secundarios.
+                        */}
                         {showNav && <NavigationBar {...navProps} />}
                         
-                        {/* Contenedor de los hijos con animación de entrada suave */}
                         <div className="animate-fade-in">
                             {children}
                         </div>
                     </main>
 
-                    {/* Global Sidebar (Menu lateral dinámico) */}
-                    {showSidebar && (
-                        <aside className={`${finalSidebarProps.isDrawerOnly ? 'w-0' : 'lg:w-80'} transition-all duration-300`}>
+                    {/* Sidebar lateral */}
+                    {showSidebar && !finalSidebarProps.isDrawerOnly && (
+                        <aside className="hidden lg:block lg:w-80 transition-all duration-300">
                             <Sidebar {...finalSidebarProps} />
                         </aside>
                     )}
