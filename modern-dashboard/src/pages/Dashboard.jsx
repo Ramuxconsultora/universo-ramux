@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Users, Clock, Filter, Globe, MapPin } from 'lucide-react';
-import { supabase } from '../lib/supabaseClient';
+import { ArrowRight, Clock, Filter, Globe, MapPin } from 'lucide-react';
+import { supabase } from '../lib/supabase'; // Cambiado a ../lib/supabase para consistencia
 
 // Components
 import { useAuth } from '../contexts/AuthContext.jsx';
@@ -22,7 +22,6 @@ import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
 
 function Dashboard() {
     const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState('news');
     const [activeScope, setActiveScope] = useState('Todos');
     const [activeCategory, setActiveCategory] = useState('Todas');
     const navigate = useNavigate();
@@ -32,9 +31,7 @@ function Dashboard() {
     const [financialData, setFinancialData] = useState(null);
     const [academicProgress, setAcademicProgress] = useState([]);
     const [quotes, setQuotes] = useState([]);
-    const [errorMsg, setErrorMsg] = useState(null);
 
-    // Definición de categorías según el Scraper
     const categories = [
         'Todas',
         'Finanzas y Mercado',
@@ -45,25 +42,24 @@ function Dashboard() {
     ];
 
     useEffect(() => {
+        if (!user) return;
+
         const fetchAllData = async () => {
-            if (!user) return;
             try {
                 setLoading(true);
                 const [newsRes, finRes, progRes, quotesRes] = await Promise.all([
-                    supabase.from('noticias').select('*').order('created_at', { ascending: false }).limit(300),
-                    getUserFinancialData(user.uid, user.email),
-                    getUserProgress(user.uid),
+                    supabase.from('noticias').select('*').order('created_at', { ascending: false }).limit(100),
+                    getUserFinancialData(user.uid || user.id, user.email),
+                    getUserProgress(user.uid || user.id),
                     supabase.from('market_quotes').select('*')
                 ]);
 
-                if (newsRes.error) throw newsRes.error;
-                
-                setNews(newsRes.data || []);
+                if (newsRes.data) setNews(newsRes.data);
                 setFinancialData(finRes);
                 setAcademicProgress(progRes);
-                setQuotes(quotesRes.data || []);
+                if (quotesRes.data) setQuotes(quotesRes.data);
             } catch (err) {
-                setErrorMsg(err.message);
+                console.error("Dashboard Data Error:", err);
             } finally {
                 setLoading(false);
             }
@@ -71,36 +67,17 @@ function Dashboard() {
 
         fetchAllData();
 
-        // Suscripción en tiempo real
-        const newsChannel = supabase
-            .channel('news_changes')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'noticias' }, (payload) => {
-                setNews((prev) => [payload.new, ...prev]);
-            })
-            .subscribe();
+        // Suscripciones optimizadas
+        const newsChannel = supabase.channel('news_realtime')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'noticias' }, payload => {
+                setNews(prev => [payload.new, ...prev]);
+            }).subscribe();
 
-        const walletChannel = supabase
-            .channel('wallet_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_wallets', filter: `id=eq.${user?.uid}` }, () => {
-                getUserFinancialData(user.uid, user.email).then(setFinancialData);
-            })
-            .subscribe();
-
-        const assetsChannel = supabase
-            .channel('assets_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_assets', filter: `user_id=eq.${user?.uid}` }, () => {
-                getUserFinancialData(user.uid, user.email).then(setFinancialData);
-            })
-            .subscribe();
-
-        return () => { 
-            supabase.removeChannel(newsChannel); 
-            supabase.removeChannel(walletChannel);
-            supabase.removeChannel(assetsChannel);
+        return () => {
+            supabase.removeChannel(newsChannel);
         };
     }, [user]);
 
-    // Lógica de Filtrado Unificada
     const filteredNews = useMemo(() => {
         return news.filter(item => {
             const scopeMatch = activeScope === 'Todos' || item.scope === activeScope;
@@ -112,114 +89,64 @@ function Dashboard() {
     return (
         <Layout>
             <div className="space-y-12 pb-20">
-                {/* 0. Top Marquee Ticker (Integral Flow) */}
                 <div className="-mx-4 md:-mx-8 bg-[#F76B1C] shadow-lg relative z-20">
-                    <ErrorBoundary>
-                        <MarqueeTicker />
-                    </ErrorBoundary>
+                    <MarqueeTicker />
                 </div>
 
+                <WelcomeHero />
 
-                {/* 2. Hero Section */}
-                <ErrorBoundary>
-                    <WelcomeHero />
-                </ErrorBoundary>
-
-                {/* 3. Grid de Inteligencia y Mercado (Main Tools) */}
                 <div className="space-y-8">
-                    <ErrorBoundary>
-                        <DolarAPIWidget />
-                    </ErrorBoundary>
-
-                    {/* 1. Ticker de Mercado (Relocated below Mercado de Cambios) */}
-                    <div className="pt-2">
-                        <ErrorBoundary>
-                            <MarketIndicators />
-                        </ErrorBoundary>
-                    </div>
+                    <DolarAPIWidget />
+                    <MarketIndicators />
                     
-                    {/* Interactive Technical Chart */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 px-4 py-2 bg-sky-500/5 rounded-xl border border-sky-500/10 w-fit">
                             <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
-                            <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Live Technical Analysis</span>
+                            <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Live Analysis</span>
                         </div>
-                        <ErrorBoundary>
-                            <TradingViewChart symbol="BCBA:GGAL" />
-                        </ErrorBoundary>
+                        <TradingViewChart symbol="BCBA:GGAL" />
                     </div>
 
-                    <ErrorBoundary>
-                        <MarketSimulator />
-                    </ErrorBoundary>
+                    <MarketSimulator />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <ErrorBoundary>
-                            <PortfolioPieChart 
-                                wallet={financialData?.wallet} 
-                                assets={financialData?.assets} 
-                                quotes={quotes}
-                            />
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <EducationWidget 
-                                progressData={academicProgress} 
-                            />
-                        </ErrorBoundary>
+                        <PortfolioPieChart wallet={financialData?.wallet} assets={financialData?.assets} quotes={quotes} />
+                        <EducationWidget progressData={academicProgress} />
                     </div>
                 </div>
 
-                {/* 4. Banner Destacado: La Nueva Era del Trabajo */}
+                {/* Banner Destacado */}
                 <NeumorphicPanel
-                    className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#0a0e1a] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-4px] transition-all duration-500 overflow-hidden relative"
+                    className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#0a0e1a] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-4px] transition-all duration-500 relative overflow-hidden"
                     onClick={() => navigate('/opinion/laboral')}
                 >
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-[#F76B1C]/5 rounded-full blur-[60px] pointer-events-none group-hover:bg-[#F76B1C]/10 transition-colors" />
                     <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
-                        <div className="flex-grow space-y-4">
+                        <div className="flex-grow space-y-4 text-left">
                             <div className="flex items-center gap-3">
-                                <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">La Nueva Era del Trabajo</span>
-                                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1"><Clock size={10} /> Actualizado hoy</span>
+                                <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">Especial Laboral</span>
                             </div>
-                            <h2 className="text-3xl md:text-5xl font-black text-slate-200 italic leading-none tracking-tighter uppercase group-hover:text-white transition-colors duration-500">
-                                Análisis Técnico de la <br /><span className="text-[#F76B1C]">Ley de Modernización Laboral</span>
+                            <h2 className="text-3xl md:text-5xl font-black text-slate-200 italic leading-none uppercase">
+                                Ley de <span className="text-[#F76B1C]">Modernización</span>
                             </h2>
-                            <p className="text-sm text-slate-400 font-medium max-w-2xl">
-                                Análisis profundo sobre las nuevas normativas legales y su repercusión en el mercado de capitales argentino.
-                            </p>
                         </div>
                         <ArrowRight className="text-white/20 group-hover:text-[#F76B1C] group-hover:translate-x-2 transition-all" size={40} />
                     </div>
                 </NeumorphicPanel>
 
-                {/* 5. IA Financial & Legal Chat (Positioned below the Banner as requested) */}
-                <div className="flex flex-col">
-                    <ErrorBoundary>
-                        <IAChatWidget />
-                    </ErrorBoundary>
-                </div>
+                <IAChatWidget />
 
-
-
-                {/* Sección de Feed con Filtros Avanzados */}
+                {/* Filtros de Noticias */}
                 <div className="space-y-8">
-                    <div className="flex flex-col gap-6">
-                        <div className="flex items-baseline gap-6 border-b border-white/5 pb-4">
-                            <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase">Noticias</h2>
-                            <span className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] hidden md:block">Strategic Intelligence</span>
-                        </div>
-
-                        {/* Selectores de Scope (Nacional/Internacional) */}
+                    <div className="flex flex-col gap-6 text-left">
+                        <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase">Noticias</h2>
+                        
                         <div className="flex flex-wrap items-center gap-4">
-                            <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10 shadow-inner">
+                            <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10">
                                 {['Todos', 'Nacional', 'Internacional'].map((scope) => (
                                     <button
                                         key={scope}
                                         onClick={() => setActiveScope(scope)}
-                                        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeScope === scope
-                                                ? 'bg-[#F76B1C] text-white shadow-lg'
-                                                : 'text-slate-500 hover:text-white'
-                                            }`}
+                                        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeScope === scope ? 'bg-[#F76B1C] text-white' : 'text-slate-500'}`}
                                     >
                                         {scope === 'Nacional' && <MapPin size={12} />}
                                         {scope === 'Internacional' && <Globe size={12} />}
@@ -229,16 +156,12 @@ function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Selectores de Categoría */}
                         <div className="flex flex-wrap gap-2">
                             {categories.map((cat) => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveCategory(cat)}
-                                    className={`px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all ${activeCategory === cat
-                                            ? 'bg-white text-black border-white'
-                                            : 'bg-transparent text-slate-500 border-white/5 hover:border-white/20 hover:text-slate-200'
-                                        }`}
+                                    className={`px-5 py-2 rounded-lg text-[9px] font-black uppercase border transition-all ${activeCategory === cat ? 'bg-white text-black' : 'text-slate-500 border-white/5'}`}
                                 >
                                     {cat}
                                 </button>
@@ -246,9 +169,8 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Grid de Noticias */}
                     {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-50">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[1, 2, 3, 4].map(i => <div key={i} className="h-64 bg-white/5 rounded-[32px] animate-pulse" />)}
                         </div>
                     ) : (
@@ -256,9 +178,8 @@ function Dashboard() {
                             {filteredNews.length > 0 ? (
                                 filteredNews.map((item) => <NewsCard key={item.id} item={item} />)
                             ) : (
-                                <div className="col-span-full flex flex-col items-center justify-center py-20 border border-dashed border-white/10 rounded-[32px]">
-                                    <Filter size={40} className="text-slate-700 mb-4" />
-                                    <p className="text-slate-500 font-black uppercase tracking-widest text-xs">No hay resultados para esta combinación</p>
+                                <div className="col-span-full py-20 border border-dashed border-white/10 rounded-[32px] text-center">
+                                    <p className="text-slate-500 font-black uppercase text-xs">Sin resultados</p>
                                 </div>
                             )}
                         </div>
