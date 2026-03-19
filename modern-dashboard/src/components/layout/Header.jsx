@@ -37,12 +37,16 @@ const Header = () => {
                                 {user.photoURL ? (
                                     <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="uppercase font-bold text-[#F76B1C]">{user.email?.charAt(0) || <User size={20} />}</span>
+                                    <span className="uppercase font-bold text-[#F76B1C]">
+                                        {user.displayName?.charAt(0) || user.email?.charAt(0) || <User size={20} />}
+                                    </span>
                                 )}
                             </div>
                             <div className="hidden md:block">
                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('STATUS_ONLINE')}</p>
-                                <p className="text-xs font-bold text-white group-hover:text-[#F76B1C] transition-colors">{user.email?.split('@')[0]}</p>
+                                <p className="text-xs font-bold text-white group-hover:text-[#F76B1C] transition-colors truncate max-w-[100px]">
+                                    {user.displayName || user.email?.split('@')[0]}
+                                </p>
                             </div>
                         </a>
                     ) : (
