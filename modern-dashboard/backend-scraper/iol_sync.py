@@ -89,9 +89,36 @@ class IOLSync:
             print(f"Error en {symbol}: {e}")
             return None
 
+    def fetch_gold_price(self):
+        print("Obteniendo precio del Oro (Spot)...")
+        try:
+            # Usando gold-api.com (Free, no key needed for basic usage)
+            response = requests.get("https://api.gold-api.com/api/v1/gold")
+            if response.status_code == 200:
+                data = response.json()
+                price = data.get("price")
+                if price:
+                    quote_data = {
+                        "symbol": "GOLD",
+                        "price": float(price),
+                        "variation": 0.0, # Gold API sometimes doesn't provide daily variation directly
+                        "last_update": datetime.now(timezone.utc).isoformat(),
+                        "category": "COMMODITY"
+                    }
+                    self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
+                    print(f"✅ GOLD  | ${price:<8} | (Spot)")
+                    return True
+            return False
+        except Exception as e:
+            print(f"⚠️ Error al obtener Oro: {e}")
+            return False
+
     def sync(self):
         print(f"🚀 {datetime.now()}: Iniciando sync...")
+        
+        # 1. Sync Tickers usuales
         for item in TICKERS:
+            # ... (existente)
             symbol = item["symbol"]
             market = item["market"]
             data = self.fetch_quote(symbol, market)
@@ -109,18 +136,13 @@ class IOLSync:
                     self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
                     print(f"✅ {symbol:5} | ${price:<8} | {variation}%")
                 except Exception as e:
-                    if "category" in str(e):
-                        del quote_data["category"]
-                        try:
-                            self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
-                            print(f"✅ {symbol:5} (sin cat) | ${price:<8}")
-                        except Exception as e2:
-                            print(f"❌ Error crítico Supabase {symbol}: {e2}")
-                    else:
-                        print(f"❌ Error Supabase {symbol}: {e}")
+                    print(f"❌ Error Supabase {symbol}: {e}")
             else:
                 print(f"⚠️ No se obtuvo data válida para {symbol}")
-            time.sleep(0.5) 
+            time.sleep(0.5)
+
+        # 2. Sync Gold (para RMX)
+        self.fetch_gold_price()
 
 if __name__ == "__main__":
     # Cambié el mensaje de error para que no culpe solo al .env
