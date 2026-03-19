@@ -60,9 +60,9 @@ function App() {
         />
         <Route
           path="/noticias"
-          element={<Navigate to="/dashboard" replace />} 
+          element={<Navigate to="/dashboard" replace />}
         />
-        
+
         {/* Detalle de Noticia */}
         <Route
           path="/news/:id"
