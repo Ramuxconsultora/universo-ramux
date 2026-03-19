@@ -21,11 +21,15 @@ import PortfolioPieChart from '../components/widgets/PortfolioPieChart';
 import EducationWidget from '../components/widgets/EducationWidget';
 import TradingViewChart from '../components/widgets/TradingViewChart';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
+import NewsLock from '../components/feed/NewsLock';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 function Dashboard() {
     const { user } = useAuth();
     const [activeScope, setActiveScope] = useState('Todos');
     const [activeCategory, setActiveCategory] = useState('Todas');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
     const navigate = useNavigate();
 
     const [news, setNews] = useState([]);
@@ -83,12 +87,42 @@ function Dashboard() {
     }, [user]);
 
     const filteredNews = useMemo(() => {
-        return news.filter(item => {
+        // 1. Filtrado básico inicial
+        let filtered = news.filter(item => {
             const scopeMatch = activeScope === 'Todos' || item.scope === activeScope;
             const catMatch = activeCategory === 'Todas' || item.category === activeCategory;
             return scopeMatch && catMatch;
         });
+
+        // 2. Lógica de Ordenamiento por Bloques para la vista "Todos/Todas"
+        // Si estamos viendo todo (sin filtros específicos de ámbito), ordenamos por bloques:
+        // Nacional -> Internacional -> Otros
+        if (activeScope === 'Todos') {
+            filtered = [...filtered].sort((a, b) => {
+                const getScopeWeight = (scope) => {
+                    const s = scope?.toLowerCase() || '';
+                    if (s.includes('nacional')) return 0;
+                    if (s.includes('internacional')) return 1;
+                    return 2;
+                };
+
+                const weightA = getScopeWeight(a.scope);
+                const weightB = getScopeWeight(b.scope);
+
+                if (weightA !== weightB) return weightA - weightB;
+                
+                // Si pesan lo mismo, orden descendente por fecha
+                return new Date(b.created_at) - new Date(a.created_at);
+            });
+        }
+
+        return filtered;
     }, [news, activeScope, activeCategory]);
+
+    const paginatedNews = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return filteredNews.slice(startIndex, startIndex + itemsPerPage);
+    }, [filteredNews, currentPage, itemsPerPage]);
 
     return (
         <Layout>
@@ -147,17 +181,22 @@ function Dashboard() {
 
                 <IAChatWidget />
 
-                <div className="space-y-8">
-                    <div className="flex flex-col gap-6 text-left">
+                {/* News Section */}
+                <div className="space-y-8" id="news-section">
+                    <div className="flex flex-col gap-8 text-left">
                         <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase">Noticias</h2>
-
+                        
+                        {/* 1. Botones de Filtro Ámbito */}
                         <div className="flex flex-wrap items-center gap-4">
                             <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10">
                                 {['Todos', 'Nacional', 'Internacional'].map((scope) => (
                                     <button
                                         key={scope}
-                                        onClick={() => setActiveScope(scope)}
-                                        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeScope === scope ? 'bg-[#F76B1C] text-white' : 'text-slate-500'}`}
+                                        onClick={() => {
+                                            setActiveScope(scope);
+                                            setCurrentPage(1);
+                                        }}
+                                        className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeScope === scope ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/10' : 'text-slate-500 hover:text-slate-300'}`}
                                     >
                                         {scope === 'Nacional' && <MapPin size={12} />}
                                         {scope === 'Internacional' && <Globe size={12} />}
@@ -167,33 +206,136 @@ function Dashboard() {
                             </div>
                         </div>
 
+                        {/* 2. Filtros por Tema (Tags) */}
                         <div className="flex flex-wrap gap-2">
                             {categories.map((cat) => (
                                 <button
                                     key={cat}
-                                    onClick={() => setActiveCategory(cat)}
-                                    className={`px-5 py-2 rounded-lg text-[9px] font-black uppercase border transition-all ${activeCategory === cat ? 'bg-white text-black' : 'text-slate-500 border-white/5'}`}
+                                    onClick={() => {
+                                        setActiveCategory(cat);
+                                        setCurrentPage(1);
+                                    }}
+                                    className={`px-5 py-2 rounded-lg text-[9px] font-black uppercase border transition-all ${activeCategory === cat ? 'bg-white text-black' : 'text-slate-500 border-white/5 hover:border-white/20'}`}
                                 >
                                     {cat}
                                 </button>
                             ))}
                         </div>
+
+                        {/* 3. Paginación Superior */}
+                        {user && filteredNews.length > itemsPerPage && (
+                            <div className="flex items-center justify-between py-4 border-y border-white/5">
+                                <p className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">
+                                    Página {currentPage} de {Math.ceil(filteredNews.length / itemsPerPage)}
+                                </p>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setCurrentPage(prev => Math.max(1, prev - 1));
+                                            document.getElementById('news-section')?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        disabled={currentPage === 1}
+                                        className="p-2 rounded-lg bg-white/5 border border-white/5 text-white/40 disabled:opacity-10 hover:bg-white/10 transition-all"
+                                    >
+                                        <ChevronLeft size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setCurrentPage(prev => Math.min(Math.ceil(filteredNews.length / itemsPerPage), prev + 1));
+                                            document.getElementById('news-section')?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        disabled={currentPage === Math.ceil(filteredNews.length / itemsPerPage)}
+                                        className="p-2 rounded-lg bg-white/5 border border-white/5 text-white/40 disabled:opacity-10 hover:bg-white/10 transition-all"
+                                    >
+                                        <ChevronRight size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {loading ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {!user ? (
+                        <div className="py-12 bg-white/[0.02] rounded-[32px] border border-white/5">
+                            <NewsLock onAuthClick={() => navigate('/login')} />
+                        </div>
+                    ) : loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                             {[1, 2, 3, 4].map(i => <div key={i} className="h-64 bg-white/5 rounded-[32px] animate-pulse" />)}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[400px]">
-                            {filteredNews.length > 0 ? (
-                                filteredNews.map((item) => <NewsCard key={item.id} item={item} />)
-                            ) : (
-                                <div className="col-span-full py-20 border border-dashed border-white/10 rounded-[32px] text-center">
-                                    <p className="text-slate-500 font-black uppercase text-xs tracking-widest">Sin resultados en esta categoría</p>
+                        <>
+                            {/* 4. Grilla de Noticias (Máx 8) */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[400px]">
+                                {paginatedNews.length > 0 ? (
+                                    paginatedNews.map((item) => (
+                                        <div key={item.id} className="animate-fade-in-up" style={{ animationDelay: `${paginatedNews.indexOf(item) * 100}ms` }}>
+                                            <NewsCard item={item} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full py-20 border border-dashed border-white/10 rounded-[32px] text-center bg-white/[0.01]">
+                                        <p className="text-slate-500 font-black uppercase text-xs tracking-widest">Sin resultados en esta categoría</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* 5. Paginación Inferior (Completa) */}
+                            {filteredNews.length > itemsPerPage && (
+                                <div className="flex flex-col items-center gap-6 mt-12 py-8 border-t border-white/5">
+                                    <div className="flex items-center gap-4">
+                                        <button
+                                            onClick={() => {
+                                                setCurrentPage(prev => Math.max(1, prev - 1));
+                                                document.getElementById('news-section')?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            disabled={currentPage === 1}
+                                            className="p-4 rounded-2xl bg-white/5 border border-white/5 text-white/40 disabled:opacity-20 hover:bg-white/10 hover:text-white transition-all group"
+                                        >
+                                            <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+                                        </button>
+
+                                        <div className="flex items-center gap-2">
+                                            {Array.from({ length: Math.ceil(filteredNews.length / itemsPerPage) }).map((_, i) => {
+                                                const pageNum = i + 1;
+                                                const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+                                                
+                                                if (totalPages > 5 && Math.abs(pageNum - currentPage) > 2 && pageNum !== 1 && pageNum !== totalPages) {
+                                                    if (Math.abs(pageNum - currentPage) === 3) return <span key={i} className="text-white/20">...</span>;
+                                                    return null;
+                                                }
+
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => {
+                                                            setCurrentPage(pageNum);
+                                                            document.getElementById('news-section')?.scrollIntoView({ behavior: 'smooth' });
+                                                        }}
+                                                        className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all ${currentPage === pageNum ? 'bg-[#F76B1C] text-white shadow-lg shadow-orange-500/20' : 'bg-white/5 text-white/40 hover:bg-white/10'}`}
+                                                    >
+                                                        {pageNum}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <button
+                                            onClick={() => {
+                                                setCurrentPage(prev => Math.min(Math.ceil(filteredNews.length / itemsPerPage), prev + 1));
+                                                document.getElementById('news-section')?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            disabled={currentPage === Math.ceil(filteredNews.length / itemsPerPage)}
+                                            className="p-4 rounded-2xl bg-white/5 border border-white/5 text-white/40 disabled:opacity-20 hover:bg-white/10 hover:text-white transition-all group"
+                                        >
+                                            <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </div>
+                                    <p className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em]">
+                                        Mostrando {Math.min(filteredNews.length, (currentPage - 1) * itemsPerPage + 1)}-{Math.min(filteredNews.length, currentPage * itemsPerPage)} de {filteredNews.length} registros
+                                    </p>
                                 </div>
                             )}
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
