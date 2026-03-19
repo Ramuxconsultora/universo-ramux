@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
@@ -18,14 +17,17 @@ import ArticleLaboral from './pages/ArticleLaboral';
 import Compromiso from './pages/Compromiso';
 import CapitalWealth from './pages/CapitalWealth';
 
-// Protected Route Wrapper using Firebase Auth
+// Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F76B1C]"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 rounded-full border-4 border-white/5"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-t-[#F76B1C] animate-spin"></div>
+        </div>
       </div>
     );
   }
@@ -41,54 +43,100 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Public & Core Routes */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/quienes-somos" element={<Institucional />} />
         <Route path="/servicios" element={<Servicios />} />
-        {/* We keep Dashboard for the main view which will include widgets and news */}
+
+        {/* Dashboard & Feed - Protegidos para asegurar sincronización con Supabase */}
         <Route
           path="/dashboard"
-          element={<Dashboard />}
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/noticias"
-          element={<Dashboard />} // Reusing Dashboard for now, we can create a dedicated Noticias page or just keep Dashboard as the main feed
+          element={<Navigate to="/dashboard" replace />} 
         />
+        
+        {/* Detalle de Noticia */}
         <Route
           path="/news/:id"
-          element={<NewsDetail />}
+          element={
+            <ProtectedRoute>
+              <NewsDetail />
+            </ProtectedRoute>
+          }
         />
+
+        {/* Ramux Ecosystem Routes */}
         <Route
           path="/academy"
-          element={<RamuxAcademy />}
+          element={
+            <ProtectedRoute>
+              <RamuxAcademy />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/library"
-          element={<Library />}
+          element={
+            <ProtectedRoute>
+              <Library />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/radar-laboral"
-          element={<RadarLaboral />}
+          element={
+            <ProtectedRoute>
+              <RadarLaboral />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/expansion-global"
-          element={<ExpansionGlobal />}
+          element={
+            <ProtectedRoute>
+              <ExpansionGlobal />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/opinion"
-          element={<Opinion />}
+          element={
+            <ProtectedRoute>
+              <Opinion />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/opinion/laboral"
-          element={<ArticleLaboral />}
+          element={
+            <ProtectedRoute>
+              <ArticleLaboral />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/compromiso-social"
-          element={<Compromiso />}
+          element={
+            <ProtectedRoute>
+              <Compromiso />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/capital-wealth"
-          element={<CapitalWealth />}
+          element={
+            <ProtectedRoute>
+              <CapitalWealth />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/ranking"
@@ -106,6 +154,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Fallback para rutas no encontradas */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>
   );
