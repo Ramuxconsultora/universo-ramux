@@ -9,9 +9,17 @@ const ProgressSection = ({ courses = [] }) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             {/* Mis Cursos - Main List */}
             <div className="lg:col-span-2 space-y-6">
-                <div className="flex items-center gap-3 px-4">
-                    <BookOpen size={20} className="text-sky-400" />
-                    <h4 className="text-xs font-black text-white uppercase tracking-[0.3em]">Formación en Curso</h4>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4">
+                    <div className="flex items-center gap-3">
+                        <BookOpen size={20} className="text-sky-400" />
+                        <h4 className="text-xs font-black text-white uppercase tracking-[0.3em]">Formación en Curso</h4>
+                    </div>
+                    <a 
+                        href="/academy" 
+                        className="flex items-center gap-2 text-[10px] font-black text-sky-400 uppercase tracking-widest hover:text-white transition-colors group/link"
+                    >
+                        Ver Toda la Academia <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                    </a>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
