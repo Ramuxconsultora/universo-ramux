@@ -4,7 +4,7 @@ import GlassPanel from '../ui/GlassPanel';
 import { updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase';
 
-const ProfileHeader = ({ user, onSignOut, onUpgrade, rank = "Analista", level = 12 }) => {
+const ProfileHeader = ({ user, onSignOut, onUpgrade, rank = "Novato", level = 1 }) => {
     const [isEditing, setIsEditing] = React.useState(false);
     const [newName, setNewName] = React.useState(user?.displayName || '');
     const [updating, setUpdating] = React.useState(false);
@@ -56,18 +56,18 @@ const ProfileHeader = ({ user, onSignOut, onUpgrade, rank = "Analista", level = 
 
     return (
         <div className="space-y-6 animate-slide-up">
-            <div className="flex flex-col lg:flex-row items-center gap-8 bg-slate-900/40 p-10 rounded-[2.5rem] border border-white/5 backdrop-blur-3xl relative overflow-hidden group">
+            <div className="flex flex-col lg:flex-row items-center gap-6 md:gap-8 bg-slate-900/40 p-6 md:p-10 rounded-[2.5rem] border border-white/5 backdrop-blur-3xl relative overflow-hidden group">
                 {/* Background Glow */}
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full group-hover:bg-sky-500/20 transition-all duration-700" />
                 
                 {/* Avatar Section */}
                 <div className="relative">
-                    <div className={`w-32 h-32 rounded-full bg-slate-800 border-2 p-1.5 shadow-lg transition-all duration-500 ${
+                    <div className={`w-36 h-36 rounded-[2.5rem] bg-slate-800 border-2 p-1.5 shadow-lg transition-all duration-500 hover:rotate-2 ${
                         isFounder 
                         ? 'border-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.4)] bg-gradient-to-br from-amber-500/20 to-orange-600/20' 
                         : 'border-sky-500/50 shadow-[0_0_30px_rgba(14,165,233,0.2)]'
                     }`}>
-                        <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden">
+                        <div className="w-full h-full rounded-[2rem] bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden">
                             {user?.photoURL ? (
                                 <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
@@ -101,15 +101,16 @@ const ProfileHeader = ({ user, onSignOut, onUpgrade, rank = "Analista", level = 
                                     </button>
                                 </div>
                             ) : (
-                                <div className="flex items-center gap-3">
-                                    <h1 className="text-4xl font-black text-white uppercase tracking-tighter italic">
+                                <div className="flex flex-col md:flex-row items-center gap-3">
+                                    <h1 className="text-4xl font-black text-white uppercase tracking-tighter italic leading-none">
                                         {user?.displayName || user?.email?.split('@')[0]}
                                     </h1>
                                     <button 
                                         onClick={() => setIsEditing(true)}
-                                        className="p-1.5 bg-white/5 text-slate-500 hover:text-[#F76B1C] rounded-lg transition-all"
+                                        className="flex items-center gap-2 px-3 py-1 bg-white/5 hover:bg-[#F76B1C]/20 text-slate-400 hover:text-[#F76B1C] rounded-xl transition-all border border-white/5 group/edit"
                                     >
-                                        <Edit3 size={14} />
+                                        <Edit3 size={12} className="group-hover/edit:scale-110 transition-transform" />
+                                        <span className="text-[9px] font-black uppercase tracking-widest">Cambiar</span>
                                     </button>
                                 </div>
                             )}
@@ -120,24 +121,24 @@ const ProfileHeader = ({ user, onSignOut, onUpgrade, rank = "Analista", level = 
                         <p className="text-slate-400 font-mono text-sm tracking-tight">{user?.email}</p>
                     </div>
 
-                    <div className="flex flex-wrap justify-center lg:justify-start items-center gap-6 pt-2">
+                    <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 md:gap-6 pt-2">
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center border border-sky-500/20">
                                 <Award size={16} className="text-sky-400" />
                             </div>
                             <div className="text-xs">
-                                <p className="text-slate-500 font-bold uppercase tracking-widest">Nivel</p>
+                                <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] md:text-[10px]">Nivel</p>
                                 <p className="text-white font-black">{level}</p>
                             </div>
                         </div>
-                        <div className="h-8 w-px bg-white/5" />
+                        <div className="h-8 w-px bg-white/5 hidden sm:block" />
                         <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
                                 <Shield size={16} className="text-emerald-400" />
                             </div>
                             <div className="text-xs">
-                                <p className="text-slate-500 font-bold uppercase tracking-widest">Estado</p>
-                                <p className="text-white font-black">Cuenta Verificada</p>
+                                <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] md:text-[10px]">Cuenta</p>
+                                <p className="text-white font-black">Vinculada con Google</p>
                             </div>
                         </div>
                     </div>
