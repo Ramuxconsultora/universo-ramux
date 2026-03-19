@@ -9,13 +9,20 @@ from dotenv import load_dotenv
 # Si no existe (como en GitHub Actions), no pasará nada y seguirá adelante.
 load_dotenv()
 
-# 2. Configuración Supabase (Prioriza variables del sistema)
+# 2. Configuración Supabase y IOL
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-
-# 3. Configuración IOL
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 IOL_USERNAME = os.getenv("IOL_USERNAME")
 IOL_PASSWORD = os.getenv("IOL_PASSWORD")
+
+# Validación de variables de entorno
+required_vars = ["VITE_SUPABASE_URL", "SUPABASE_KEY", "IOL_USERNAME", "IOL_PASSWORD"]
+missing_vars = [v for v in required_vars if not os.getenv(v) and not (v == "SUPABASE_KEY" and os.getenv("SUPABASE_SERVICE_ROLE_KEY"))]
+
+if missing_vars:
+    print(f"❌ ERROR: Faltan las siguientes variables de entorno: {', '.join(missing_vars)}")
+    exit(1)
+
 IOL_TOKEN_URL = "https://api.invertironline.com/token"
 IOL_API_URL = "https://api.invertironline.com/api/v2"
 
@@ -26,6 +33,10 @@ TICKERS = [
     {"symbol": "PAMP", "type": "accion", "market": "BCBA"},
     {"symbol": "AL30", "type": "bono", "market": "BCBA"},
     {"symbol": "GD30", "type": "bono", "market": "BCBA"},
+    {"symbol": "AE38", "type": "bono", "market": "BCBA"},
+    {"symbol": "AL29", "type": "bono", "market": "BCBA"},
+    {"symbol": "AL35", "type": "bono", "market": "BCBA"},
+    {"symbol": "GD35", "type": "bono", "market": "BCBA"},
     {"symbol": "SPY", "type": "cedear", "market": "BCBA"},
     {"symbol": "AAPL", "type": "cedear", "market": "BCBA"}
 ]
@@ -95,13 +106,13 @@ class IOLSync:
                     "category": item["type"].upper()
                 }
                 try:
-                    self.supabase.table("market_quotes").upsert(quote_data).execute()
+                    self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
                     print(f"✅ {symbol:5} | ${price:<8} | {variation}%")
                 except Exception as e:
                     if "category" in str(e):
                         del quote_data["category"]
                         try:
-                            self.supabase.table("market_quotes").upsert(quote_data).execute()
+                            self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
                             print(f"✅ {symbol:5} (sin cat) | ${price:<8}")
                         except Exception as e2:
                             print(f"❌ Error crítico Supabase {symbol}: {e2}")
