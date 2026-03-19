@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/layout/Layout';
-import { LogOut, Loader2, Zap } from 'lucide-react';
-import { getUserFinancialData } from '../lib/walletService';
+import { Loader2, TrendingUp, GraduationCap } from 'lucide-react';
+import { getUserFinancialData, updateProfileField } from '../lib/walletService';
 
 // Profile Components
 import ProfileHeader from '../components/profile/ProfileHeader';
 import WalletSection from '../components/profile/WalletSection';
 import ProgressSection from '../components/profile/ProgressSection';
+import ModuleNavigationWidgets from '../components/profile/ModuleNavigationWidgets';
+import FeaturedOpinionWidget from '../components/profile/FeaturedOpinionWidget';
 import SettingsSection from '../components/profile/SettingsSection';
 
 const Profile = () => {
@@ -44,44 +46,56 @@ const Profile = () => {
         <Layout>
             <div className="max-w-[1400px] mx-auto space-y-12 animate-fade-in py-12 px-4 md:px-8">
                 
-                {/* Header with Exit controls */}
-                <div className="relative">
-                    <ProfileHeader 
-                        user={user} 
-                        onSignOut={handleSignOut}
-                        onUpgrade={async () => {
-                            console.log("[DEBUG] Manual upgrade triggered");
-                            const result = await getUserFinancialData(user.uid, user.email);
-                            if (result?.error) {
-                                alert(`Error al inicializar: ${result.error}`);
-                            } else {
-                                window.location.reload();
-                            }
-                        }}
-                    />
-                    
-                    {/* Identification Debug Info */}
-                    <div className="mt-4 p-4 bg-black/40 rounded-2xl border border-white/5 text-[10px] font-mono space-y-1">
-                        <p className="text-slate-500">Auth UID: {user.uid}</p>
-                        <p className="text-slate-500">Auth Email: {user.email}</p>
-                        <p className="text-slate-500">Auth Name: {user.displayName}</p>
-                        <p className="text-[#F76B1C] font-black">Wallet Status: {financialData?.error ? `ERROR: ${financialData.error}` : (financialData?.wallet ? 'OK' : 'No Wallet Found')}</p>
-                        {financialData?.error && (
-                            <p className="text-rose-500/70">Dato técnico: Posible bloqueo de RLS en Supabase. Verifica políticas de la tabla 'user_wallets'.</p>
-                        )}
-                        <p className="text-slate-500">Wallet Info: {JSON.stringify(financialData?.wallet || 'No Data')}</p>
-                    </div>
-                </div>
+                {/* 1. Header & ID Profile */}
+                <ProfileHeader 
+                    user={user} 
+                    onSignOut={handleSignOut}
+                    rank={financialData?.profile?.rango}
+                    level={financialData?.profile?.nivel}
+                    onUpgrade={async () => {
+                        console.log("[DEBUG] Manual upgrade triggered");
+                        const result = await getUserFinancialData(user.uid, user.email);
+                        if (result?.error) {
+                            alert(`Error al inicializar: ${result.error}`);
+                        } else {
+                            window.location.reload();
+                        }
+                    }}
+                />
 
-                {/* Main Dashboard Grid */}
                 {loading ? (
-                    <div className="flex items-center justify-center p-20">
+                    <div className="flex flex-col items-center justify-center p-20 space-y-4">
                         <Loader2 className="animate-spin text-[#F76B1C]" size={40} />
+                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Cargando tu Ecosistema...</p>
                     </div>
                 ) : (
                     <div className="space-y-16">
-                        {/* Section 1: Financial & Wallet */}
-                        <div className="space-y-6">
+                        
+                        {/* Section 1: Education & Training (Priority) */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4 px-2">
+                                <div className="p-2 bg-[#F76B1C]/10 rounded-xl border border-[#F76B1C]/20">
+                                    <GraduationCap className="text-[#F76B1C]" size={20} />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic leading-none">Mi Formación</h2>
+                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Capacitaciones y Progreso Académico</p>
+                                </div>
+                            </div>
+                            <ProgressSection />
+                        </div>
+
+                        {/* Section 2: Financial Wallet & Portfolio */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4 px-2">
+                                <div className="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                                    <TrendingUp className="text-emerald-500" size={20} />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic leading-none">Mi Economía</h2>
+                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Billetera Personal y Posiciones en Cartera</p>
+                                </div>
+                            </div>
                             <WalletSection 
                                 balance={financialData?.wallet?.ars_balance?.toLocaleString('es-AR') || "0,00"} 
                                 usdBalance={financialData?.wallet?.usd_balance?.toLocaleString('es-AR') || "0,00"}
@@ -95,15 +109,33 @@ const Profile = () => {
                             />
                         </div>
 
-                    {/* Section 2: Education & Progress */}
-                    <div className="space-y-6">
-                        <ProgressSection />
-                    </div>
+                        {/* Section 3: Navigation Hub (Capital & Radar) */}
+                        <ModuleNavigationWidgets />
 
-                    {/* Section 3: Settings & Radar */}
-                    <div className="space-y-6 pb-20">
-                        <SettingsSection />
-                    </div>
+                        {/* Section 4: Featured Analysis (Opinión de Coyuntura) */}
+                        <div className="space-y-8">
+                            <div className="flex items-center gap-4 px-2">
+                                <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Análisis Destacado</h2>
+                            </div>
+                            <FeaturedOpinionWidget />
+                        </div>
+
+                        {/* Section 5: Settings (Bottom) */}
+                        <div className="pt-10 border-t border-white/5">
+                            <SettingsSection 
+                                novedadesRmx={financialData?.profile?.novedades_rmx}
+                                onToggleNovedades={async (val) => {
+                                    const res = await updateProfileField(user.uid, 'novedades_rmx', val);
+                                    if (res.success) {
+                                        setFinancialData(prev => ({
+                                            ...prev,
+                                            profile: { ...prev.profile, novedades_rmx: val }
+                                        }));
+                                    }
+                                }}
+                            />
+                        </div>
+
                     </div>
                 )}
 
