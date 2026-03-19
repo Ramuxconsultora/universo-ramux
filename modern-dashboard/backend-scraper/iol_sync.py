@@ -33,6 +33,10 @@ TICKERS = [
     {"symbol": "PAMP", "type": "accion", "market": "BCBA"},
     {"symbol": "AL30", "type": "bono", "market": "BCBA"},
     {"symbol": "GD30", "type": "bono", "market": "BCBA"},
+    {"symbol": "AE38", "type": "bono", "market": "BCBA"},
+    {"symbol": "AL29", "type": "bono", "market": "BCBA"},
+    {"symbol": "AL35", "type": "bono", "market": "BCBA"},
+    {"symbol": "GD35", "type": "bono", "market": "BCBA"},
     {"symbol": "SPY", "type": "cedear", "market": "BCBA"},
     {"symbol": "AAPL", "type": "cedear", "market": "BCBA"}
 ]
@@ -102,13 +106,13 @@ class IOLSync:
                     "category": item["type"].upper()
                 }
                 try:
-                    self.supabase.table("market_quotes").upsert(quote_data).execute()
+                    self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
                     print(f"✅ {symbol:5} | ${price:<8} | {variation}%")
                 except Exception as e:
                     if "category" in str(e):
                         del quote_data["category"]
                         try:
-                            self.supabase.table("market_quotes").upsert(quote_data).execute()
+                            self.supabase.table("market_quotes").upsert(quote_data, on_conflict="symbol").execute()
                             print(f"✅ {symbol:5} (sin cat) | ${price:<8}")
                         except Exception as e2:
                             print(f"❌ Error crítico Supabase {symbol}: {e2}")
