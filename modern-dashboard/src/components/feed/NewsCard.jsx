@@ -1,14 +1,11 @@
 import React from 'react';
-import { createClient } from '@supabase/supabase-js'; // Corregido el nombre del paquete
-import { ExternalLink, Clock, Tag, Globe, Briefcase } from 'lucide-react';
+// ✅ IMPORTACIÓN CENTRALIZADA (Eliminamos createClient de aquí)
+import { supabase } from '../../lib/supabase'; 
+import { ExternalLink, Clock, Tag, Globe, Briefcase, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Link } from 'react-router-dom'; // Para navegar al detalle sin recargar
 import NeumorphicPanel from '../ui/NeumorphicPanel';
-
-// ✅ CONFIGURACIÓN DE SUPABASE (Al principio, después de los imports)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const NewsCard = React.memo(({ item }) => {
     // 1. Detección de color ampliada para tus servicios y regiones
@@ -16,11 +13,11 @@ const NewsCard = React.memo(({ item }) => {
         const cat = category?.toLowerCase() || '';
         const scp = scope?.toLowerCase() || '';
 
-        // Prioridad por Región
+        // Prioridad por Región (Entre Ríos / Buenos Aires)
         if (scp.includes('entre ríos')) return 'emerald'; 
         if (scp.includes('buenos aires')) return 'blue';
 
-        // Prioridad por Servicio
+        // Prioridad por Servicio (Finanzas, Legal, RRHH, Tecno)
         if (cat.includes('finan') || cat.includes('mercado') || cat.includes('econo')) return 'blue';
         if (cat.includes('tech') || cat.includes('innovación')) return 'purple';
         if (cat.includes('legal')) return 'amber';
@@ -33,6 +30,7 @@ const NewsCard = React.memo(({ item }) => {
 
     const cleanSummary = (text) => {
         if (!text) return 'Sin resumen disponible.';
+        // Limpieza de HTML y entidades comunes
         let cleaned = text.replace(/<[^>]*>?/gm, '');
         cleaned = cleaned.replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
         return cleaned.trim();
@@ -46,25 +44,18 @@ const NewsCard = React.memo(({ item }) => {
     }
 
     // 2. Iconos dinámicos basados en el Scope de Ramux
-    const getScopeIcon = (scope) => {
-        const scp = scope?.toLowerCase() || '';
-        if (scp.includes('nacional')) return Briefcase;
-        if (scp.includes('internacional')) return Globe;
-        return Tag;
-    };
-    const ScopeIcon = getScopeIcon(item.scope);
+    const ScopeIcon = item.scope?.toLowerCase().includes('nacional') ? Briefcase : Globe;
 
     return (
-        <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block group no-underline h-full"
-            style={{ transform: 'translate3d(0,0,0)' }}
-        >
+        /* 
+           Cambiamos el <a> por un <div> para manejar dos acciones: 
+           1. Ver detalle interno (Link)
+           2. Ir a la fuente externa (ExternalLink)
+        */
+        <div className="group h-full transition-all duration-300">
             <NeumorphicPanel
                 radiance={radiance}
-                className="p-5 h-full flex flex-col items-start text-left border-white/5 relative overflow-hidden transition-all duration-300 group-hover:scale-[1.01] hover:border-white/10"
+                className="p-5 h-full flex flex-col items-start text-left border-white/5 relative overflow-hidden transition-all duration-300 group-hover:scale-[1.01] hover:border-white/10 bg-[#0a0a0a]"
             >
                 {/* Header: Badges Geográficos y de Fuente */}
                 <div className="flex justify-between w-full items-start mb-6 relative z-10">
@@ -102,10 +93,12 @@ const NewsCard = React.memo(({ item }) => {
                         </span>
                     </div>
 
-                    {/* Título - Itálico y Heavy como el resto de la plataforma */}
-                    <h3 className="text-sm md:text-base font-black text-white mb-3 group-hover:text-[#F76B1C] transition-colors leading-tight tracking-tighter italic uppercase">
-                        {item.title}
-                    </h3>
+                    {/* Título - Link al detalle interno */}
+                    <Link to={`/news/${item.id}`}>
+                        <h3 className="text-sm md:text-base font-black text-white mb-3 group-hover:text-[#F76B1C] transition-colors leading-tight tracking-tighter italic uppercase">
+                            {item.title}
+                        </h3>
+                    </Link>
 
                     {/* Resumen */}
                     <p className="text-[11px] text-slate-300/80 mb-6 line-clamp-3 leading-relaxed font-medium">
@@ -113,14 +106,27 @@ const NewsCard = React.memo(({ item }) => {
                     </p>
                 </div>
 
-                {/* Footer: CTA con efecto hover */}
+                {/* Footer: Acciones */}
                 <div className="mt-auto pt-4 w-full flex justify-between items-center border-t border-white/5 relative z-10">
-                    <span className="text-[10px] font-black text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all inline-flex items-center gap-2">
-                        LEER ARTÍCULO <ExternalLink size={10} className="text-[#F76B1C]" />
-                    </span>
+                    <Link 
+                        to={`/news/${item.id}`} 
+                        className="text-[10px] font-black text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all inline-flex items-center gap-2 uppercase italic"
+                    >
+                        VER DETALLE <ArrowRight size={12} className="text-[#F76B1C]" />
+                    </Link>
+                    
+                    {/* Link externo original */}
+                    <a 
+                        href={item.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                    >
+                        <ExternalLink size={14} className="text-white/20 hover:text-[#F76B1C]" />
+                    </a>
                 </div>
             </NeumorphicPanel>
-        </a>
+        </div>
     );
 });
 
