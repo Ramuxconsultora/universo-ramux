@@ -253,3 +253,141 @@ export const updateProfileField = async (userId, field, value) => {
         return { success: false, error: error.message };
     }
 };
+
+/**
+ * Redeems a secret code and credits funds to the user's wallet.
+ */
+export const redeemCode = async (userId, code) => {
+    if (!userId || !code) return { success: false, error: "Datos faltantes" };
+    
+    try {
+        // 1. Check if the code exists and is not used
+        const { data: codeData, error: codeError } = await supabase
+            .from('promo_codes')
+            .select('*')
+            .eq('code', code.trim())
+            .eq('is_used', false)
+            .maybeSingle();
+
+        if (codeError || !codeData) {
+            return { success: false, error: "Código inválido o ya utilizado" };
+        }
+
+        // 2. Add funds to the wallet
+        const { data: wallet, error: walletError } = await supabase
+            .from('user_wallets')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        if (walletError) throw walletError;
+
+        const newArsBalance = wallet.ars_balance + (codeData.amount_ars || 0);
+        const newUsdBalance = wallet.usd_balance + (codeData.amount_usd || 0);
+
+        const { error: updateError } = await supabase
+            .from('user_wallets')
+            .update({ 
+                ars_balance: newArsBalance, 
+                usd_balance: newUsdBalance, 
+                updated_at: new Date().toISOString() 
+            })
+            .eq('id', userId);
+
+        if (updateError) throw updateError;
+
+        // 3. Mark code as used
+        await supabase
+            .from('promo_codes')
+            .update({ 
+                is_used: true, 
+                used_by: userId 
+            })
+            .eq('id', codeData.id);
+
+        return { 
+            success: true, 
+            message: `¡Éxito! Acreditado: $${codeData.amount_ars} ARS / u$s ${codeData.amount_usd} USD` 
+        };
+
+    } catch (error) {
+        console.error("Redeem code error:", error);
+        return { success: false, error: error.message };
+    }
+};
+
+/**
+ * Transfers funds between users via email.
+ */
+export const transferFunds = async (fromUserId, targetEmail, amount, currency) => {
+    if (!fromUserId || !targetEmail || !amount) return { success: false, error: "Datos incompletos" };
+    
+    try {
+        const amt = parseFloat(amount);
+        if (isNaN(amt) || amt <= 0) return { success: false, error: "Monto inválido" };
+
+        // 1. Find target user
+        const { data: targetProfile, error: targetError } = await supabase
+            .from('perfiles')
+            .select('id')
+            .eq('email', targetEmail.toLowerCase().trim())
+            .maybeSingle();
+
+        if (targetError || !targetProfile) {
+            return { success: false, error: "Usuario destino no encontrado" };
+        }
+
+        if (targetProfile.id === fromUserId) {
+            return { success: false, error: "No puedes transferirte a ti mismo" };
+        }
+
+        // 2. Check sender balance
+        const { data: senderWallet, error: senderError } = await supabase
+            .from('user_wallets')
+            .select('*')
+            .eq('id', fromUserId)
+            .single();
+
+        if (senderError) throw senderError;
+
+        const balanceField = currency === 'ARS' ? 'ars_balance' : 'usd_balance';
+        if (senderWallet[balanceField] < amt) {
+            return { success: false, error: "Saldo insuficiente" };
+        }
+
+        // 3. Atomic update (using separate calls for now, ideally an RPC)
+        // Subtract from sender
+        await supabase
+            .from('user_wallets')
+            .update({ [balanceField]: senderWallet[balanceField] - amt, updated_at: new Date().toISOString() })
+            .eq('id', fromUserId);
+
+        // Add to recipient
+        const { data: targetWallet } = await supabase
+            .from('user_wallets')
+            .select('*')
+            .eq('id', targetProfile.id)
+            .single();
+
+        await supabase
+            .from('user_wallets')
+            .update({ [balanceField]: (targetWallet?.[balanceField] || 0) + amt, updated_at: new Date().toISOString() })
+            .eq('id', targetProfile.id);
+
+        // 4. Record transfer
+        await supabase
+            .from('wallet_transfers')
+            .insert({
+                from_user_id: fromUserId,
+                to_user_id: targetProfile.id,
+                amount: amt,
+                currency: currency
+            });
+
+        return { success: true, message: "Transferencia realizada con éxito" };
+
+    } catch (error) {
+        console.error("Transfer error:", error);
+        return { success: false, error: error.message };
+    }
+};
