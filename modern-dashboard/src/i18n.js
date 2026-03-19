@@ -21,7 +21,10 @@ const resources = {
             "Visita la fuente original para más detalles.": "Visit the original source for more details.",
             "Ir a la Fuente": "Go to Source",
             "Volver": "Back",
-            "Traducir": "Translate"
+            "Traducir": "Translate",
+            "STATUS_ONLINE": "Online",
+            "LOGIN": "Log in",
+            "SOCIAL_FOLLOW": "Follow us"
         }
     },
     es: {
@@ -42,7 +45,10 @@ const resources = {
             "Visita la fuente original para más detalles.": "Visita la fuente original para más detalles.",
             "Ir a la Fuente": "Ir a la Fuente",
             "Volver": "Volver",
-            "Traducir": "Traducir"
+            "Traducir": "Traducir",
+            "STATUS_ONLINE": "En Línea",
+            "LOGIN": "Iniciar Sesión",
+            "SOCIAL_FOLLOW": "Síguenos"
         }
     }
 };
