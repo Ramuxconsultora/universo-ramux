@@ -115,8 +115,9 @@ const Profile = () => {
                                 </div>
                             </div>
                             <WalletSection 
-                                balance={financialData?.wallet?.ars_balance?.toLocaleString('es-AR') || "0,00"} 
-                                usdBalance={financialData?.wallet?.usd_balance?.toLocaleString('es-AR') || "0,00"}
+                                balance={financialData?.wallet?.ars_balance?.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0,00"} 
+                                usdBalance={financialData?.wallet?.usd_balance?.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0,00"}
+                                rmxBalance={financialData?.wallet?.rmx_balance?.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0,00"}
                                 history={financialData?.history?.map(h => ({
                                     id: h.id,
                                     type: h.type === 'BUY' ? 'spend' : 'gain',
