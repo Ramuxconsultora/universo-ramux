@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Clock, Filter, Globe, MapPin } from 'lucide-react';
 
 // ⚠️ REVISA QUE ESTE ARCHIVO EXISTA EN src/lib/supabase.js
-import { supabase } from '../lib/supabase'; 
+import { supabase } from '../lib/supabase';
 
 // Components
 import { useAuth } from '../contexts/AuthContext';
@@ -102,7 +102,7 @@ function Dashboard() {
                 <div className="space-y-8">
                     <DolarAPIWidget />
                     <MarketIndicators />
-                    
+
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 px-4 py-2 bg-sky-500/5 rounded-xl border border-sky-500/10 w-fit">
                             <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span>
@@ -114,10 +114,10 @@ function Dashboard() {
                     <MarketSimulator />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <PortfolioPieChart 
-                            wallet={financialData?.wallet} 
-                            assets={financialData?.assets} 
-                            quotes={quotes} 
+                        <PortfolioPieChart
+                            wallet={financialData?.wallet}
+                            assets={financialData?.assets}
+                            quotes={quotes}
                         />
                         <EducationWidget progressData={academicProgress} />
                     </div>
@@ -132,9 +132,14 @@ function Dashboard() {
                             <div className="flex items-center gap-3">
                                 <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">Especial Laboral</span>
                             </div>
-                            <h2 className="text-3xl md:text-5xl font-black text-slate-200 italic leading-none uppercase">
-                                Ley de <span className="text-[#F76B1C]">Modernización</span>
-                            </h2>
+                            <div className="space-y-1">
+                                <h2 className="text-3xl md:text-5xl font-black text-slate-200 italic leading-none uppercase">
+                                    La Nueva <span className="text-[#F76B1C]">Era del Trabajo</span>
+                                </h2>
+                                <p className="text-sm md:text-base font-bold !text-slate-100 uppercase tracking-tight opacity-80">
+                                    Análisis Técnico de la Ley de Modernización Laboral
+                                </p>
+                            </div>
                         </div>
                         <ArrowRight className="text-white/20 group-hover:text-[#F76B1C] group-hover:translate-x-2 transition-all" size={40} />
                     </div>
@@ -145,7 +150,7 @@ function Dashboard() {
                 <div className="space-y-8">
                     <div className="flex flex-col gap-6 text-left">
                         <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase">Noticias</h2>
-                        
+
                         <div className="flex flex-wrap items-center gap-4">
                             <div className="flex bg-black/40 p-1 rounded-2xl border border-white/10">
                                 {['Todos', 'Nacional', 'Internacional'].map((scope) => (
