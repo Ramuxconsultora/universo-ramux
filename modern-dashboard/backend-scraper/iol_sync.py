@@ -3,11 +3,13 @@ import requests
 import time
 from datetime import datetime, timezone
 from supabase import create_client, Client
-from dotenv import load_dotenv
+from supabase import create_client, Client
+from dotenv import load_dotenv, find_dotenv
 
-# 1. Intentar cargar el .env si existe (para desarrollo local)
-# Si no existe (como en GitHub Actions), no pasará nada y seguirá adelante.
-load_dotenv()
+# 1. Cargar variables de entorno
+# Esta función busca el archivo .env localmente. 
+# En entornos como GitHub Actions o Vercel, usará las "Secret Keys" configuradas en la plataforma.
+load_dotenv(find_dotenv())
 
 # 2. Configuración Supabase y IOL
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
