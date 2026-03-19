@@ -1,42 +1,116 @@
+/* --- RAMUX CAPITAL: GLOBAL STYLES --- */
+
+:root {
+  --ramux-orange: #F76B1C;
+  --ramux-dark: #0a0a0a;
+  --ramux-panel: #0f0f0f;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: var(--ramux-dark);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  margin: 0;
+  display: flex;
+  place-items: start;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--ramux-dark);
+  overflow-x: hidden; /* Vital para que no falle en celulares */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* --- TIPOGRAFÍA RAMUX --- */
+
+/* Forzamos el estilo Black Italic para los títulos de la plataforma */
+h1, h2, h3, .font-black {
+  font-weight: 900 !important;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+/* --- COMPONENTES DE INTERFAZ --- */
+
+a {
+  font-weight: 500;
+  color: inherit;
+  text-decoration: inherit;
+  transition: all 0.2s;
+}
+
+button {
+  cursor: pointer;
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* --- SOPORTE PARA MÓVIL (Fix de Noticias) --- */
+
+@media (max-width: 768px) {
+  #root {
+    padding: 0; /* Quitamos el padding excesivo de Vite en móvil */
   }
-  to {
-    transform: rotate(360deg);
+  
+  /* Evita que el teclado del celu rompa el layout */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Mejora el scroll táctil */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* --- ANIMACIONES DE CARGA --- */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.card {
-  padding: 2em;
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-.read-the-docs {
-  color: #888;
+/* --- SCROLLBAR ESTÉTICA RAMUX --- */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ramux-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ramux-orange);
+}
+
+/* --- FIX PARA NEUMORPHIC PANELS EN MÓVIL --- */
+.shadow-neumorphic {
+  box-shadow: 8px 8px 16px #050505, -8px -8px 16px #121212;
 }
