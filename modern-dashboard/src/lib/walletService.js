@@ -24,6 +24,10 @@ export const initializeWallet = async (userId, email = '') => {
                 id: userId, 
                 nombre: auth.currentUser?.displayName || '',
                 email: userEmail,
+                nivel: 1,
+                rango: 'Novato',
+                experiencia: 0,
+                novedades_rmx: true,
                 updated_at: new Date().toISOString() 
             });
         } catch(e) {
@@ -80,16 +84,18 @@ export const getUserFinancialData = async (userId, email = '') => {
         // Guarantee wallet is initialized and corrected (especially for Founder)
         await initializeWallet(userId, email);
 
-        const [walletRes, assetsRes, historyRes] = await Promise.all([
+        const [walletRes, assetsRes, historyRes, profileRes] = await Promise.all([
             supabase.from('user_wallets').select('*').eq('id', userId).single(),
             supabase.from('user_assets').select('*').eq('user_id', userId),
-            supabase.from('trade_history').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(10)
+            supabase.from('trade_history').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(10),
+            supabase.from('perfiles').select('*').eq('id', userId).single()
         ]);
 
         return {
             wallet: walletRes.data,
             assets: assetsRes.data || [],
-            history: historyRes.data || []
+            history: historyRes.data || [],
+            profile: profileRes.data || { nivel: 1, rango: 'Novato', experiencia: 0 }
         };
     } catch (error) {
         console.error("Error fetching financial data:", error);
@@ -223,6 +229,27 @@ export const updateCourseProgress = async (userId, courseTitle, progress, lastLe
         return { success: true, data };
     } catch (error) {
         console.error("Error updating course progress:", error);
+        return { success: false, error: error.message };
+    }
+};
+
+/**
+ * Updates a single field in the user's profile.
+ */
+export const updateProfileField = async (userId, field, value) => {
+    if (!userId) return { success: false };
+    try {
+        const { data, error } = await supabase
+            .from('perfiles')
+            .update({ [field]: value, updated_at: new Date().toISOString() })
+            .eq('id', userId)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return { success: true, data };
+    } catch (error) {
+        console.error(`Error updating profile field ${field}:`, error);
         return { success: false, error: error.message };
     }
 };
