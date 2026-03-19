@@ -2,10 +2,11 @@ name: Scraper de Noticias
 
 on:
   schedule:
+    # Se ejecuta a las 11:00, 16:00 y 00:00 UTC
     - cron: '0 11,16,0 * * *'
   workflow_dispatch: 
 
-# Permisos necesarios para evitar el error de GITHUB_TOKEN e id-token
+# Permisos necesarios para el entorno de GitHub
 permissions:
   contents: write
   id-token: write
@@ -33,9 +34,11 @@ jobs:
 
     - name: Ejecutar el Scraper
       env:
-        # Asegúrate de que estos nombres coincidan con tus Secrets en GitHub
+        # Mapeamos los Secrets de GitHub a las variables que espera el script de Python
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       run: |
+        # Entramos a la carpeta del scraper y ejecutamos
         cd modern-dashboard/backend-scraper
         python scraper.py
