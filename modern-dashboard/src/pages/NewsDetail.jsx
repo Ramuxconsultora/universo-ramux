@@ -1,10 +1,12 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+// ✅ IMPORTACIÓN CORREGIDA PARA VERCEL
+import { supabase } from '../lib/supabase'; 
 import Layout from '../components/layout/Layout';
-import GlassPanel from '../components/ui/GlassPanel';
-import { ArrowLeft, ExternalLink, Calendar, Tag, Share2 } from 'lucide-react';
+import NeumorphicPanel from '../components/ui/NeumorphicPanel';
+import { ArrowLeft, ExternalLink, Calendar, Tag, Share2, Clock } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 function NewsDetail() {
     const { id } = useParams();
@@ -33,11 +35,16 @@ function NewsDetail() {
         fetchNews();
     }, [id]);
 
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Enlace copiado al portapapeles");
+    };
+
     if (loading) {
         return (
             <Layout>
-                <div className="flex justify-center items-center h-[50vh]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                <div className="flex justify-center items-center h-[60vh]">
+                    <div className="w-10 h-10 border-4 border-t-orange-500 border-white/10 rounded-full animate-spin"></div>
                 </div>
             </Layout>
         );
@@ -47,10 +54,10 @@ function NewsDetail() {
         return (
             <Layout>
                 <div className="text-center py-20">
-                    <h2 className="text-2xl font-bold text-white mb-4">Noticia no encontrada</h2>
+                    <h2 className="text-xl font-black text-white italic uppercase mb-6">Contenido no disponible</h2>
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors"
+                        className="px-8 py-3 bg-white/5 border border-white/10 text-white font-bold rounded-xl uppercase text-xs"
                     >
                         Volver al Dashboard
                     </button>
@@ -61,85 +68,85 @@ function NewsDetail() {
 
     return (
         <Layout>
-            <div className="max-w-4xl mx-auto animate-fade-in pb-20">
-
-                {/* Back Button */}
+            <div className="max-w-4xl mx-auto pb-20 px-4 animate-fade-in">
+                
+                {/* Botón Volver */}
                 <button
                     onClick={() => navigate('/dashboard')}
-                    className="flex items-center gap-2 text-slate-400 hover:text-white mb-6 transition-colors group"
+                    className="flex items-center gap-2 text-white/40 hover:text-white mb-8 transition-colors group uppercase font-black text-[10px] tracking-widest"
                 >
-                    <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    Volver
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform text-orange-500" />
+                    Regresar al Feed
                 </button>
 
-                <GlassPanel className="p-0 overflow-hidden">
-                    {/* Minimal Header */}
-                    <div className="relative w-full p-8 md:p-12 border-b border-slate-700/50 bg-slate-800/20">
-                        <div className="flex flex-col items-center justify-center text-center max-w-2xl mx-auto">
-                            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-                                <span className={`px-3 py-1 rounded border text-[10px] font-bold uppercase tracking-widest ${newsItem.category.includes('Tecnología') ? 'text-sky-400 border-sky-500/30 bg-sky-500/10' : 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'}`}>
-                                    {newsItem.category}
+                <NeumorphicPanel radiance="blue" className="p-0 overflow-hidden border-white/5 shadow-2xl bg-[#0a0a0a]">
+                    
+                    {/* Cabecera Estilo Ramux */}
+                    <div className="p-8 md:p-12 border-b border-white/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+                        <div className="flex flex-col gap-6">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <span className="px-3 py-1 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[9px] font-black uppercase tracking-[0.2em] rounded">
+                                    {newsItem.category || 'GENERAL'}
                                 </span>
-                                {newsItem.scope && (
-                                    <span className={`px-3 py-1 rounded border text-[10px] font-bold uppercase tracking-widest ${newsItem.scope === 'Nacional' ? 'text-sky-300 border-sky-400/30 bg-sky-400/10' : 'text-purple-300 border-purple-400/30 bg-purple-400/10'}`}>
-                                        [{newsItem.scope}]
-                                    </span>
-                                )}
-                                <span className="flex items-center gap-1.5 text-slate-400 text-xs font-mono font-medium ml-2">
-                                    <Calendar size={13} />
-                                    {new Date(newsItem.created_at).toLocaleDateString()}
-                                </span>
+                                <div className="flex items-center gap-2 text-white/30 text-[10px] font-bold uppercase tracking-widest ml-auto">
+                                    <Calendar size={12} className="text-orange-500" />
+                                    {format(new Date(newsItem.created_at), "dd MMM yyyy", { locale: es })}
+                                </div>
                             </div>
-                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-100 leading-tight">
+
+                            <h1 className="text-3xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter italic uppercase">
                                 {newsItem.title}
                             </h1>
+                            
+                            <div className="flex items-center justify-between pt-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center">
+                                        <Tag size={18} className="text-white/60" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] text-white/30 uppercase font-black tracking-widest">Fuente</p>
+                                        <p className="text-sm text-white font-bold italic uppercase">{newsItem.source_name}</p>
+                                    </div>
+                                </div>
+
+                                <button 
+                                    onClick={handleShare}
+                                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:border-orange-500/40 transition-all group"
+                                >
+                                    <Share2 size={18} className="text-white/40 group-hover:text-orange-500 transition-colors" />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-6 md:p-10 bg-slate-900/40">
-
-                        <div className="flex justify-between items-center mb-8 border-b border-slate-700/50 pb-6">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">
-                                    <Tag size={18} className="text-slate-400" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-400 uppercase">Fuente</p>
-                                    <p className="text-white font-bold">{newsItem.source_name}</p>
-                                </div>
-                            </div>
-
-                            <button className="text-slate-400 hover:text-sky-400 transition-colors" title="Compartir">
-                                <Share2 size={24} />
-                            </button>
-                        </div>
-
-                        <article className="prose prose-invert max-w-none prose-lg text-slate-300 leading-relaxed mb-10">
-                            <p>{newsItem.summary}</p> {/* In real implementation, render HTML or Markdown safely */}
+                    {/* Cuerpo de la Noticia */}
+                    <div className="p-8 md:p-12">
+                        <article className="max-w-none">
+                            <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-medium mb-12 italic">
+                                {newsItem.summary}
+                            </p>
                         </article>
 
-                        {/* CTA Button */}
+                        {/* Caja de Enlace Externo */}
                         {newsItem.url && (
-                            <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700/50 flex flex-col md:flex-row items-center justify-between gap-4">
-                                <div>
-                                    <h4 className="text-white font-bold text-lg">Leer artículo completo</h4>
-                                    <p className="text-slate-400 text-sm">Visita la fuente original para más detalles.</p>
+                            <div className="mt-12 p-8 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 group hover:border-white/10 transition-all">
+                                <div className="text-center md:text-left">
+                                    <h4 className="text-white font-black italic uppercase text-lg tracking-tighter mb-1">Nota Completa</h4>
+                                    <p className="text-white/40 text-xs font-medium uppercase tracking-wide">Continúa leyendo en el portal oficial</p>
                                 </div>
+                                
                                 <a
                                     href={newsItem.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-sky-600/20 transform hover:-translate-y-1"
+                                    className="flex items-center gap-3 px-8 py-4 bg-orange-500 hover:bg-orange-600 text-black font-black italic uppercase rounded-xl transition-all shadow-xl shadow-orange-500/10 text-xs tracking-widest"
                                 >
-                                    Ir a la Fuente <ExternalLink size={18} />
+                                    IR A LA FUENTE <ExternalLink size={14} />
                                 </a>
                             </div>
                         )}
-
                     </div>
-                </GlassPanel>
-
+                </NeumorphicPanel>
             </div>
         </Layout>
     );
