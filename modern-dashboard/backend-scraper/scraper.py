@@ -9,15 +9,24 @@ import urllib.parse
 from dotenv import load_dotenv
 
 # --- CARGAR VARIABLES ---
-# Intentamos cargar .env si existe (local), si no, os.getenv buscará en el sistema (GitHub)
 load_dotenv()
 
+# Priorizamos los nombres exactos que tienes en tus Secrets de GitHub
 SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-# Validación robusta de credenciales
+# El script buscará la key en este orden de prioridad:
+SUPABASE_KEY = (
+    os.getenv("VITE_SUPABASE_SERVICE_ROLE_KEY") or 
+    os.getenv("VITE_SUPABASE_ANON_KEY") or 
+    os.getenv("SUPABASE_KEY")
+)
+
+# --- VALIDACIÓN DE CREDENCIALES ---
 if not SUPABASE_URL or not SUPABASE_KEY:
-    print("❌ ERROR: Credenciales de Supabase no encontradas (VITE_SUPABASE_URL o SUPABASE_KEY). Verifica Secrets o .env")
+    print("❌ ERROR: Credenciales de Supabase no encontradas.")
+    print(f"DEBUG -> URL presente: {bool(SUPABASE_URL)}")
+    print(f"DEBUG -> KEY presente: {bool(SUPABASE_KEY)}")
+    print("Verifica que en GitHub Actions hayas mapeado las variables en la sección 'env:'.")
     exit(1)
 
 def get_google_url(query):
@@ -50,6 +59,7 @@ def clean_summary(html_content):
 def fetch_and_insert_news():
     try:
         supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        print("✅ Conexión exitosa con Supabase")
     except Exception as e:
         print(f"❌ Error al conectar con Supabase: {e}")
         return
