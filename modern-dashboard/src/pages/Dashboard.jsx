@@ -1,24 +1,26 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Clock, Filter, Globe, MapPin } from 'lucide-react';
-import { supabase } from '../lib/supabase'; // Cambiado a ../lib/supabase para consistencia
+
+// ⚠️ REVISA QUE ESTE ARCHIVO EXISTA EN src/lib/supabase.js
+import { supabase } from '../lib/supabase'; 
 
 // Components
-import { useAuth } from '../contexts/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext';
 import { getUserFinancialData, getUserProgress } from '../lib/walletService';
-import Layout from '../components/layout/Layout.jsx';
-import NewsCard from '../components/feed/NewsCard.jsx';
-import NeumorphicPanel from '../components/ui/NeumorphicPanel.jsx';
-import IAChatWidget from '../components/widgets/IAChatWidget.jsx';
-import WelcomeHero from '../components/widgets/WelcomeHero.jsx';
-import DolarAPIWidget from '../components/widgets/DolarAPIWidget.jsx';
-import MarketIndicators from '../components/widgets/MarketIndicators.jsx';
-import MarketSimulator from '../components/widgets/MarketSimulator.jsx';
-import MarqueeTicker from '../components/widgets/MarqueeTicker.jsx';
-import PortfolioPieChart from '../components/widgets/PortfolioPieChart.jsx';
-import EducationWidget from '../components/widgets/EducationWidget.jsx';
-import TradingViewChart from '../components/widgets/TradingViewChart.jsx';
-import ErrorBoundary from '../components/ui/ErrorBoundary.jsx';
+import Layout from '../components/layout/Layout';
+import NewsCard from '../components/feed/NewsCard';
+import NeumorphicPanel from '../components/ui/NeumorphicPanel';
+import IAChatWidget from '../components/widgets/IAChatWidget';
+import WelcomeHero from '../components/widgets/WelcomeHero';
+import DolarAPIWidget from '../components/widgets/DolarAPIWidget';
+import MarketIndicators from '../components/widgets/MarketIndicators';
+import MarketSimulator from '../components/widgets/MarketSimulator';
+import MarqueeTicker from '../components/widgets/MarqueeTicker';
+import PortfolioPieChart from '../components/widgets/PortfolioPieChart';
+import EducationWidget from '../components/widgets/EducationWidget';
+import TradingViewChart from '../components/widgets/TradingViewChart';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 function Dashboard() {
     const { user } = useAuth();
@@ -47,17 +49,20 @@ function Dashboard() {
         const fetchAllData = async () => {
             try {
                 setLoading(true);
+                // Usamos user.uid o user.id según lo que devuelva tu AuthContext
+                const userId = user.uid || user.id;
+
                 const [newsRes, finRes, progRes, quotesRes] = await Promise.all([
                     supabase.from('noticias').select('*').order('created_at', { ascending: false }).limit(100),
-                    getUserFinancialData(user.uid || user.id, user.email),
-                    getUserProgress(user.uid || user.id),
+                    getUserFinancialData(userId, user.email),
+                    getUserProgress(userId),
                     supabase.from('market_quotes').select('*')
                 ]);
 
                 if (newsRes.data) setNews(newsRes.data);
                 setFinancialData(finRes);
                 setAcademicProgress(progRes);
-                if (quotesRes.data) setQuotes(quotesRes.data);
+                if (quotesRes.data) setQuotes(quotesRes.data || []);
             } catch (err) {
                 console.error("Dashboard Data Error:", err);
             } finally {
@@ -67,7 +72,6 @@ function Dashboard() {
 
         fetchAllData();
 
-        // Suscripciones optimizadas
         const newsChannel = supabase.channel('news_realtime')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'noticias' }, payload => {
                 setNews(prev => [payload.new, ...prev]);
@@ -110,18 +114,21 @@ function Dashboard() {
                     <MarketSimulator />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <PortfolioPieChart wallet={financialData?.wallet} assets={financialData?.assets} quotes={quotes} />
+                        <PortfolioPieChart 
+                            wallet={financialData?.wallet} 
+                            assets={financialData?.assets} 
+                            quotes={quotes} 
+                        />
                         <EducationWidget progressData={academicProgress} />
                     </div>
                 </div>
 
-                {/* Banner Destacado */}
                 <NeumorphicPanel
                     className="group p-6 md:p-10 bg-gradient-to-br from-[#1c2230] to-[#0a0e1a] border-l-4 border-[#F76B1C] cursor-pointer hover:translate-y-[-4px] transition-all duration-500 relative overflow-hidden"
                     onClick={() => navigate('/opinion/laboral')}
                 >
-                    <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
-                        <div className="flex-grow space-y-4 text-left">
+                    <div className="flex flex-col md:flex-row gap-8 items-center relative z-10 text-left">
+                        <div className="flex-grow space-y-4">
                             <div className="flex items-center gap-3">
                                 <span className="px-3 py-1 bg-[#F76B1C]/10 rounded-full border border-[#F76B1C]/20 text-[9px] font-black text-[#F76B1C] uppercase tracking-[0.2em]">Especial Laboral</span>
                             </div>
@@ -135,7 +142,6 @@ function Dashboard() {
 
                 <IAChatWidget />
 
-                {/* Filtros de Noticias */}
                 <div className="space-y-8">
                     <div className="flex flex-col gap-6 text-left">
                         <h2 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase">Noticias</h2>
@@ -179,7 +185,7 @@ function Dashboard() {
                                 filteredNews.map((item) => <NewsCard key={item.id} item={item} />)
                             ) : (
                                 <div className="col-span-full py-20 border border-dashed border-white/10 rounded-[32px] text-center">
-                                    <p className="text-slate-500 font-black uppercase text-xs">Sin resultados</p>
+                                    <p className="text-slate-500 font-black uppercase text-xs tracking-widest">Sin resultados en esta categoría</p>
                                 </div>
                             )}
                         </div>
