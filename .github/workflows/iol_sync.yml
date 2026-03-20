@@ -29,7 +29,7 @@ jobs:
           IOL_USERNAME: ${{ secrets.IOL_USERNAME }}
           IOL_PASSWORD: ${{ secrets.IOL_PASSWORD }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
           VITE_IOL_TOKEN: ${{ secrets.VITE_IOL_TOKEN }}
           VITE_IOL_TOKEN_EXPIRES: ${{ secrets.VITE_IOL_TOKEN_EXPIRES }}
         run: python modern-dashboard/backend-scraper/iol_sync.py
