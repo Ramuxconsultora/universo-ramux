@@ -12,19 +12,29 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 # 2. Configuración Supabase y IOL
-SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SUPABASE_URL = os.getenv("VITE_SUPABASE_URL") or os.getenv("SUPABASE_URL")
+SUPABASE_KEY = (
+    os.getenv("VITE_SUPABASE_SERVICE_ROLE_KEY") or 
+    os.getenv("SUPABASE_SERVICE_ROLE_KEY") or 
+    os.getenv("VITE_SUPABASE_ANON_KEY") or 
+    os.getenv("SUPABASE_KEY")
+)
 IOL_USERNAME = os.getenv("IOL_USERNAME")
 IOL_PASSWORD = os.getenv("IOL_PASSWORD")
 
 # Validación de variables de entorno
 # IOL_USERNAME/PASSWORD son necesarios SOLO si no se provee un VITE_IOL_TOKEN
 has_token = os.getenv("VITE_IOL_TOKEN") or os.getenv("IOL_TOKEN")
-required_vars = ["VITE_SUPABASE_URL", "SUPABASE_KEY"] if has_token else ["VITE_SUPABASE_URL", "SUPABASE_KEY", "IOL_USERNAME", "IOL_PASSWORD"]
-missing_vars = [v for v in required_vars if not os.getenv(v) and not (v == "SUPABASE_KEY" and os.getenv("SUPABASE_SERVICE_ROLE_KEY"))]
+errors = []
 
-if missing_vars:
-    print(f"❌ ERROR: Faltan las siguientes variables de entorno: {', '.join(missing_vars)}")
+if not SUPABASE_URL: errors.append("VITE_SUPABASE_URL")
+if not SUPABASE_KEY: errors.append("VITE_SUPABASE_SERVICE_ROLE_KEY o SUPABASE_KEY")
+if not has_token:
+    if not IOL_USERNAME: errors.append("IOL_USERNAME")
+    if not IOL_PASSWORD: errors.append("IOL_PASSWORD")
+
+if errors:
+    print(f"❌ ERROR: Faltan las siguientes variables de entorno: {', '.join(errors)}")
     exit(1)
 
 IOL_TOKEN_URL = "https://api.invertironline.com/token"
